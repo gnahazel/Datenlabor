@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Datenlabor Klasse 7</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+/* VOICE everyday learning for 12-year-olds: friendly, clear, calm working surface
+   IDEA a metro map through the lab: each step is a station, Teil 1 blue line, Teil 2 red line
+   PICTURE the live widget of each station (bit lamps, safe, unit staircase, storage bar) drawn large
+   COLOUR white ground, metro blue and red per part, amber lined paper for Hefter tasks, green for Basis/correct
+   TYPE Figtree 800 for titles, Figtree 400/600 for text
+   LAYOUT laptop: metro line left, station content right, pager bottom; phone: content only, metro as drawer */
+:root{color-scheme:light dark;--fs:17px;--bg:light-dark(#ffffff,#0e1116);--ink:light-dark(#151821,#eef1f6);--soft:light-dark(#596072,#a7aebd);--line:light-dark(#dde2ea,#2b313d);--panel:light-dark(#f3f5f9,#161a22);--blue:light-dark(#0a5cff,#5b8cff);--red:light-dark(#e6261f,#ff5d55);--amber:#ffb400;--paper:light-dark(#fff7dc,#2a2414);--pline:light-dark(#f0dca0,#4a3f22);--green:light-dark(#00975a,#2ecc85);--gsoft:light-dark(#e3f6ec,#123224);--bad:light-dark(#c0261c,#ff7a70);--bsoft:light-dark(#fde8e6,#3a1714);--part:var(--blue);--pro:light-dark(#1f2638,#3d4866);--violet:light-dark(#6a3fd0,#8a66f0)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+[hidden]{display:none!important}
+html{font-size:var(--fs);scroll-padding-top:80px}
+body{margin:0;background:var(--bg);color:var(--ink);font:1rem/1.55 Figtree,system-ui,sans-serif;overflow-x:clip}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+h1,h2,h3{line-height:1.1;letter-spacing:-.02em;margin:0;text-wrap:balance}
+h1{font-size:clamp(1.9rem,4vw,2.6rem);font-weight:800}
+h2{font-size:1.35rem;font-weight:800;margin-top:1.6rem}
+h3{font-size:1.08rem;font-weight:800}
+p{margin:.5rem 0;max-width:68ch}
+sub{font-size:.7em}
+.top{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;gap:10px;padding:8px max(16px,3vw)}
+.brand{display:flex;align-items:center;gap:10px;margin-right:auto}
+.brand svg{width:38px;height:38px;flex:none}
+.brand b{font-size:1.15rem;font-weight:800;display:block;line-height:1.1}
+.brand span{font-size:.8rem;color:var(--soft)}
+.tbtn{min-height:44px;padding:0 14px;border:1px solid var(--line);border-radius:10px;background:var(--panel);font-weight:600}
+.tbtn:hover{border-color:var(--soft)}
+#stepsBtn{display:none}
+.lk2{display:none}
+.prog{display:flex;gap:3px;padding:0 max(16px,3vw) 8px}
+.prog i{flex:1;height:6px;border-radius:3px;background:var(--line)}
+.prog i{background:color-mix(in srgb,var(--c) 28%,var(--line))}
+.prog i.ok{background:var(--c)}
+.prog i.cur{outline:2px solid var(--ink);outline-offset:1px}
+.wrap{display:grid;grid-template-columns:250px minmax(0,1fr);max-width:1240px;margin:0 auto}
+.metro{position:sticky;top:80px;align-self:start;padding:22px 10px 22px max(16px,2vw);max-height:calc(100vh - 80px);overflow:auto}
+.mpart{font-size:.82rem;font-weight:800;margin:6px 0 6px 2px;color:var(--soft)}
+.mpart.t1{color:var(--blue)}.mpart.t2{color:var(--red);margin-top:14px}
+.st{display:flex;align-items:center;gap:12px;width:100%;min-height:44px;border:0;background:none;text-align:left;padding:4px 6px;border-radius:10px;position:relative}
+.st:hover{background:var(--panel)}
+.st .dot{width:22px;height:22px;border-radius:50%;border:4px solid var(--c);background:var(--bg);flex:none;position:relative;z-index:1;display:grid;place-items:center}
+.st::before{content:"";position:absolute;left:15px;top:-6px;bottom:-6px;width:6px;background:var(--c)}
+.st.first::before{top:50%}.st.last::before{bottom:50%}
+.st.ok .dot{background:var(--c)}
+.st.ok .dot svg{width:12px;height:12px;color:#fff}
+.st .dot svg{width:11px;height:11px;color:var(--c)}
+.st.cur .dot{transform:scale(1.25);box-shadow:0 0 0 4px color-mix(in srgb,var(--c) 25%,transparent)}
+.st.cur{font-weight:800;background:var(--panel)}
+.st small{display:block;color:var(--soft);font-size:.8rem;font-weight:400}
+main{padding:22px max(16px,3vw) 120px;max-width:900px}
+.kicker{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.tag{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:99px;font-size:.85rem;font-weight:600;background:var(--panel);border:1px solid var(--line);white-space:nowrap}
+.tag.part{background:var(--part);color:#fff;border-color:transparent}
+.bitty{display:flex;gap:12px;align-items:flex-start;margin:16px 0}
+.bitty svg{width:56px;height:56px;flex:none}
+.bitty p{margin:0;background:var(--panel);border:1px solid var(--line);border-radius:4px 16px 16px 16px;padding:10px 14px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;margin:14px 0}
+.lead{font-size:1.1rem}
+.ic{width:20px;height:20px;flex:none;vertical-align:-4px}
+/* Hefter */
+.hef{margin:18px 0;border-radius:6px 14px 14px 6px;background:var(--paper);background-image:repeating-linear-gradient(transparent 0 calc(1.55em - 1px),var(--pline) calc(1.55em - 1px) 1.55em);border:2px solid var(--amber);padding:14px 16px 12px 46px;position:relative}
+.hef::before{content:"";position:absolute;left:14px;top:12px;bottom:12px;width:14px;background:radial-gradient(circle at 7px 7px,var(--bg) 4px,transparent 5px) 0 0/14px 26px repeat-y}
+.hef .hh{display:flex;align-items:center;gap:8px;font-weight:800;color:light-dark(#7a5200,#ffcf5a);margin-bottom:4px}
+.hef .task{font-weight:600;margin:0 0 8px}
+.hef .copy{background:var(--bg);border:1px dashed var(--pline);border-radius:8px;padding:10px 14px}
+.hef .copy h3{margin-bottom:4px;text-decoration:underline;text-underline-offset:3px}
+.hef ol,.hef ul{margin:.3rem 0;padding-left:1.3rem}
+.chk{display:flex;align-items:center;gap:10px;margin-top:10px;min-height:44px;font-weight:600;cursor:pointer}
+.chk input{width:24px;height:24px;accent-color:var(--green)}
+.hef.done{border-color:var(--green)}
+/* levels */
+.lvl{display:flex;align-items:center;gap:10px;margin:26px 0 8px}
+.lvl .badge{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--green);color:#fff;flex:none}
+.lvl .badge svg{width:20px;height:20px}
+.lvl small{display:block;color:var(--soft);font-weight:400;font-size:.88rem}
+.count{margin-left:auto;font-weight:800;white-space:nowrap;color:var(--green)}
+.profi{margin:26px 0;border:2px solid var(--ink);border-radius:14px;overflow:hidden}
+.pz-toggle{width:100%;display:flex;align-items:center;gap:12px;padding:12px 16px;border:0;background:var(--ink);color:var(--bg);text-align:left;min-height:56px}
+.pz-toggle svg{width:24px;height:24px;flex:none;color:var(--amber)}
+.pz-toggle b{font-size:1.05rem}
+.pz-toggle small{display:block;opacity:.8}
+.pz-toggle .arr{margin-left:auto;font-size:1.3rem;transition:transform .2s}
+.pz-toggle[aria-expanded=true] .arr{transform:rotate(180deg)}
+.pz-toggle.ready{animation:pulse 1.6s ease-in-out 3}
+@keyframes pulse{50%{box-shadow:inset 0 0 0 4px var(--amber)}}
+.pz-body{padding:4px 16px 16px}
+/* exercises */
+.ex{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:10px 0;background:var(--bg)}
+.ex .q{font-weight:600}
+.ex .q .n{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--panel);border:1px solid var(--line);font-size:.85rem;margin-right:6px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px}
+.row input{width:11em;min-height:44px;padding:6px 10px;border:2px solid var(--line);border-radius:10px;background:var(--bg);font-size:1.05rem;font-variant-numeric:tabular-nums}
+.row input:focus{border-color:var(--part)}
+.unit{font-weight:600;white-space:nowrap}
+.btn{min-height:44px;padding:0 16px;border-radius:10px;border:0;background:var(--part);color:#fff;font-weight:700}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:var(--panel);color:var(--ink);border:1px solid var(--line)}
+.btn.sm{min-height:38px;padding:0 12px;font-size:.9rem}
+.opts{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.opt{min-height:44px;padding:6px 14px;border-radius:10px;border:2px solid var(--line);background:var(--bg);font-weight:600;text-align:left}
+.opt:hover{border-color:var(--part)}
+.opt.right{border-color:var(--green);background:var(--gsoft)}
+.opt.wrong{border-color:var(--bad);background:var(--bsoft)}
+.fb{margin-top:8px;border-radius:8px}
+.fb:empty{display:none}
+.fb.good{background:var(--gsoft);padding:8px 12px}
+.fb.bad{background:var(--bsoft);padding:8px 12px}
+.fb.info{background:var(--panel);padding:8px 12px;border:1px solid var(--line)}
+.help{display:flex;gap:8px;margin-top:6px}
+.help:empty{display:none}
+.ex.ok{border-color:var(--green);background:color-mix(in srgb,var(--gsoft) 45%,var(--bg))}
+.ex.ok input{border-color:var(--green)}
+.okmark{color:var(--green);font-weight:800}
+/* tables */
+.scroll{overflow-x:auto}
+table.pv{border-collapse:collapse;margin:10px 0;font-variant-numeric:tabular-nums}
+table.pv td,table.pv th{border:2px solid var(--line);padding:6px 12px;text-align:center;min-width:46px}
+table.pv th{background:var(--panel);font-size:.9rem}
+table.pv td.one{background:color-mix(in srgb,var(--part) 18%,var(--bg));font-weight:800}
+.plan{border-collapse:collapse;width:100%}
+.plan td{padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+.plan td:first-child{white-space:nowrap;font-weight:800;width:5.5em}
+/* lamps */
+.lab{background:light-dark(#10182b,#0a0e18);color:#eef1f6;border-radius:16px;padding:18px;margin:14px 0}
+.lamps{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.bit{width:64px;border:0;background:none;color:inherit;display:flex;flex-direction:column;align-items:center;gap:6px;padding:4px}
+.bulb{width:52px;height:52px;border-radius:50%;background:#2a3348;border:3px solid #3b4762;display:grid;place-items:center;font-size:1.5rem;font-weight:800;transition:background .15s,box-shadow .15s}
+.bit.on .bulb{background:#ffd23f;border-color:#fff1b8;color:#2a1d00;box-shadow:0 0 22px #ffd23f88}
+.bit .pv{font-size:.9rem;font-weight:700;color:#9fb0d0}
+.readout{display:flex;flex-wrap:wrap;gap:10px 24px;justify-content:center;align-items:baseline;margin-top:14px;font-variant-numeric:tabular-nums}
+.readout b{font-size:clamp(1.6rem,5vw,2.3rem);font-weight:800}
+.readout span{color:#9fb0d0}
+.chal{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:14px;align-items:center}
+.chip{padding:6px 12px;border-radius:99px;border:2px solid #3b4762;font-weight:700;white-space:nowrap}
+.chip.now{border-color:#ffd23f;color:#ffd23f}
+.chip.got{background:#1f7a4d;border-color:#1f7a4d}
+.lab .msg{text-align:center;margin-top:8px;min-height:1.6em;color:#c9f5dd;font-weight:600}
+.lab .btn.ghost{background:#222b40;color:#eef1f6;border-color:#3b4762}
+.charbox{display:grid;place-items:center;width:70px;height:70px;border-radius:12px;background:#fff;color:#10182b;font-size:2.4rem;font-weight:800}
+/* stepper */
+.steps{list-style:none;padding:0;margin:10px 0}
+.steps li{padding:8px 12px;border-left:4px solid var(--part);background:var(--bg);margin:6px 0;border-radius:0 8px 8px 0;font-variant-numeric:tabular-nums}
+.steps li b.y{color:var(--green)}.steps li b.n{color:var(--bad)}
+/* vault */
+.vault{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:18px;align-items:center}
+.vault svg{width:100%;height:auto}
+.door{transition:transform .9s ease,opacity .9s;transform-origin:26px 100px;transform-box:view-box}
+.open .door{transform:scaleX(.06);opacity:.35}
+/* stairs */
+.stairs{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px;align-items:end;margin:40px 0 6px}
+.stair{border:0;border-radius:8px 8px 0 0;background:color-mix(in srgb,var(--red) 16%,var(--bg));border:2px solid color-mix(in srgb,var(--red) 40%,var(--bg));display:flex;flex-direction:column;justify-content:flex-start;align-items:center;padding:8px 2px;position:relative;font-weight:800;font-size:clamp(.85rem,2.4vw,1.1rem)}
+.stair .fac{position:absolute;top:-30px;left:-14px;font-size:.78rem;background:var(--ink);color:var(--bg);border-radius:99px;padding:2px 7px;white-space:nowrap;z-index:1}
+.stair.path{background:color-mix(in srgb,var(--red) 40%,var(--bg))}
+.stair.from,.stair.to{background:var(--red);color:#fff;border-color:var(--red)}
+.slegend{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-weight:600;font-size:.92rem}
+.conv{display:grid;grid-template-columns:repeat(auto-fit,minmax(9em,1fr));gap:10px;margin-top:12px}
+.conv label{font-size:.88rem;font-weight:600;color:var(--soft);display:flex;flex-direction:column;gap:4px}
+.conv input,.conv select{min-height:44px;padding:6px 10px;border:2px solid var(--line);border-radius:10px;background:var(--bg);font-size:1rem}
+.result{font-size:clamp(1.5rem,5vw,2.2rem);font-weight:800;margin-top:12px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.chain{color:var(--soft);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.switch{display:flex;align-items:center;gap:8px;font-weight:600;min-height:44px}
+.switch input{width:22px;height:22px;accent-color:var(--ink)}
+/* mission */
+.items{display:grid;grid-template-columns:repeat(auto-fit,minmax(12em,1fr));gap:10px;margin:12px 0}
+.item{display:flex;gap:12px;align-items:center;padding:10px 12px;border:2px solid var(--line);border-radius:12px;background:var(--bg);text-align:left}
+.item svg{width:38px;height:38px;flex:none;color:var(--red)}
+.item b{display:block}
+.item small{color:var(--soft)}
+button.item[aria-pressed=true]{border-color:var(--red);background:color-mix(in srgb,var(--red) 10%,var(--bg))}
+.media{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:12px 0}
+.medium{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 6px;border:2px solid var(--line);border-radius:12px;background:var(--bg);text-align:center}
+.medium svg{width:46px;height:46px;color:var(--ink)}
+.medium small{color:var(--soft);white-space:nowrap}
+button.medium[aria-pressed=true]{border-color:var(--ink);box-shadow:inset 0 0 0 2px var(--ink)}
+.meter{height:34px;border-radius:10px;background:var(--bg);border:2px solid var(--ink);overflow:hidden;position:relative;margin-top:10px}
+.meter i{display:block;height:100%;background:var(--green);transition:width .3s}
+.meter.full i{background:var(--bad)}
+.mstat{font-weight:800;margin-top:8px;font-size:1.1rem}
+/* final */
+.selfrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 12px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}
+.seg{display:flex;gap:4px}
+.seg button{min-height:40px;padding:0 10px;border:2px solid var(--line);border-radius:8px;background:var(--bg);font-size:.88rem;font-weight:600}
+.seg button[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.hlist{list-style:none;padding:0}
+.hlist li{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}
+.hlist .st2{width:26px;height:26px;border-radius:50%;border:2px solid var(--amber);display:grid;place-items:center;flex:none}
+.hlist .st2.y{background:var(--green);border-color:var(--green);color:#fff}
+.hlist .st2 svg{width:14px;height:14px}
+.hlist button{margin-left:auto}
+.big{font-size:clamp(2rem,6vw,3rem);font-weight:800;line-height:1}
+
+.opt.pick[aria-pressed=true]{border-color:var(--part);background:color-mix(in srgb,var(--part) 14%,var(--bg));box-shadow:inset 0 0 0 2px var(--part);animation:pop .25s ease}
+.opt.pick[aria-pressed=true]::before{content:"✓ ";font-weight:800;color:var(--part)}
+@keyframes pop{50%{transform:scale(1.07)}}
+.seg button[aria-pressed=true]{animation:pop .2s ease}
+.lockcard{display:flex;gap:12px;align-items:flex-start;color:var(--soft)}
+.lockcard .ic{width:26px;height:26px;color:var(--ink);flex:none}
+.ex.no{border-color:var(--bad)}
+.resrow{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.resrow small{display:block;color:var(--soft)}
+.resrow .rnote{color:var(--ink);font-style:italic}
+.rdot{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:800}
+.rdot svg{width:16px;height:16px}
+.resrow.good .rdot{background:var(--green)}.resrow.bad .rdot{background:var(--bad)}
+.unlock{display:flex;gap:14px;align-items:flex-start;background:var(--pro);color:#fff;border:0}
+.unlock>svg{width:34px;height:34px;color:var(--amber);flex:none}
+.unlock .btn.ghost{background:transparent;color:#fff;border-color:#ffffff66}
+.btn.pro{background:var(--amber);color:#151821}
+.story .note{background:var(--paper);border-radius:10px;padding:10px 14px;font-style:italic}
+.stage{border:2px solid var(--line);border-radius:14px;padding:4px 16px 12px;margin:18px 0}
+.stage.sdone{border-color:var(--green)}
+.stage.locked{opacity:.75}
+.stagehead{display:flex;gap:12px;align-items:center}
+.stagehead h2{margin-top:12px}
+.stagehead small{color:var(--soft);font-weight:600}
+.snum{width:38px;height:38px;border-radius:50%;background:var(--pro);color:var(--amber);display:grid;place-items:center;font-weight:800;flex:none;margin-top:10px}
+.stage.sdone .snum{background:var(--green);color:#fff}
+@media(max-width:600px){.resrow{grid-template-columns:auto minmax(0,1fr)}.resrow>:last-child{grid-column:2}.unlock{flex-direction:column}}
+
+.beamer .dlg{max-width:980px}
+.beamer .bit{width:110px}.beamer .bulb{width:90px;height:90px;font-size:2.6rem}.beamer .bit .pv{font-size:1.4rem}
+.plq{font-size:clamp(1.4rem,3.5vw,2.2rem);font-weight:700;margin:12px 0;min-height:1.4em}
+.goals li{font-size:1.15rem;margin:4px 0}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(12em,1fr));gap:10px;margin:14px 0}
+.pjump{display:flex;gap:10px;align-items:center;padding:12px 14px;border-radius:12px;background:var(--pro);color:#fff;text-decoration:none;min-height:56px}
+.pjump svg{width:24px;height:24px;color:var(--amber);flex:none}
+.pjump small{display:block;opacity:.8}
+table.abc td,table.abc th{min-width:30px;padding:4px 6px;font-size:.88rem}
+
+.rules{display:flex;flex-wrap:wrap;gap:10px}
+.rules span{padding:10px 16px;border-radius:10px;background:var(--bg);border:2px solid var(--line);font-size:1.2rem;font-variant-numeric:tabular-nums}
+.rules span small{font-size:.85rem;color:var(--soft)}
+.rules span.later{border-style:dashed;color:var(--soft)}
+.addt{border-collapse:collapse;margin:0 auto;font-variant-numeric:tabular-nums}
+.addt td{width:56px;height:52px;text-align:center;font-size:1.6rem;font-weight:800}
+.addt td.lbl{width:auto;text-align:right;padding-right:14px;font-size:.9rem;color:#9fb0d0;font-weight:600;white-space:nowrap}
+.addt tr.head td{font-size:.85rem;color:#9fb0d0;height:28px;font-weight:700}
+.addt tr.car td{font-size:1.05rem;color:#ffd23f;height:26px}
+.addt tr.car td.lbl{font-size:.9rem;color:#ffd23f}
+.addt tr.res td{border-top:3px solid #eef1f6}
+.addt tr.res td.lbl{border-top:0}
+.addt td.q{color:#5b6683}
+.addt td.x{color:#9fb0d0}
+.addt.ovmode td.x{border:2px dashed #ff7a70;border-width:0 2px;background:#ff5d5512}
+.addt.ovmode tr.head td.x{border-top-width:2px;font-size:.72rem;color:#ff9d96}
+.addt.ovmode tr.res td.x{border-bottom-width:2px;border-top:3px solid #eef1f6}
+.addt td.ovc{color:#ff7a70}
+.ab{width:46px;height:46px;border-radius:10px;border:2px solid #3b4762;background:#2a3348;color:#eef1f6;font:inherit;font-size:1.4rem;font-weight:800;cursor:pointer}
+.ab.on{background:#ffd23f;color:#2a1d00;border-color:#fff1b8}
+.addsteps{margin:12px auto 0;max-width:620px;padding-left:1.4rem;color:#dfe6f3}
+.addsteps li{margin:3px 0}
+.ovwarn{margin:12px auto 0;max-width:620px;background:#5a1712;border:2px solid #ff7a70;color:#ffe3e0;border-radius:10px;padding:10px 14px;font-weight:600;text-align:center}
+.lab .btn[disabled]{opacity:.45}
+.pyr{display:flex;flex-direction:column;align-items:center;gap:6px;margin:12px 0 16px}
+.pyr>div{display:flex;gap:6px}
+.brick{min-width:84px;padding:10px 12px;text-align:center;font-weight:800;font-size:1.1rem;border-radius:6px;background:color-mix(in srgb,var(--part) 18%,var(--bg));border:2px solid var(--part);font-variant-numeric:tabular-nums}
+.brick.q{background:var(--bg);border-style:dashed;color:var(--soft)}
+@media(max-width:600px){.addt td{width:40px;height:44px;font-size:1.25rem}.ab{width:36px;height:36px;font-size:1.1rem}.addt td.lbl{padding-right:6px;font-size:.78rem}.brick{min-width:64px;font-size:.95rem;padding:8px 6px}}
+.btn.danger{background:var(--bad);color:#fff}
+#resetBtn{color:var(--bad)}
+/* pager */
+.pager{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--bg);border-top:1px solid var(--line);padding:10px max(16px,3vw) max(10px,env(safe-area-inset-bottom))}
+.pager .in{display:flex;gap:10px;align-items:center;max-width:1240px;margin:0 auto}
+.pager .mid{flex:1;text-align:center;font-weight:600;color:var(--soft);font-size:.92rem}
+.pager .btn{min-width:7.5em}
+/* dialog */
+.ov{position:fixed;inset:0;z-index:50;background:rgba(10,14,24,.55);display:none;align-items:center;justify-content:center;padding:16px}
+.ov.show{display:flex}
+.dlg{background:var(--bg);border-radius:16px;max-width:560px;width:100%;max-height:88vh;overflow:auto;padding:20px;border:1px solid var(--line)}
+.dlg .acts{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;margin-top:16px}
+.drawer .dlg{max-width:340px}
+footer.foot{color:var(--soft);font-size:.85rem;padding:0 max(16px,3vw) 100px;max-width:1240px;margin:0 auto}
+@media(max-width:900px){.wrap{grid-template-columns:minmax(0,1fr)}.metro{display:none}#stepsBtn{display:inline-block}.brand span{display:none}}
+@media(max-width:600px){.vault{grid-template-columns:minmax(0,1fr)}.vault svg{max-width:200px;margin:auto}.bit{width:52px}.bulb{width:44px;height:44px;font-size:1.25rem}.lamps{gap:4px}.pager .mid{display:none}.pager .in{justify-content:space-between}.media{grid-template-columns:minmax(0,1fr)}.medium{flex-direction:row;justify-content:flex-start;text-align:left}.selfrow{grid-template-columns:minmax(0,1fr)}.tbtn{padding:0 10px}.lk{display:none}.lk2{display:inline}.brand b{display:none}.stair .fac{left:-8px;font-size:.7rem;padding:1px 5px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media print{.top,.metro,.pager,.foot,.lvl,.ex,.profi,.lab,.bitty{display:none!important}.wrap{display:block}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+ <symbol id="i-bitty" viewBox="0 0 64 64"><line x1="32" y1="4" x2="32" y2="14" stroke="#596072" stroke-width="3"/><circle cx="32" cy="5" r="4" fill="#e6261f"/><rect x="8" y="13" width="48" height="38" rx="12" fill="#0a5cff"/><rect x="8" y="13" width="48" height="10" rx="10" fill="#3d7dff"/><rect x="14" y="22" width="36" height="22" rx="7" fill="#10182b"/><circle cx="24" cy="31" r="4.5" fill="#ffd23f"/><circle cx="40" cy="31" r="4.5" fill="#ffd23f"/><rect x="25" y="38" width="14" height="3" rx="1.5" fill="#2ecc85"/><rect x="4" y="27" width="5" height="12" rx="2" fill="#596072"/><rect x="55" y="27" width="5" height="12" rx="2" fill="#596072"/><rect x="20" y="51" width="24" height="9" rx="3" fill="#596072"/></symbol>
+ <symbol id="i-book" viewBox="0 0 24 24"><path d="M5 3h11a3 3 0 0 1 3 3v15H8a3 3 0 0 1-3-3z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5 18a3 3 0 0 1 3-3h11M9 7h6M9 10h6" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+ <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.2l7.1-.6z" fill="currentColor"/></symbol>
+ <symbol id="i-base" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+ <symbol id="i-check" viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+ <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2.2"/></symbol>
+ <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+ <symbol id="i-cam" viewBox="0 0 40 40"><rect x="4" y="11" width="32" height="22" rx="4" fill="currentColor" opacity=".18"/><rect x="4" y="11" width="32" height="22" rx="4" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M13 11l3-4h8l3 4" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="20" cy="22" r="6" fill="none" stroke="currentColor" stroke-width="2.5"/></symbol>
+ <symbol id="i-film" viewBox="0 0 40 40"><rect x="4" y="9" width="24" height="22" rx="4" fill="currentColor" opacity=".18"/><rect x="4" y="9" width="24" height="22" rx="4" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M28 17l8-5v16l-8-5z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/></symbol>
+ <symbol id="i-music" viewBox="0 0 40 40"><path d="M15 29V9l17-4v20" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="11" cy="29" r="5" fill="currentColor" opacity=".3" stroke="currentColor" stroke-width="2.5"/><circle cx="28" cy="25" r="5" fill="currentColor" opacity=".3" stroke="currentColor" stroke-width="2.5"/></symbol>
+ <symbol id="i-chat" viewBox="0 0 40 40"><path d="M6 8h28v18H17l-7 6v-6H6z" fill="currentColor" fill-opacity=".18" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><path d="M12 15h16M12 20h10" stroke="currentColor" stroke-width="2.5"/></symbol>
+ <symbol id="i-doc" viewBox="0 0 40 40"><path d="M10 4h14l7 7v25H10z" fill="currentColor" fill-opacity=".18" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><path d="M24 4v7h7M15 19h11M15 24h11M15 29h7" fill="none" stroke="currentColor" stroke-width="2.5"/></symbol>
+ <symbol id="i-disk" viewBox="0 0 48 48"><rect x="6" y="6" width="36" height="36" rx="3" fill="#3a4256"/><rect x="14" y="6" width="20" height="12" fill="#c7ccd6"/><rect x="27" y="8" width="4" height="8" fill="#3a4256"/><rect x="11" y="25" width="26" height="15" rx="2" fill="#f4f6fa"/><path d="M14 30h20M14 34h14" stroke="#9aa2b4" stroke-width="2"/></symbol>
+ <symbol id="i-usb" viewBox="0 0 48 48"><rect x="17" y="3" width="14" height="11" fill="#c7ccd6"/><rect x="20" y="6" width="3" height="3" fill="#3a4256"/><rect x="25" y="6" width="3" height="3" fill="#3a4256"/><rect x="12" y="13" width="24" height="32" rx="5" fill="#e6261f"/><rect x="12" y="13" width="7" height="32" rx="3" fill="#ff6a63"/><circle cx="24" cy="37" r="3" fill="#fff"/></symbol>
+ <symbol id="i-phone" viewBox="0 0 48 48"><rect x="11" y="3" width="26" height="42" rx="6" fill="#151821"/><rect x="14" y="8" width="20" height="31" rx="2" fill="#5b8cff"/><rect x="14" y="8" width="20" height="10" fill="#8fb0ff"/><circle cx="24" cy="42" r="1.6" fill="#596072"/></symbol>
+</svg>
+
+<header class="top">
+ <div class="bar">
+  <div class="brand"><svg aria-hidden="true"><use href="#i-bitty"/></svg><div><b>Datenlabor</b><span>Informatik Klasse 7: Informationen und Daten</span></div></div>
+  <button class="tbtn" id="stepsBtn" type="button">Schritte</button>
+  <button class="tbtn" id="resetBtn" type="button"><span class="lk">Neu starten</span><span class="lk2">Neu</span></button>
+  <button class="tbtn" id="fontBtn" type="button" aria-label="Schriftgröße">Aa</button>
+  <button class="tbtn" id="teachBtn" type="button"><span class="lk">Lehrkraft</span><span class="lk2">Info</span></button>
+ </div>
+ <div class="prog" id="prog"></div>
+</header>
+
+<div class="wrap">
+ <nav class="metro" id="metro" aria-label="Schritte"></nav>
+ <main id="main"></main>
+</div>
+
+<div class="pager"><div class="in">
+ <button class="btn ghost" id="prevBtn" type="button">Zurück</button>
+ <div class="mid" id="pagerMid"></div>
+ <button class="btn" id="nextBtn" type="button">Weiter</button>
+</div></div>
+
+<div class="ov" id="ov" role="dialog" aria-modal="true"><div class="dlg" id="dlg"></div></div>
+
+<script>
+{
+const $=s=>document.querySelector(s);
+const ico=(n,c='ic')=>`<svg class="${c}" aria-hidden="true"><use href="#i-${n}"/></svg>`;
+const fmt=x=>Number(x).toLocaleString('de-DE',{maximumFractionDigits:4});
+const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const KEY='datenlabor7-v4';
+const fresh=()=>({step:0,done:{},tries:{},hef:{},seen:{},fs:17,vault:null,guess:null,self:{},cc:{}});
+let S=fresh();
+try{const r=JSON.parse(localStorage.getItem(KEY)||'null');if(r)S=Object.assign(S,r)}catch(e){}
+if(window.claude?.hot?.data&&window.claude.hot.data.step!==undefined)S=Object.assign(S,window.claude.hot.data);
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+try{window.claude?.hot?.snapshot?.(()=>S)}catch(e){}
+document.documentElement.style.setProperty('--fs',S.fs+'px');
+
+/* ---------- helpers ---------- */
+const parseDE=s=>{s=String(s).trim().replace(/\s/g,'');if(!s)return NaN;if(s.includes(','))s=s.replace(/\./g,'').replace(',','.');else if(/^\d{1,3}(\.\d{3})+$/.test(s))s=s.replace(/\./g,'');return Number(s)};
+const bin=n=>n.toString(2);
+const p4=n=>bin(n).padStart(4,'0');
+const norm=s=>String(s).trim().toLowerCase().replace(/ä/g,'ae').replace(/ö/g,'oe').replace(/ü/g,'ue').replace(/ß/g,'ss').replace(/\s+/g,'');
+function b2dText(b){const L=b.length;const t=[];for(let i=0;i<L;i++)if(b[i]==='1')t.push(2**(L-1-i));return `${b}<sub>2</sub>: ${t.join(' + ')} = ${parseInt(b,2)}`}
+function d2bText(n){let p=1;while(p*2<=n)p*=2;let r=n,parts=[];for(;p>=1;p/=2){if(p<=r){parts.push(`${p} passt (Rest ${r-p})`);r-=p}else parts.push(`${p} passt nicht → 0`)}return `${n}: ${parts.join(', ')} → <b>${bin(n)}<sub>2</sub></b>`}
+const say=t=>`<div class="bitty"><svg aria-hidden="true"><use href="#i-bitty"/></svg><p>${t}</p></div>`;
+
+/* ---------- exercises ---------- */
+const EX={};
+function E(kind,id,q,ans,x={}){EX[id]=Object.assign({kind,id,q,ans},x);return id}
+function exHTML(id,n){const d=EX[id];let body;
+ if(d.kind==='choice')body=`<div class="opts">${d.opts.map((o,i)=>`<button type="button" class="opt" data-choice="${id}" data-i="${i}">${o}</button>`).join('')}</div>`;
+ else body=`<div class="row"><input id="in-${id}" data-in="${id}" autocomplete="off" spellcheck="false" inputmode="${d.kind==='text'?'text':'decimal'}" aria-label="Antwort">${d.unit?`<span class="unit">${d.unit}</span>`:''}<button type="button" class="btn" data-check="${id}">Prüfen</button></div>`;
+ return `<div class="ex" id="ex-${id}"><div class="q">${n?`<span class="n">${n}</span>`:''}${d.q}</div>${body}<div class="fb" aria-live="polite"></div><div class="help"></div></div>`}
+const exList=ids=>ids.map((id,i)=>exHTML(id,i+1)).join('');
+function correctText(d){if(d.kind==='bin')return bin(d.ans);if(d.kind==='choice')return d.opts[d.ans];if(d.kind==='text')return d.ans[0].toUpperCase();return fmt(d.ans)}
+function judge(d,v){
+ if(d.kind==='choice')return {ok:+v===d.ans};
+ if(d.kind==='bin'){const s=String(v).replace(/\s/g,'');if(!s)return {ok:false,msg:'Gib zuerst eine Antwort ein.',empty:1};if(!/^[01]+$/.test(s))return {ok:false,msg:'Eine Binärzahl besteht nur aus 0 und 1.',empty:1};return {ok:parseInt(s,2)===d.ans}}
+ if(d.kind==='text'){if(!String(v).trim())return {ok:false,msg:'Gib zuerst eine Antwort ein.',empty:1};return {ok:d.ans.map(norm).includes(norm(v))}}
+ if(String(v).trim()==='')return {ok:false,msg:'Gib zuerst eine Antwort ein.',empty:1};const x=parseDE(v);if(isNaN(x))return {ok:false,msg:'Das ist keine Zahl. Schreibe nur Ziffern (Komma ist erlaubt).',empty:1};
+ return {ok:Math.abs(x-d.ans)<=(d.tol||1e-9)}}
+function check(id,v,btn){const d=EX[id];const el=$('#ex-'+id);if(!el||S.done[id])return;
+ const r=judge(d,v);const fb=el.querySelector('.fb');
+ if(r.empty){fb.className='fb info';fb.textContent=r.msg;return}
+ if(r.ok){S.done[id]=1;save();if(btn)btn.classList.add('right');solved(id,true);update();return}
+ S.tries[id]=(S.tries[id]||0)+1;save();if(btn)btn.classList.add('wrong');
+ fb.className='fb bad';fb.innerHTML=['Noch nicht richtig. Versuch es noch einmal!','Leider falsch. Schau dir den Tipp an.','Noch nicht. Du kannst dir die Lösung zeigen lassen.'][Math.min(S.tries[id]-1,2)];
+ helpBtns(id)}
+function helpBtns(id){const d=EX[id],t=S.tries[id]||0,el=$('#ex-'+id);if(!el)return;const h=el.querySelector('.help');let s='';
+ if(t>=1&&d.hint)s+=`<button type="button" class="btn ghost sm" data-hint="${id}">Tipp</button>`;
+ if(t>=2)s+=`<button type="button" class="btn ghost sm" data-sol="${id}">Lösung zeigen</button>`;h.innerHTML=s}
+function solved(id,isNew){const d=EX[id],el=$('#ex-'+id);if(!el)return;el.classList.add('ok');
+ const inp=el.querySelector('input');if(inp){if(!inp.value)inp.value=correctText(d);inp.readOnly=true;const b=el.querySelector('[data-check]');if(b)b.remove()}
+ if(d.kind==='choice')el.querySelectorAll('.opt').forEach(b=>{if(+b.dataset.i===d.ans)b.classList.add('right');b.disabled=true});
+ const fb=el.querySelector('.fb');fb.className='fb good';fb.innerHTML=`<span class="okmark">${isNew?['Richtig!','Super!','Stark!','Genau!'][rnd(0,3)]:'Erledigt.'}</span> ${d.sol||''}`;el.querySelector('.help').innerHTML=''}
+
+/* ---------- Hefter ---------- */
+const HEF={h1:{step:1,title:'Stellenwerte im Binärsystem'},h2:{step:2,title:'Vorgehen: Binär → Dezimal'},h3:{step:3,title:'Vorgehen: Dezimal → Binär'},h4:{step:12,title:'Bit und Byte'},h5:{step:13,title:'Die Einheitentreppe'},h6:{step:14,title:'Speicherbedarf berechnen'},h7:{step:6,title:'Binäre Addition'},h8:{step:7,title:'Addition mit Übertrag'},h9:{step:8,title:'Der Überlauf'}};
+function hef(id,task,copy){return `<div class="hef${S.hef[id]?' done':''}" id="hef-${id}"><div class="hh">${ico('book')} Hefter-Auftrag</div><p class="task">${task}</p><div class="copy"><h3>${HEF[id].title}</h3>${copy}</div><label class="chk"><input type="checkbox" data-hef="${id}"${S.hef[id]?' checked':''}> Erledigt: Das steht jetzt in meinem Hefter.</label></div>`}
+function lvlHead(step){const ids=STEPS[step].b;const n=ids.filter(i=>S.done[i]).length;return `<div class="lvl"><span class="badge">${ico('base','')}</span><div><h3>Basis-Aufgaben</h3><small>Hier übst du das Wichtigste. Löse alle Aufgaben, bevor du weitergehst.</small></div><span class="count" id="cnt-${step}">${n} / ${ids.length}</span></div>`}
+
+if(!S.vault){S.vault={a:rnd(5,15),b:rnd(3,15),c:rnd(17,31)};save()}
+const V=S.vault;
+
+/* ---------- steps ---------- */
+const STEPS=[];
+function step(o){o.b=o.b||[];o.h=o.h||[];STEPS.push(o)}
+
+// 0 Start
+step({kind:'s1',lesson:1,title:'Start',sub:'Ablauf und Symbole',min:2,render:()=>`
+<h1>Willkommen im Datenlabor</h1>
+${say('Hallo, ich bin <b>Bitty</b>! Ich bin ein Computer und verstehe nur zwei Zeichen: <b>0</b> und <b>1</b>. In drei Stunden lernst du meine Sprache, rechnest wie ein Computer und hilfst mir bei einer echten Speicher-Mission.')}
+<div class="card"><h3>So ist das Labor aufgebaut</h3><div class="scroll"><table class="plan">
+<tr><td>Stunde 1</td><td><b>Binärzahlen</b>: Wie ist eine Binärzahl aufgebaut? Wie rechne ich um? Am Ende knackst du im Check Bittys Tresor.</td></tr>
+<tr><td>Stunde 2</td><td><b>Rechnen mit Binärzahlen</b>: Du addierst wie ein Computer, mit und ohne Übertrag, und lernst, was ein Überlauf ist.</td></tr>
+<tr><td>Stunde 3</td><td><b>Bit, Byte und Einheiten</b>: Die Klassenfahrt-Mission. Du berechnest, wie viel Speicher die Erinnerungen brauchen und wo sie hinpassen.</td></tr></table></div>
+<p style="margin-bottom:0">Jede Stunde endet mit einem <b>Check</b>: Du schätzt dich ein, löst Aufgaben und erfährst, was du noch üben solltest. Danach öffnet sich eine <b>Profi-Zone</b>.</p></div>
+<h2>Diese Zeichen begleiten dich</h2>
+<div class="card" style="display:grid;gap:12px">
+<div style="display:flex;gap:12px;align-items:center"><span class="lvl" style="margin:0"><span class="badge">${ico('base','')}</span></span><div><b>Basis-Aufgaben</b>: Hier übst du das Wichtigste. Erst wenn sie gelöst sind, ist eine Station fertig.</div></div>
+<div style="display:flex;gap:12px;align-items:center"><span style="width:34px;height:34px;border-radius:8px;display:grid;place-items:center;background:var(--paper);border:2px solid var(--amber);flex:none">${ico('book')}</span><div><b>Hefter-Auftrag</b>: Diesen Kasten schreibst du in deinen Hefter. Danach setzt du den Haken.</div></div>
+<div style="display:flex;gap:12px;align-items:center"><span style="width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--pro);color:var(--amber);flex:none">${ico('star','ic')}</span><div><b>Profi-Zone</b>: Schwierige Aufgaben und Rätsel. Sie öffnet sich nach dem Check.</div></div>
+</div>
+<p>Wenn du bei einer Aufgabe festhängst, erscheint nach einem Fehlversuch ein <b>Tipp</b>, nach zwei Fehlversuchen kannst du dir die <b>Lösung</b> zeigen lassen.</p>
+<p class="lead">Lege deinen Hefter bereit und klicke unten auf <b>Weiter</b>.</p>`});
+
+// 1 Binärzahl
+step({kind:'s1',lesson:1,title:'Was ist eine Binärzahl?',sub:'Aufbau und Stellenwerte',min:6,
+ b:[E('choice','b2a','Welche Ziffern gibt es im Binärsystem?',1,{opts:['0 bis 9','0 und 1','1 und 2','nur die 1'],hint:'„Bi“ bedeutet zwei.',sol:'Nur 0 und 1. Deshalb heißt es auch Zweiersystem.'}),
+    E('choice','b2b','Wie heißt eine einzelne Binärziffer?',1,{opts:['Byte','Bit','Bot','Stelle'],hint:'Das Wort ist sehr kurz und hat drei Buchstaben.',sol:'Eine Binärziffer heißt <b>Bit</b> (von binary digit).'}),
+    E('choice','b2c','Im Dezimalsystem wird der Stellenwert nach links immer verzehnfacht. Im Binärsystem …',0,{opts:['verdoppelt er sich','verzehnfacht er sich auch','bleibt er gleich','halbiert er sich'],hint:'Schau auf die Zahlen über den Lampen: 1, 2, 4, 8.',sol:'Er verdoppelt sich, weil die Basis 2 ist.'}),
+    E('choice','b2d','Was bedeutet eine <b>1</b> an einer Stelle einer Binärzahl?',0,{opts:['Der Stellenwert wird mitgezählt.','Die Stelle ist leer.','Man rechnet an dieser Stelle mal 10.'],hint:'Denk an die Lampen: Was passiert, wenn eine Lampe an ist?',sol:'1 heißt: Der Stellenwert wird verwendet. 0 heißt: Er wird nicht verwendet.'})],
+ h:['h1'],
+ render:()=>`
+<h1>Was ist eine Binärzahl?</h1>
+${say('Ihr Menschen zählt mit zehn Ziffern, 0 bis 9. Ich habe nur Strom an (1) und Strom aus (0). Trotzdem kann ich jede Zahl darstellen. Wie? Mit Stellenwerten!')}
+<div class="card"><h3>Erinnerung: Dezimalsystem (Basis 10)</h3>
+<p>Bei der Zahl 6314 hat jede Ziffer einen Stellenwert. Nach links wird er immer <b>zehnmal</b> so groß.</p>
+<div class="scroll"><table class="pv"><tr><th>1000</th><th>100</th><th>10</th><th>1</th></tr><tr><td>6</td><td>3</td><td>1</td><td>4</td></tr></table></div>
+<p>6314 = 6 · 1000 + 3 · 100 + 1 · 10 + 4 · 1</p></div>
+<h2>Binärsystem (Basis 2): Probier es aus!</h2>
+<p>Klicke auf die Lampen, um sie an (1) oder aus (0) zu schalten. Die Zahl über jeder Lampe ist ihr <b>Stellenwert</b>. Nach links wird er immer <b>doppelt</b> so groß.</p>
+<div class="lab" id="lampA"></div>
+${hef('h1','Übernimm die Stellenwerttafel und den Satz in deinen Hefter.',`
+<div class="scroll"><table class="pv"><tr><th>128</th><th>64</th><th>32</th><th>16</th><th>8</th><th>4</th><th>2</th><th>1</th></tr></table></div>
+<p>Von rechts nach links <b>verdoppelt</b> sich der Stellenwert.</p>`)}
+${lvlHead(1)}${exList(STEPS[1].b)}`,
+ init:()=>lamps('lampA',4,[{v:5,l:'5'},{v:12,l:'12'},{v:7,l:'7'},{v:15,l:'15'}])});
+
+// 2 Binär -> Dezimal
+const B3=['101','111','1001','1010','1100','1111','10011'];
+step({kind:'s1',lesson:1,title:'Binär → Dezimal',sub:'Binärzahlen umrechnen',min:9,
+ b:B3.map((b,i)=>E('num','b3'+i,`${b}<sub>2</sub> = ?`,parseInt(b,2),{unit:'(dezimal)',hint:b.length>4?'Diese Zahl hat 5 Stellen. Ganz links steht der Stellenwert 16.':'Schreibe 8 4 2 1 über die Ziffern (von rechts!) und addiere die Stellenwerte, unter denen eine 1 steht.',sol:b2dText(b)})),
+ h:['h2'],
+ render:()=>`
+<h1>Binär → Dezimal</h1>
+${say('Ich zeige dir eine Binärzahl, und du übersetzt sie in eine normale Zahl. Der Trick: Nur die Stellen mit einer <b>1</b> zählen!')}
+<div class="card"><h3>Beispiel: 1101<sub>2</sub></h3>
+<div class="scroll"><table class="pv"><tr><th>8</th><th>4</th><th>2</th><th>1</th></tr><tr><td class="one">1</td><td class="one">1</td><td>0</td><td class="one">1</td></tr></table></div>
+<p>1 · 8 + 1 · 4 + 0 · 2 + 1 · 1 = 8 + 4 + 1 = <b>13</b></p></div>
+${hef('h2','Übernimm das Vorgehen als eigenen Merkkasten in deinen Hefter. Schreibe das Beispiel mit Stellenwerttafel dazu.',`
+<ol><li>Schreibe die Stellenwerte (… 8, 4, 2, 1) von rechts nach links über die Ziffern.</li><li>Markiere alle Stellen, an denen eine <b>1</b> steht.</li><li>Addiere die markierten Stellenwerte.</li></ol>
+<p>Beispiel: 1101<sub>2</sub> → 8 + 4 + 1 = 13<sub>10</sub></p>`)}
+${lvlHead(2)}${exList(STEPS[2].b)}
+<div class="card"><h3>Training: so viele du willst</h3><p style="margin-top:0;color:var(--soft)">Für alle, die noch sicherer werden wollen.</p><div id="gen3"></div></div>`,
+ init:()=>gen('gen3','b2d')});
+
+// 3 Dezimal -> Binär
+const B4=[3,6,9,10,12,14,18];
+step({kind:'s1',lesson:1,title:'Dezimal → Binär',sub:'Zahlen in Binär übersetzen',min:10,
+ b:B4.map((n,i)=>E('bin','b4'+i,`${n} = ?`,n,{unit:'(binär)',hint:n>15?'Die Zahl ist größer als 15. Starte mit dem Stellenwert 16.':'Schreibe 8 4 2 1 auf. Prüfe von links: Passt 8 in die Zahl? Dann 1 und mit dem Rest weiter.',sol:d2bText(n)})),
+ h:['h3'],
+ render:()=>`
+<h1>Dezimal → Binär</h1>
+${say('Jetzt andersherum: Du gibst mir eine normale Zahl, und ich brauche sie in 0 und 1. Frag dich bei jedem Stellenwert: <b>Passt er noch hinein?</b>')}
+<div class="card"><h3>Der Schritt-für-Schritt-Helfer</h3>
+<div class="row"><label for="stIn" style="font-weight:600">Zahl (0 bis 255):</label><input id="stIn" inputmode="numeric" value="11" style="width:6em"><button type="button" class="btn" id="stNext">Nächster Schritt</button><button type="button" class="btn ghost" id="stAll">Alles zeigen</button></div>
+<ul class="steps" id="stOut"></ul></div>
+${hef('h3','Übernimm das Vorgehen als eigenen Merkkasten in deinen Hefter. Schreibe das Beispiel mit Probe dazu.',`
+<ol><li>Schreibe die Stellenwerte auf (… 8, 4, 2, 1).</li><li>Prüfe von links: Passt der Stellenwert in die Zahl?<br><b>Ja</b> → schreibe 1 und rechne mit dem Rest weiter.<br><b>Nein</b> → schreibe 0.</li><li>Lies die Ziffern von links nach rechts ab.</li><li>Mache die Probe (Binär → Dezimal).</li></ol>
+<p>Beispiel: 11 → 8 passt (Rest 3), 4 passt nicht (0), 2 passt (Rest 1), 1 passt (Rest 0) → <b>1011<sub>2</sub></b><br>Probe: 8 + 2 + 1 = 11</p>`)}
+${lvlHead(3)}${exList(STEPS[3].b)}
+<div class="card"><h3>Training: so viele du willst</h3><p style="margin-top:0;color:var(--soft)">Für alle, die noch sicherer werden wollen.</p><div id="gen4"></div></div>`,
+ init:()=>{stepper();gen('gen4','d2b')}});
+
+/* ---------- checks ---------- */
+const RATE=['sicher','fast','noch nicht'];
+const CHECKS={
+ k1:{step:4,profi:5,hef:['h1','h2','h3'],
+  skills:[{t:'Ich kann erklären, wie eine Binärzahl aufgebaut ist.',st:1,s:'Aufbau von Binärzahlen'},{t:'Ich kann Binärzahlen in Dezimalzahlen umrechnen.',st:2,s:'Binär → Dezimal'},{t:'Ich kann Dezimalzahlen in Binärzahlen umrechnen.',st:3,s:'Dezimal → Binär'}],
+  tasks:[
+   {id:'a1',k:0,kind:'choice',q:'Welchen Stellenwert hat die <b>6. Stelle von rechts</b>?',opts:['6','12','32','64'],ans:2,sol:'1 – 2 – 4 – 8 – 16 – 32'},
+   {id:'a2',k:0,kind:'choice',q:'Welche Zahl ist <b>keine</b> Binärzahl?',opts:['1100','1021','111','10'],ans:1,sol:'1021 enthält eine 2. Binärzahlen haben nur 0 und 1.'},
+   {id:'a3',k:0,kind:'choice',q:'Bei der Binärzahl 1000<sub>2</sub> steht die 1 an der Stelle mit dem Wert …',opts:['1','4','8','1000'],ans:2,sol:'Von rechts: 1, 2, 4, 8. Die 1 steht bei 8, also 1000<sub>2</sub> = 8.'},
+   {id:'a4',k:1,kind:'num',q:`${bin(V.a)}<sub>2</sub> = ?`,unit:'(dezimal)',ans:V.a,sol:b2dText(bin(V.a))},
+   {id:'a5',k:1,kind:'num',q:'1100<sub>2</sub> = ?',unit:'(dezimal)',ans:12,sol:b2dText('1100')},
+   {id:'a6',k:1,kind:'num',q:`${bin(V.c)}<sub>2</sub> = ?`,unit:'(dezimal)',ans:V.c,sol:b2dText(bin(V.c))},
+   {id:'a7',k:2,kind:'bin',q:`${V.b} = ?`,unit:'(binär)',ans:V.b,sol:d2bText(V.b)},
+   {id:'a8',k:2,kind:'bin',q:'11 = ?',unit:'(binär)',ans:11,sol:d2bText(11)},
+   {id:'a9',k:2,kind:'bin',q:'20 = ?',unit:'(binär)',ans:20,sol:d2bText(20)}]},
+ k2:{step:9,profi:10,hef:['h7','h8','h9'],
+  skills:[{t:'Ich kann Binärzahlen ohne Übertrag addieren.',st:6,s:'Addition ohne Übertrag'},{t:'Ich kann Binärzahlen mit Übertrag addieren.',st:7,s:'Addition mit Übertrag'},{t:'Ich kann erkennen, wann ein Überlauf entsteht.',st:8,s:'Überlauf erkennen'}],
+  tasks:[
+   {id:'d1',k:0,kind:'bin',q:'0100<sub>2</sub> + 0010<sub>2</sub> = ?',unit:'(binär)',ans:6,sol:'0110<sub>2</sub>. Probe: 4 + 2 = 6'},
+   {id:'d2',k:0,kind:'bin',q:'1001<sub>2</sub> + 0110<sub>2</sub> = ?',unit:'(binär)',ans:15,sol:'1111<sub>2</sub>. Probe: 9 + 6 = 15'},
+   {id:'d3',k:0,kind:'choice',q:'Was ergibt 1 + 0 im Binärsystem?',opts:['0','1','10','2'],ans:1,sol:'1 + 0 = 1'},
+   {id:'d4',k:1,kind:'choice',q:'Was ergibt 1 + 1 im Binärsystem?',opts:['2','10','11','0'],ans:1,sol:'1 + 1 = 10: 0 schreiben, 1 übertragen.'},
+   {id:'d5',k:1,kind:'bin',q:'0011<sub>2</sub> + 0011<sub>2</sub> = ?',unit:'(binär)',ans:6,sol:'0110<sub>2</sub>. Probe: 3 + 3 = 6'},
+   {id:'d6',k:1,kind:'bin',q:'0101<sub>2</sub> + 0111<sub>2</sub> = ?',unit:'(binär)',ans:12,sol:'1100<sub>2</sub>. Probe: 5 + 7 = 12'},
+   {id:'d7',k:2,kind:'choice',q:'Ein 4-Bit-Rechner rechnet 1010<sub>2</sub> + 0111<sub>2</sub>. Gibt es einen Überlauf?',opts:['Ja','Nein'],ans:0,sol:'10 + 7 = 17. Das ist größer als 15, also braucht das Ergebnis 5 Bit: Überlauf.'},
+   {id:'d8',k:2,kind:'choice',q:'Ein 4-Bit-Rechner rechnet 0110<sub>2</sub> + 0101<sub>2</sub>. Gibt es einen Überlauf?',opts:['Ja','Nein'],ans:1,sol:'6 + 5 = 11 = 1011<sub>2</sub>. Das passt in 4 Bit, kein Überlauf.'},
+   {id:'d9',k:2,kind:'num',q:'Was ist das größte Ergebnis, das ein 4-Bit-Rechner <b>ohne</b> Überlauf anzeigen kann (dezimal)?',ans:15,sol:'1111<sub>2</sub> = 15'}]},
+ k3:{step:15,profi:16,hef:['h4','h5','h6'],
+  skills:[{t:'Ich kann Binärzahlen umrechnen (in beide Richtungen).',st:2,s:'Binärzahlen umrechnen'},{t:'Ich weiß, was Bit und Byte sind.',st:12,s:'Bit und Byte'},{t:'Ich kann mit der Einheitentreppe umrechnen.',st:13,s:'Einheiten umrechnen'},{t:'Ich kann prüfen, ob Daten auf einen Speicher passen.',st:14,s:'Speicherbedarf prüfen'}],
+  tasks:[
+   {id:'c3',k:0,kind:'num',q:'1011<sub>2</sub> = ?',unit:'(dezimal)',ans:11,sol:'8 + 2 + 1 = 11'},
+   {id:'c5',k:0,kind:'bin',q:'13 = ?',unit:'(binär)',ans:13,sol:'8 + 4 + 1 → 1101'},
+   {id:'c6',k:1,kind:'num',q:'5 Byte = ? Bit',unit:'Bit',ans:40,sol:'5 · 8 = 40 Bit'},
+   {id:'c7',k:1,kind:'num',q:'Wie viele Byte braucht das Wort <b>COMPUTER</b>?',unit:'Byte',ans:8,sol:'8 Zeichen = 8 Byte'},
+   {id:'c8',k:2,kind:'num',q:'4 MB = ? kB',unit:'kB',ans:4000,sol:'Treppe hinunter: 4 · 1000 = 4000 kB'},
+   {id:'c9',k:2,kind:'num',q:'2500 MB = ? GB',unit:'GB',ans:2.5,sol:'Treppe hinauf: 2500 : 1000 = 2,5 GB'},
+   {id:'c4',k:2,kind:'num',q:'3 kB = ? Bit',unit:'Bit',ans:24000,sol:'3 · 1000 · 8 = 24 000 Bit'},
+   {id:'c1',k:3,kind:'num',q:'Wie viele Songs mit je 5 MB passen auf einen leeren 1-GB-Stick?',unit:'Songs',ans:200,sol:'1000 MB : 5 MB = 200 Songs'},
+   {id:'c10',k:3,kind:'choice',q:'300 Fotos mit je 4 MB sollen auf einen leeren 1-GB-Stick. Passt das?',opts:['Ja, das passt','Nein, 200 MB zu viel','Nein, 1 GB zu viel'],ans:1,sol:'300 · 4 MB = 1200 MB. Der Stick hat 1000 MB, es sind 200 MB zu viel.'},
+   {id:'c2',k:3,kind:'choice',q:'Was ist die <b>Speicherkapazität</b>?',opts:['Wie viele Daten eine Datei hat','Wie viele Daten ein Speicher aufnehmen kann','Wie schnell ein Computer ist'],ans:1,sol:'Die Speicherkapazität sagt, wie viele Daten ein Speicher aufnehmen kann.'}]}};
+Object.entries(CHECKS).forEach(([k,c])=>c.tasks.forEach(t=>{t.chk=k;EX[t.id]=t}));
+const selfDone=k=>CHECKS[k].skills.every((s,i)=>S.self[k+':'+i]);
+const ccDone=k=>CHECKS[k].tasks.every(c=>S.cc[c.id]);
+function checkRender(k,title,intro,extra=''){const C=CHECKS[k];return `
+<h1>${title}</h1>
+${say(intro)}
+<h2>Schritt 1: Wie gut kannst du das?</h2><p>Sei ehrlich. Niemand außer dir sieht das.</p>
+<div class="card">${C.skills.map((s,i)=>`<div class="selfrow"><span>${s.t}</span><div class="seg">${RATE.map(v=>`<button type="button" data-self="${k}:${i}" data-v="${v}" aria-pressed="${S.self[k+':'+i]===v}">${v}</button>`).join('')}</div></div>`).join('')}</div>
+<h2>Schritt 2: ${C.tasks.length} Aufgaben</h2>${extra}
+<div id="ccArea-${k}">${ccArea(k)}</div>
+<div id="ccRes-${k}"></div>`}
+const ccArea=k=>selfDone(k)?CHECKS[k].tasks.map((c,i)=>ccHTML(c,i+1)).join(''):`<div class="card lockcard">${ico('lock')} Schätze dich zuerst bei allen Punkten oben ein. Dann erscheinen die Aufgaben.</div>`;
+
+// 4 Check 1 (Tresor)
+step({kind:'check',chk:'k1',lesson:1,title:'Check: Bittys Tresor',sub:'Einschätzen und testen',min:6,
+ render:()=>checkRender('k1','Check: Knacke Bittys Tresor','Zum Schluss der Stunde prüfst du, was du schon kannst. Zuerst schätzt du dich ein, dann löst du 9 Aufgaben. <b>Jede Aufgabe hat nur einen Versuch</b>, es gibt keine Tipps. Jede Antwort lässt ein Licht an meinem Tresor leuchten. Sind alle abgegeben, geht er auf.',
+ `<div class="card vault" id="vault"><div><p style="margin-top:0"><b>Grün</b> heißt richtig, <b>orange</b> heißt falsch. Der Tresor öffnet sich, sobald du alle Aufgaben abgegeben hast. Danach sagt dir Bitty, was du noch üben solltest.</p></div>
+<svg viewBox="0 0 200 200" aria-label="Tresor"><rect x="10" y="10" width="180" height="180" rx="16" fill="#3a4256"/><rect x="26" y="26" width="148" height="148" rx="8" fill="#10182b"/><g id="treasure" opacity="0"><rect x="52" y="78" width="96" height="50" rx="6" fill="#ffd23f"/><text x="100" y="109" text-anchor="middle" font-size="15" font-weight="800" fill="#2a1d00">Profi-Zone</text></g><g class="door"><rect x="26" y="26" width="148" height="148" rx="8" fill="#5b6683"/><circle cx="100" cy="90" r="28" fill="#3a4256" stroke="#c7ccd6" stroke-width="6"/><path d="M100 68v44M78 90h44" stroke="#c7ccd6" stroke-width="6"/>${CHECKS.k1.tasks.map((t,i)=>`<circle id="led${i}" cx="${44+i*14}" cy="150" r="5.5" fill="#2a3348"/>`).join('')}</g></svg></div>`),
+ init:()=>{ccResult('k1');vaultUpd()}});
+
+// 5 Profi 1
+const PX=[E('num','x1','10110110<sub>2</sub> = ?',182,{unit:'(dezimal)',hint:'Stellenwerte 128 64 32 16 8 4 2 1 drüberschreiben.',sol:b2dText('10110110')}),
+ E('num','x2','11111111<sub>2</sub> = ?',255,{unit:'(dezimal)',hint:'Alle 8 Lampen sind an. Addiere 128 + 64 + … + 1.',sol:'128 + 64 + 32 + 16 + 8 + 4 + 2 + 1 = 255. Das ist die größte Zahl mit 8 Bit.'}),
+ E('bin','x3','200 = ?',200,{unit:'(binär)',hint:'Starte mit 128: Passt 128 in 200?',sol:d2bText(200)}),
+ E('bin','x4','100 = ?',100,{unit:'(binär)',hint:'128 passt nicht in 100. Starte mit 64.',sol:d2bText(100)}),
+ E('num','x5','Wie viele <b>verschiedene</b> Zahlen kann man mit 8 Bit darstellen?',256,{hint:'Die kleinste ist 0, die größte 255. Zähle die 0 mit!',sol:'0 bis 255 sind 256 Zahlen. Allgemein: Mit n Bit gibt es 2<sup>n</sup> Möglichkeiten.'}),
+ E('num','x6','Wie viele Bit brauchst du <b>mindestens</b>, um die Zahl 100 darzustellen?',7,{unit:'Bit',hint:'Welcher ist der größte Stellenwert, der in 100 passt? An welcher Stelle steht er?',sol:'64 passt in 100, 128 nicht. 64 ist die 7. Stelle: 100 = 1100100<sub>2</sub>, also 7 Bit.'}),
+ E('choice','x7','Woran erkennst du <b>sofort</b>, ob eine Binärzahl gerade ist?',0,{opts:['Die letzte Ziffer ist 0.','Die erste Ziffer ist 1.','Sie hat viele Nullen.','Sie hat genau 4 Stellen.'],hint:'Nur die Stelle ganz rechts hat einen ungeraden Stellenwert.',sol:'Alle Stellenwerte außer der 1 sind gerade. Ist die letzte Ziffer 0, ist die Zahl gerade.'})];
+const PW=[E('text','w1','TIB',['bit'],{hint:'Eine einzelne Binärziffer.',sol:'BIT'}),
+ E('text','w2','NÄRBI',['binär','binaer'],{hint:'Das Zweiersystem heißt auch …system.',sol:'BINÄR'}),
+ E('text','w3','FERZIF',['ziffer'],{hint:'0 und 1 sind zwei davon.',sol:'ZIFFER'}),
+ E('text','w4','BOERP',['probe'],{hint:'Damit kontrollierst du dein Ergebnis.',sol:'PROBE'}),
+ E('text','w5','LETTERNSWEL',['stellenwert'],{hint:'1, 2, 4, 8 … sind solche.',sol:'STELLENWERT'})];
+const PR=[E('text','r1','Entschlüssle das Geheimwort: <b>10000 · 10010 · 1111 · 110 · 1001</b>',['profi'],{hint:'Rechne jede Binärzahl in eine Dezimalzahl um und suche den Buchstaben in der Tabelle. 10000<sub>2</sub> = 16 = P.',sol:'16 = P, 18 = R, 15 = O, 6 = F, 9 = I → <b>PROFI</b>'}),
+ E('num','r2','Ich bin eine Binärzahl mit 4 Stellen. Nur meine erste und meine letzte Ziffer sind 1. Welche Zahl bin ich dezimal?',9,{hint:'Schreibe die Zahl auf: 1 _ _ 1.',sol:'1001<sub>2</sub> = 8 + 1 = 9'}),
+ E('num','r3','Ich bin die <b>kleinste</b> Zahl, für die man 5 Bit braucht. Welche Zahl bin ich?',16,{hint:'Mit 4 Bit kommt man bis 1111<sub>2</sub> = 15.',sol:'10000<sub>2</sub> = 16'}),
+ E('num','r4','Ich bin 101<sub>2</sub>. Hängst du rechts eine 0 an, werde ich doppelt so groß. Wie viel bin ich dann dezimal?',10,{hint:'101<sub>2</sub> = 5. Was ist 1010<sub>2</sub>?',sol:'1010<sub>2</sub> = 8 + 2 = 10. Eine 0 anhängen heißt im Binärsystem: mal 2.'})];
+const ABC='ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+step({kind:'profi',chk:'k1',lesson:1,title:'Profi-Zone 1',sub:'Knifflige Aufgaben und Rätsel',min:0,b:[...PX,...PW,...PR],
+ render:()=>ccDone('k1')?`
+<h1>Profi-Zone 1: Bittys Rätselkammer</h1>
+${say('Du bist schnell! Hier findest du schwierigere Aufgaben und Rätsel. Du musst nicht alles schaffen. Such dir aus, womit du anfängst.')}
+<div class="pgrid"><a class="pjump" href="#px">${ico('star','')}<span><b>Knifflige Aufgaben</b><small>8 Bit und Tricks</small></span></a><a class="pjump" href="#pw">${ico('star','')}<span><b>Wortsalat</b><small>5 Fachbegriffe</small></span></a><a class="pjump" href="#pr">${ico('star','')}<span><b>Zahlenrätsel</b><small>Geheimwort und mehr</small></span></a></div>
+<section class="stage" id="px"><div class="stagehead"><span class="snum">1</span><div><h2>Knifflige Aufgaben</h2><small><span id="pc-x">0</span> von ${PX.length} gelöst</small></div></div>${exList(PX)}</section>
+<section class="stage" id="pw"><div class="stagehead"><span class="snum">2</span><div><h2>Wortsalat</h2><small><span id="pc-w">0</span> von ${PW.length} gelöst</small></div></div>
+<p>Bitty hat die Buchstaben von fünf Fachbegriffen durcheinandergebracht. Wie heißen die Wörter richtig?</p>${exList(PW)}</section>
+<section class="stage" id="pr"><div class="stagehead"><span class="snum">3</span><div><h2>Zahlenrätsel</h2><small><span id="pc-r">0</span> von ${PR.length} gelöst</small></div></div>
+<p>Für das Geheimwort bekommt jeder Buchstabe seine Nummer im Alphabet:</p>
+<div class="scroll"><table class="pv abc"><tr>${ABC.map(c=>`<th>${c}</th>`).join('')}</tr><tr>${ABC.map((c,i)=>`<td>${i+1}</td>`).join('')}</tr></table></div>${exList(PR)}</section>
+<div id="profEnd1"></div>`:lockedProfi(4),
+ init:()=>prof1Upd()});
+
+// ===== STUNDE 2: Rechnen =====
+const addQ=(id,a,b,hint)=>E('bin',id,`${p4(a)}<sub>2</sub> + ${p4(b)}<sub>2</sub> = ?`,a+b,{unit:'(binär)',hint,sol:`${p4(a)}<sub>2</sub> + ${p4(b)}<sub>2</sub> = <b>${bin(a+b).padStart(4,'0')}<sub>2</sub></b>. Probe: ${a} + ${b} = ${a+b}`});
+const H6='Schreibe die Zahlen untereinander und rechne Stelle für Stelle von rechts: 0 + 0 = 0, 0 + 1 = 1, 1 + 0 = 1.';
+const H7='Von rechts rechnen. Bei 1 + 1 = 10 schreibst du 0 und merkst dir 1 als Übertrag für die nächste Stelle links.';
+// 6 Addition ohne Übertrag
+step({kind:'s2',lesson:2,title:'Addition ohne Übertrag',sub:'Aufwärmen und erste Rechnungen',min:9,
+ b:[E('num','u1','Aufwärmen: 0101<sub>2</sub> = ?',5,{unit:'(dezimal)',hint:'8 4 2 1 drüberschreiben.',sol:b2dText('0101')}),
+    E('bin','u2','Aufwärmen: 6 = ?',6,{unit:'(binär)',hint:'Passt 4? Passt 2? Passt 1?',sol:d2bText(6)}),
+    addQ('e1',2,5,H6),addQ('e2',4,3,H6),addQ('e3',8,6,H6),addQ('e4',10,5,H6),addQ('e5',1,6,H6),addQ('e6',12,2,H6)],
+ h:['h7'],
+ render:()=>`
+<h1>Rechnen wie ein Computer: Addition</h1>
+${say('Willkommen zurück! Ich kann nicht nur Zahlen speichern, ich kann auch mit ihnen rechnen. Und zwar genauso, wie du schriftlich addierst: Stelle für Stelle, von rechts nach links. Wärm dich zuerst kurz auf.')}
+${lvlHead(6)}${exList(['u1','u2'])}
+<h2>Die Rechenregeln</h2>
+<div class="card"><p style="margin-top:0">Im Binärsystem gibt es nur vier Fälle:</p>
+<div class="rules"><span>0 + 0 = <b>0</b></span><span>0 + 1 = <b>1</b></span><span>1 + 0 = <b>1</b></span><span class="later">1 + 1 = <b>10</b> <small>(kommt im nächsten Kapitel)</small></span></div></div>
+<h2>Die Rechenmaschine</h2>
+<p>Klicke auf die Ziffern von Zahl 1 und Zahl 2, um sie zu ändern. Mit <b>Nächste Stelle</b> rechnet Bitty Schritt für Schritt vor.</p>
+<div class="lab" id="addA"></div>
+${hef('h7','Übernimm die Regeln und das Vorgehen in deinen Hefter. Schreibe das Beispiel untereinander wie bei der schriftlichen Addition.',`
+<p>Regeln: 0 + 0 = 0 &nbsp;&nbsp; 0 + 1 = 1 &nbsp;&nbsp; 1 + 0 = 1 &nbsp;&nbsp; 1 + 1 = 10</p>
+<ol><li>Schreibe die Zahlen stellengerecht untereinander.</li><li>Addiere Stelle für Stelle von <b>rechts nach links</b>.</li><li>Mache die Probe im Dezimalsystem.</li></ol>
+<div class="scroll"><table class="pv"><tr><td></td><td>0</td><td>0</td><td>1</td><td>0</td><td style="border:0;text-align:left">(2)</td></tr><tr><td>+</td><td>0</td><td>1</td><td>0</td><td>1</td><td style="border:0;text-align:left">(5)</td></tr><tr><td>=</td><td class="one">0</td><td class="one">1</td><td class="one">1</td><td class="one">1</td><td style="border:0;text-align:left">(7)</td></tr></table></div>`)}
+<div class="lvl"><span class="badge">${ico('base','')}</span><div><h3>Weiter mit den Basis-Aufgaben</h3><small>Rechne zuerst im Kopf oder auf Papier, prüfe dann mit der Rechenmaschine.</small></div></div>
+${['e1','e2','e3','e4','e5','e6'].map((id,i)=>exHTML(id,i+3)).join('')}`,
+ init:()=>adder('addA',4,2,5,'free')});
+
+// 7 Addition mit Übertrag
+step({kind:'s2',lesson:2,title:'Addition mit Übertrag',sub:'Wenn 1 + 1 = 10 ist',min:10,
+ b:[E('choice','e7','1 + 1 + 1 (mit Übertrag) ergibt im Binärsystem …',2,{opts:['3','10','11','111'],hint:'1 + 1 = 10. Und dann noch 1 dazu.',sol:'1 + 1 + 1 = 11: 1 schreiben, 1 übertragen.'}),
+    addQ('f1',3,1,H7),addQ('f2',5,3,H7),addQ('f3',6,3,H7),addQ('f4',7,1,H7),addQ('f5',5,5,H7),addQ('f6',6,6,H7),addQ('f7',7,6,H7)],
+ h:['h8'],
+ render:()=>`
+<h1>Addition mit Übertrag</h1>
+${say('Jetzt wird es spannend: Was ist 1 + 1? Bei euch 2. Aber die Ziffer 2 gibt es bei mir nicht! Darum schreibe ich <b>10</b>: also 0 hinschreiben und 1 in die nächste Stelle übertragen. Genau wie bei euch, wenn 5 + 7 = 12 ist.')}
+<div class="card"><h3>Zwei neue Fälle</h3>
+<div class="rules"><span>1 + 1 = <b>10</b> <small>→ 0 schreiben, 1 übertragen</small></span><span>1 + 1 + 1 = <b>11</b> <small>→ 1 schreiben, 1 übertragen</small></span></div></div>
+<h2>Die Rechenmaschine</h2>
+<p>Der gelbe Übertrag erscheint über der nächsten Stelle. Probiere zuerst 0011 + 0101 Schritt für Schritt.</p>
+<div class="lab" id="addB"></div>
+${hef('h8','Übernimm die Regeln und das Beispiel mit Übertragszeile in deinen Hefter. Schreibe den Übertrag klein über die nächste Stelle.',`
+<ul><li>1 + 1 = 10 → schreibe <b>0</b>, übertrage <b>1</b> in die nächste Stelle links.</li><li>1 + 1 + 1 = 11 → schreibe <b>1</b>, übertrage <b>1</b>.</li></ul>
+<div class="scroll"><table class="pv"><tr><td style="font-size:.8rem">Übertrag</td><td style="font-size:.8rem">1</td><td style="font-size:.8rem">1</td><td style="font-size:.8rem">1</td><td></td><td style="border:0"></td></tr><tr><td></td><td>0</td><td>0</td><td>1</td><td>1</td><td style="border:0;text-align:left">(3)</td></tr><tr><td>+</td><td>0</td><td>1</td><td>0</td><td>1</td><td style="border:0;text-align:left">(5)</td></tr><tr><td>=</td><td class="one">1</td><td class="one">0</td><td class="one">0</td><td class="one">0</td><td style="border:0;text-align:left">(8)</td></tr></table></div>`)}
+${lvlHead(7)}${exList(STEPS[7].b)}`,
+ init:()=>adder('addB',4,3,5,'carry')});
+
+// 8 Überlauf
+step({kind:'s2',lesson:2,title:'Der Überlauf',sub:'Wenn das Ergebnis nicht mehr passt',min:8,
+ b:[E('num','o1','Welches ist die größte Zahl, die man mit 4 Bit darstellen kann (dezimal)?',15,{hint:'Alle vier Stellen sind 1: 1111<sub>2</sub>.',sol:'1111<sub>2</sub> = 8 + 4 + 2 + 1 = 15'}),
+    E('choice','o2','Ein 4-Bit-Rechner rechnet 0111<sub>2</sub> + 0100<sub>2</sub>. Gibt es einen Überlauf?',1,{opts:['Ja','Nein'],hint:'Rechne die Probe im Dezimalsystem: Ist das Ergebnis größer als 15?',sol:'7 + 4 = 11 ≤ 15. Kein Überlauf: 1011<sub>2</sub>.'}),
+    E('choice','o3','Ein 4-Bit-Rechner rechnet 1000<sub>2</sub> + 1000<sub>2</sub>. Gibt es einen Überlauf?',0,{opts:['Ja','Nein'],hint:'8 + 8 = ?',sol:'8 + 8 = 16 > 15. Das Ergebnis 10000<sub>2</sub> braucht 5 Bit: Überlauf!'}),
+    E('choice','o4','Ein 4-Bit-Rechner rechnet 1100<sub>2</sub> + 0011<sub>2</sub>. Gibt es einen Überlauf?',1,{opts:['Ja','Nein'],hint:'12 + 3 = ?',sol:'12 + 3 = 15 = 1111<sub>2</sub>. Passt gerade noch!'}),
+    E('bin','o5','Rechne mit <b>allen</b> Stellen: 1001<sub>2</sub> + 1000<sub>2</sub> = ?',17,{unit:'(binär)',hint:'Der letzte Übertrag wird vorne als neue Stelle angeschrieben.',sol:'1001<sub>2</sub> + 1000<sub>2</sub> = 10001<sub>2</sub> (9 + 8 = 17)'}),
+    E('bin','o6','Was zeigt ein <b>4-Bit-Rechner</b> bei 1001<sub>2</sub> + 1000<sub>2</sub> an?',1,{unit:'(binär)',hint:'Er hat nur 4 Stellen. Die vorderste 1 von 10001 geht verloren.',sol:'Er zeigt nur 0001<sub>2</sub> = 1 an. Das Ergebnis ist falsch, weil ein Überlauf entstanden ist.'}),
+    E('num','o7','Ab welcher Summe (dezimal) entsteht bei einem 4-Bit-Rechner ein Überlauf?',16,{hint:'Die größte Zahl mit 4 Bit ist 15.',sol:'Ab 16 = 10000<sub>2</sub>, denn dafür braucht man 5 Bit.'})],
+ h:['h9'],
+ render:()=>`
+<h1>Der Überlauf</h1>
+${say('Ich habe ein Problem: Mein Rechenwerk hat nur <b>4 Lampen</b> für das Ergebnis. Was passiert, wenn das Ergebnis größer als 1111 = 15 ist? Dann bräuchte ich eine fünfte Stelle, die ich nicht habe. Das nennt man <b>Überlauf</b>.')}
+<h2>Teste den 4-Bit-Rechner</h2>
+<p>Die gestrichelte Spalte ganz links gibt es im Rechner nicht. Landet dort ein Übertrag, leuchtet die Überlauf-Warnung. Probiere 1001 + 1000.</p>
+<div class="lab" id="addC"></div>
+${hef('h9','Übernimm die Merksätze und das Beispiel in deinen Hefter.',`
+<ul><li>Ein Rechner speichert Zahlen mit einer <b>festen Anzahl Bit</b> (z. B. 4 Bit).</li><li>Mit 4 Bit ist 1111<sub>2</sub> = 15 die größte Zahl.</li><li>Ist das Ergebnis zu groß, entsteht ein <b>Überlauf</b>: Die vorderste Stelle geht verloren, das Ergebnis ist <b>falsch</b>.</li></ul>
+<p>Beispiel: 1001<sub>2</sub> + 1000<sub>2</sub> = 1 0001<sub>2</sub> (9 + 8 = 17)<br>Der 4-Bit-Rechner zeigt nur 0001<sub>2</sub> = 1 an.</p>`)}
+${lvlHead(8)}${exList(STEPS[8].b)}`,
+ init:()=>adder('addC',4,9,8,'ov')});
+
+// 9 Check 2
+step({kind:'check',chk:'k2',lesson:2,title:'Check: Rechenwerk',sub:'Einschätzen und testen',min:6,
+ render:()=>checkRender('k2','Check: Bittys Rechenwerk','Zeit für den Check! Zuerst schätzt du dich ein, dann löst du 9 Aufgaben. <b>Jede Aufgabe hat nur einen Versuch</b>, es gibt keine Tipps. Die Rechenmaschine darfst du jetzt nicht benutzen, rechne auf Papier.'),
+ init:()=>ccResult('k2')});
+
+// 10 Profi 2
+const PY=[E('bin','y1','00110101<sub>2</sub> + 00011010<sub>2</sub> = ?',79,{unit:'(binär)',hint:'8 Stellen, gleiche Regeln. Rechne von rechts und achte auf die Überträge.',sol:'01001111<sub>2</sub>. Probe: 53 + 26 = 79'}),
+ E('bin','y2','0011<sub>2</sub> + 0101<sub>2</sub> + 0110<sub>2</sub> = ?',14,{unit:'(binär)',hint:'Addiere erst die ersten beiden Zahlen, dann die dritte dazu.',sol:'0011 + 0101 = 1000, dann 1000 + 0110 = <b>1110<sub>2</sub></b>. Probe: 3 + 5 + 6 = 14'}),
+ E('num','y3','10110110<sub>2</sub> + 01001011<sub>2</sub> = ? Gib das vollständige Ergebnis <b>dezimal</b> an.',257,{hint:'Rechne in Dezimal: 10110110<sub>2</sub> = 182, 01001011<sub>2</sub> = 75.',sol:'182 + 75 = 257 = 100000001<sub>2</sub>'}),
+ E('choice','y4','Gibt es bei der letzten Aufgabe mit einem <b>8-Bit-Rechner</b> einen Überlauf?',0,{opts:['Ja','Nein'],hint:'Die größte Zahl mit 8 Bit ist 255.',sol:'257 > 255: Das Ergebnis braucht 9 Bit, also Überlauf. Der Rechner würde nur 00000001<sub>2</sub> = 1 anzeigen.'}),
+ E('num','y5','Ein 8-Bit-Rechner rechnet 11111111<sub>2</sub> + 00000001<sub>2</sub>. Was zeigt er an (dezimal)?',0,{hint:'255 + 1 = 256 = 100000000<sub>2</sub>. Welche Stellen bleiben übrig?',sol:'256 = 1 00000000<sub>2</sub>. Die 1 vorne geht verloren, der Rechner zeigt 0 an. So etwas passiert wirklich, z. B. in alten Videospielen!'})];
+const PF=[E('choice','g1','Bitty rechnet: 0110<sub>2</sub> + 0011<sub>2</sub> = 1011<sub>2</sub>. Stimmt das?',1,{opts:['Ja','Nein, richtig ist 1001','Nein, richtig ist 1111'],hint:'Mach die Probe: 6 + 3 = ?',sol:'6 + 3 = 9 = 1001<sub>2</sub>. Bitty hat den Übertrag vergessen.'}),
+ E('choice','g2','Bitty rechnet: 0101<sub>2</sub> + 0101<sub>2</sub> = 1010<sub>2</sub>. Stimmt das?',0,{opts:['Ja','Nein, richtig ist 1011','Nein, richtig ist 0000'],hint:'5 + 5 = ?',sol:'5 + 5 = 10 = 1010<sub>2</sub>. Richtig!'}),
+ E('choice','g3','Bitty rechnet mit 4 Bit: 1011<sub>2</sub> + 0110<sub>2</sub> = 0001<sub>2</sub>. Was ist passiert?',2,{opts:['Bitty hat sich verrechnet','Das Ergebnis ist richtig','Es gab einen Überlauf'],hint:'11 + 6 = ?',sol:'11 + 6 = 17 = 10001<sub>2</sub>. Mit 4 Bit bleibt nur 0001 übrig: Überlauf.'})];
+const PQ=[E('bin','q1','Pyramide: Welche Zahl gehört in den Stein <b>links in der Mitte</b>?',8,{unit:'(binär)',hint:'0011 + 0101',sol:'0011 + 0101 = 1000<sub>2</sub>'}),
+ E('bin','q2','Pyramide: Welche Zahl gehört in den Stein <b>rechts in der Mitte</b>?',11,{unit:'(binär)',hint:'0101 + 0110',sol:'0101 + 0110 = 1011<sub>2</sub>'}),
+ E('bin','q3','Pyramide: Welche Zahl gehört in den <b>Spitzenstein</b>? (Schreibe alle Stellen.)',19,{unit:'(binär)',hint:'Addiere deine beiden Ergebnisse aus der Mitte.',sol:'1000 + 1011 = 10011<sub>2</sub> (8 + 11 = 19)'}),
+ E('num','q4','Welche Ziffer fehlt? 01?1<sub>2</sub> + 0010<sub>2</sub> = 1001<sub>2</sub>',1,{hint:'1001<sub>2</sub> = 9 und 0010<sub>2</sub> = 2. Welche Zahl plus 2 ergibt 9?',sol:'9 − 2 = 7 = 0111<sub>2</sub>. Die fehlende Ziffer ist 1.'}),
+ E('num','q5','Bitty startet bei 0001<sub>2</sub> und addiert die Zahl immer zu sich selbst: 0001 + 0001 = 0010, dann 0010 + 0010 = … Bei der wievielten Addition gibt es mit 4 Bit einen Überlauf?',4,{hint:'Rechne mit: 1 → 2 → 4 → 8 → …',sol:'1 → 2 → 4 → 8 → 16. Bei der 4. Addition (8 + 8 = 16) gibt es einen Überlauf.'})];
+step({kind:'profi',chk:'k2',lesson:2,title:'Profi-Zone 2',sub:'Rechenwerk für Profis',min:0,b:[...PY,...PF,...PQ],
+ render:()=>ccDone('k2')?`
+<h1>Profi-Zone 2: Bittys Rechenwerk</h1>
+${say('Du rechnest schon wie ein Computer! Hier gibt es große Zahlen, Fehlersuche und Rätsel. Such dir aus, womit du anfängst.')}
+<div class="pgrid"><a class="pjump" href="#py">${ico('star','')}<span><b>Knifflige Aufgaben</b><small>8 Bit, drei Zahlen, Überlauf</small></span></a><a class="pjump" href="#pf">${ico('star','')}<span><b>Fehlersuche</b><small>Hat Bitty richtig gerechnet?</small></span></a><a class="pjump" href="#pq">${ico('star','')}<span><b>Rätselecke</b><small>Pyramide und mehr</small></span></a></div>
+<section class="stage" id="py"><div class="stagehead"><span class="snum">1</span><div><h2>Knifflige Aufgaben</h2><small><span id="pc-y">0</span> von ${PY.length} gelöst</small></div></div>${exList(PY)}</section>
+<section class="stage" id="pf"><div class="stagehead"><span class="snum">2</span><div><h2>Fehlersuche</h2><small><span id="pc-f">0</span> von ${PF.length} gelöst</small></div></div><p>Bitty ist müde und hat vielleicht falsch gerechnet. Prüfe nach!</p>${exList(PF)}</section>
+<section class="stage" id="pq"><div class="stagehead"><span class="snum">3</span><div><h2>Rätselecke</h2><small><span id="pc-q">0</span> von ${PQ.length} gelöst</small></div></div>
+<p><b>Zahlenpyramide:</b> Jeder Stein ist die Summe der beiden Steine darunter.</p>
+<div class="pyr"><div><span class="brick q">?</span></div><div><span class="brick q">?</span><span class="brick q">?</span></div><div><span class="brick">0011</span><span class="brick">0101</span><span class="brick">0110</span></div></div>
+${exList(PQ)}</section>
+<div id="profEnd2"></div>`:lockedProfi(9),
+ init:()=>secUpd([['y',PY],['f',PF],['q',PQ]],'profEnd2','<b>Alles gelöst!</b> Du bist ein echter Rechenprofi. Bitty überlegt, dich als Rechenwerk einzustellen.')});
+
+// 11 Mission
+const ITEMS=[{id:'foto',n:'Fotos',c:'320 Fotos, je 4 MB',mb:1280,i:'cam'},{id:'video',n:'Videos',c:'12 Videos, je 150 MB',mb:1800,i:'film'},{id:'song',n:'Playlist',c:'80 Songs, je 5 MB',mb:400,i:'music'},{id:'chat',n:'Klassenchat',c:'2000 Nachrichten, je 50 Zeichen',mb:0.1,i:'chat'},{id:'pdf',n:'Reiseplan',c:'1 PDF-Datei, 2 MB',mb:2,i:'doc'}];
+const MEDIA=[{id:'disk',n:'Diskette',c:'1,44 MB',mb:1.44,i:'disk'},{id:'usb',n:'Lias USB-Stick',c:'2 GB',mb:2000,i:'usb'},{id:'phone',n:'Lias Handy',c:'4 GB frei',mb:4000,i:'phone'}];
+const GUESS=['Diskette','USB-Stick','Handy','Nirgendwohin'];
+const itemCards=btn=>ITEMS.map(t=>`<${btn?'button type="button" data-item="'+t.id+'"':'div'} class="item">${ico(t.i,'')}<span><b>${t.n}</b><small>${t.c}</small></span></${btn?'button':'div'}>`).join('');
+const mediaCards=btn=>MEDIA.map(m=>`<${btn?'button type="button" data-med="'+m.id+'"':'div'} class="medium">${ico(m.i,'')}<span><b>${m.n}</b><br><small>${m.c}</small></span></${btn?'button':'div'}>`).join('');
+const guessNote=()=>S.guess!=null?`<span class="okmark">${ico('check')} Gespeichert:</span> Deine Schätzung ist <b>${GUESS[S.guess]}</b>. Im Speicher-Check findest du heraus, ob du recht hast.`:'Klicke auf eine Antwort.';
+step({kind:'s3',lesson:3,title:'Die Mission',sub:'Aufwärmen und Auftrag',min:4,
+ b:[E('num','m1','Aufwärmen: 1010<sub>2</sub> = ?',10,{unit:'(dezimal)',hint:'8 4 2 1 drüberschreiben.',sol:b2dText('1010')}),E('bin','m2','Aufwärmen: 13 = ?',13,{unit:'(binär)',hint:'Passt 8? Passt 4? Passt 2? Passt 1?',sol:d2bText(13)})],
+ render:()=>`
+<h1>Mission: Klassenfahrt-Erinnerungen</h1>
+${say('Willkommen zurück im Datenlabor! Bevor es losgeht, wärm dein Gehirn mit zwei Binärzahlen auf.')}
+${lvlHead(11)}${exList(STEPS[11].b)}
+<h2>Dein Auftrag</h2>
+<p class="lead">Die Klasse 7b war drei Tage im Schullandheim im Erzgebirge. Jetzt liegen alle Erinnerungen verstreut auf vielen Handys. <b>Lia</b> will alles an einem Ort sammeln. Das sind die Daten:</p>
+<div class="items">${itemCards(false)}</div>
+<p class="lead">Lia hat aber nur diese drei Speicher:</p>
+<div class="media">${mediaCards(false)}</div>
+<div class="card"><h3>Deine Schätzung</h3><p>Was glaubst du: Wohin passen <b>alle</b> Erinnerungen zusammen? (Hier gibt es noch kein Richtig oder Falsch.)</p>
+<div class="opts" id="guess">${GUESS.map((o,i)=>`<button type="button" class="opt pick" data-guess="${i}" aria-pressed="${S.guess===i}">${o}</button>`).join('')}</div>
+<p id="guessNote" aria-live="polite">${guessNote()}</p></div>
+${say('Um das herauszufinden, musst du drei Dinge können: <b>1.</b> Bit und Byte verstehen, <b>2.</b> Einheiten umrechnen, <b>3.</b> Speicherbedarf berechnen. Los geht’s!')}`});
+
+// 7 Bit & Byte
+step({kind:'s3',lesson:3,title:'Bit und Byte',sub:'Die kleinsten Einheiten',min:7,
+ b:[E('num','b7a','1 Byte = ? Bit',8,{unit:'Bit',hint:'Zähle die Lampen im Byte-Baukasten.',sol:'1 Byte = 8 Bit.'}),
+    E('num','b7b','3 Byte = ? Bit',24,{unit:'Bit',hint:'Jedes Byte hat 8 Bit. Rechne 3 · 8.',sol:'3 · 8 = 24 Bit.'}),
+    E('num','b7c','32 Bit = ? Byte',4,{unit:'Byte',hint:'Wie oft passen 8 Bit in 32 Bit? Rechne 32 : 8.',sol:'32 : 8 = 4 Byte.'}),
+    E('num','b7e','16 Bit = ? Byte',2,{unit:'Byte',hint:'16 : 8',sol:'16 : 8 = 2 Byte.'}),
+    E('num','b7d','Wie viel Speicher braucht das Wort <b>KLASSE</b>?',6,{unit:'Byte',hint:'Jeder Buchstabe braucht 1 Byte. Zähle die Buchstaben.',sol:'K-L-A-S-S-E: 6 Zeichen = 6 Byte.'}),
+    E('num','b7f','Wie viele <b>Bit</b> braucht das Wort <b>INFORMATIK</b>?',80,{unit:'Bit',hint:'Erst Buchstaben zählen (= Byte), dann mal 8.',sol:'INFORMATIK hat 10 Zeichen: 10 Byte = 80 Bit.'})],
+ h:['h4'],
+ render:()=>`
+<h1>Bit und Byte</h1>
+${say('Ein einzelnes Bit kann nur 0 oder 1 sein. Das ist ziemlich wenig. Darum fasse ich immer <b>8 Bit</b> zu einem Paket zusammen. Dieses Paket heißt <b>Byte</b>. Jeder Buchstabe bekommt bei mir eine Nummer und passt in genau ein Byte.')}
+<h2>Der Byte-Baukasten</h2>
+<p>Schalte die 8 Bit so, dass der richtige Buchstabe erscheint. A hat die Nummer 65, B die 66, C die 67 usw.</p>
+<div class="lab" id="lampC"></div>
+${hef('h4','Schreibe die Überschrift und die Merksätze in deinen Hefter.',`
+<ul><li>Ein <b>Bit</b> ist die kleinste Dateneinheit. Es hat genau zwei mögliche Werte: 0 oder 1.</li><li><b>8 Bit = 1 Byte</b> (Abkürzung: B)</li><li>Ein Zeichen (z. B. ein Buchstabe) braucht 1 Byte Speicher.</li></ul>`)}
+${lvlHead(12)}${exList(STEPS[12].b)}`,
+ init:()=>lamps('lampC',8,[{v:65,l:'A'},{v:66,l:'B'},{v:67,l:'C'}],true)});
+
+// 8 Einheitentreppe
+step({kind:'s3',lesson:3,title:'Die Einheitentreppe',sub:'kB, MB, GB umrechnen',min:8,
+ b:[E('choice','b8f','Du rechnest von GB in MB, also die Treppe <b>hinunter</b>. Was machst du?',0,{opts:['mal 1000','durch 1000','mal 8','plus 1000'],hint:'Eine kleinere Einheit braucht mehr Stück, die Zahl wird also größer.',sol:'Treppe hinunter: multiplizieren. 1 GB = 1000 MB.'}),
+    E('num','b8a','3 kB = ? Byte',3000,{unit:'Byte',hint:'Von kB zu Byte: eine Stufe hinunter, also · 1000.',sol:'3 · 1000 = 3000 Byte.'}),
+    E('num','b8b','2 GB = ? MB',2000,{unit:'MB',hint:'Eine Stufe hinunter: · 1000.',sol:'2 · 1000 = 2000 MB.'}),
+    E('num','b8c','5000 MB = ? GB',5,{unit:'GB',hint:'Von MB zu GB: eine Stufe hinauf, also : 1000.',sol:'5000 : 1000 = 5 GB.'}),
+    E('num','b8g','7000 kB = ? MB',7,{unit:'MB',hint:'Eine Stufe hinauf: : 1000.',sol:'7000 : 1000 = 7 MB.'}),
+    E('num','b8d','1,5 MB = ? kB',1500,{unit:'kB',hint:'Eine Stufe hinunter: · 1000. Auch mit Komma!',sol:'1,5 · 1000 = 1500 kB.'}),
+    E('num','b8h','3 TB = ? GB',3000,{unit:'GB',hint:'TB ist die oberste Stufe. Eine Stufe hinunter: · 1000.',sol:'3 · 1000 = 3000 GB.'})],
+ h:['h5'],
+ render:()=>`
+<h1>Die Einheitentreppe</h1>
+${say('Fotos und Videos sind riesig. Niemand sagt „4 000 000 Byte“. Darum gibt es größere Einheiten. Stell sie dir wie eine Treppe vor: Jede Stufe ist <b>1000-mal</b> so groß wie die vorherige. Nur zwischen Bit und Byte ist der Faktor 8.')}
+<div class="card">
+<div class="slegend"><span>← Treppe hinunter: <b>multiplizieren</b></span><span>Treppe hinauf: <b>dividieren</b> →</span></div>
+<div class="stairs" id="stairs"></div>
+<div class="conv"><label>Wert<input id="cvV" inputmode="decimal" value="2"></label><label>von<select id="cvF"></select></label><label>nach<select id="cvT"></select></label></div>
+<div class="result" id="cvR"></div><div class="chain" id="cvC"></div>
+<p style="color:var(--soft);font-size:.9rem">Tipp: Du kannst auch auf eine Stufe klicken, um das Ziel zu wählen.</p></div>
+${hef('h5','Zeichne die Treppe mit allen Einheiten und Faktoren in deinen Hefter. Schreibe die Merksätze und das Beispiel darunter.',`
+<p><b>Bit</b> –(8)→ <b>Byte</b> –(1000)→ <b>kB</b> –(1000)→ <b>MB</b> –(1000)→ <b>GB</b> –(1000)→ <b>TB</b></p>
+<ul><li>Treppe <b>hinunter</b> (zur kleineren Einheit): <b>multiplizieren</b>.</li><li>Treppe <b>hinauf</b> (zur größeren Einheit): <b>dividieren</b>.</li><li>Über mehrere Stufen: Schritt für Schritt rechnen.</li></ul>
+<p>Beispiel: 2 MB = 2 · 1000 · 1000 Byte = 2 000 000 Byte</p>`)}
+${lvlHead(13)}${exList(STEPS[13].b)}`,
+ init:()=>stairs()});
+
+// 9 Speicher-Check
+const B9A=[E('num','b9a','<b>Fotos:</b> 320 Fotos mit je 4 MB. Wie viel Speicher brauchen sie zusammen?',1280,{unit:'MB',hint:'Anzahl · Größe einer Datei.',sol:'320 · 4 MB = 1280 MB.'}),
+    E('num','b9b','Wie viel <b>GB</b> sind 1280 MB?',1.28,{unit:'GB',hint:'Von MB zu GB: Treppe hinauf, also : 1000.',sol:'1280 : 1000 = 1,28 GB.'}),
+    E('num','b9c','<b>Playlist:</b> 80 Songs mit je 5 MB. Wie viel Speicher?',400,{unit:'MB',hint:'80 · 5',sol:'80 · 5 MB = 400 MB.'}),
+    E('num','b9g','<b>Videos:</b> 12 Videos mit je 150 MB. Wie viel Speicher?',1800,{unit:'MB',hint:'12 · 150',sol:'12 · 150 MB = 1800 MB.'}),
+    E('num','b9e','<b>Klassenchat:</b> 2000 Nachrichten mit je 50 Zeichen. Ein Zeichen = 1 Byte. Wie viele Byte?',100000,{unit:'Byte',hint:'Erst alle Zeichen zählen: 2000 · 50.',sol:'2000 · 50 = 100 000 Zeichen = 100 000 Byte = 100 kB = 0,1 MB.'}),
+    E('num','b9i','Wie viele Fotos mit je 4 MB passen auf Lias <b>leeren</b> USB-Stick (2 GB)?',500,{unit:'Fotos',hint:'2 GB in MB umrechnen, dann durch 4 teilen.',sol:'2000 MB : 4 MB = 500 Fotos.'})];
+const B9B=[E('choice','b9h','Wohin passen <b>alle</b> Erinnerungen zusammen (Fotos, Videos, Playlist, Chat und der Reiseplan mit 2 MB)?',2,{opts:['Diskette (1,44 MB)','USB-Stick (2 GB)','Handy (4 GB frei)','Nirgendwohin'],hint:'Addiere alles in MB: 1280 + 1800 + 400 + 0,1 + 2. Vergleiche dann mit 1,44 MB, 2000 MB und 4000 MB. Oder teste es in der Packstation.',sol:'1280 + 1800 + 400 + 0,1 + 2 = 3482,1 MB. Das ist mehr als 2000 MB, aber weniger als 4000 MB: Nur das Handy hat genug Platz.'})];
+step({kind:'s3',lesson:3,title:'Speicher-Check',sub:'Passt alles drauf?',min:9,b:[...B9A,...B9B],h:['h6'],
+ render:()=>`
+<h1>Speicher-Check: Passt alles drauf?</h1>
+${say('Jetzt wird es ernst. Rechne aus, wie viel Speicher die Erinnerungen brauchen. Danach kannst du deine Rechnung in der Packstation testen.')}
+<div class="items">${itemCards(false)}</div>
+${hef('h6','Übernimm die Begriffe und das Vorgehen in deinen Hefter.',`
+<p><b>Datenmenge</b> (Speicherbedarf): Wie viele Daten gespeichert werden sollen, z. B. ein Foto mit 4 MB.<br><b>Speicherkapazität</b>: Wie viele Daten ein Speicher aufnehmen kann, z. B. ein USB-Stick mit 2 GB.</p>
+<ol><li>Speicherbedarf einer Datei · Anzahl der Dateien</li><li>Alle Werte in <b>dieselbe Einheit</b> umrechnen</li><li>Alles addieren</li><li>Vergleichen: Ist der Speicherbedarf ≤ der Speicherkapazität, dann passt es.</li></ol>`)}
+${lvlHead(14)}${exList(B9A)}
+<h2>Packstation: Teste deine Rechnung</h2>
+<div class="card"><p><b>1.</b> Wähle einen Speicher. <b>2.</b> Packe Daten ein oder aus.</p>
+<div class="media" id="pkM">${mediaCards(true)}</div>
+<div class="items" id="pkI">${itemCards(true)}</div>
+<div class="meter" id="pkBar"><i></i></div><div class="mstat" id="pkS"></div></div>
+<div id="guessBack"></div>
+${exHTML(B9B[0],B9A.length+1)}`,
+ init:()=>pack()});
+
+// 10 Check 2
+step({kind:'check',chk:'k3',lesson:3,title:'Abschluss-Check',sub:'Einschätzen und testen',min:6,
+ render:()=>checkRender('k3','Dein Abschluss-Check','Zum Schluss prüfst du, was du schon kannst. Zuerst schätzt du dich selbst ein, dann löst du 10 Aufgaben. <b>Jede Aufgabe hat nur einen Versuch</b>, es gibt keine Tipps. Danach sage ich dir, was du noch üben solltest.'),
+ init:()=>ccResult('k3')});
+
+// 11 Profi 2
+const PS=[
+ {t:'Das Zahlenschloss',k:'Binär → Dezimal',txt:'Auf dem Stick klebt ein Zahlenschloss mit drei Feldern. Herr Bauer hat den Code auf einen Zettel geschrieben, natürlich in Bittys Sprache: <b>00010011 · 00101100 · 01010001</b>',ex:[
+  E('num','z1','Erstes Feld: 00010011<sub>2</sub> = ?',19,{unit:'(dezimal)',hint:'Führende Nullen zählen nicht. 10011<sub>2</sub>: Stellenwerte 16, 8, 4, 2, 1.',sol:b2dText('00010011')}),
+  E('num','z2','Zweites Feld: 00101100<sub>2</sub> = ?',44,{unit:'(dezimal)',hint:'Stellenwerte 128 64 32 16 8 4 2 1 drüberschreiben.',sol:b2dText('00101100')}),
+  E('num','z3','Drittes Feld: 01010001<sub>2</sub> = ?',81,{unit:'(dezimal)',hint:'Die 1 ganz links steht bei 64.',sol:b2dText('01010001')})]},
+ {t:'Die Sicherheitsfrage',k:'Dezimal → Binär',txt:'Klick! Das Schloss ist offen. Doch der Stick stellt zwei Sicherheitsfragen und versteht nur Binärzahlen.',ex:[
+  E('bin','z4','„Wie viele Kinder waren auf der Klassenfahrt?“ Es waren <b>27</b>.',27,{unit:'(binär)',hint:'Starte mit 16: Passt 16 in 27?',sol:d2bText(27)}),
+  E('bin','z5','„In welchem Zimmer stand Bitty?“ Im Zimmer <b>113</b>.',113,{unit:'(binär)',hint:'Starte mit 64. Passt 64 in 113?',sol:d2bText(113)})]},
+ {t:'Der geheime Ordner',k:'Bit und Byte',txt:'Auf dem Stick gibt es einen Ordner, dessen Name nur aus Bits besteht: <b>01001100 01000001 01000111 01000101 01010010</b>. Jedes Byte ist ein Buchstabe (A = 65, B = 66, …).',ex:[
+  E('text','z6','Wie heißt der Ordner?',['lager'],{hint:'Rechne jedes Byte in eine Dezimalzahl um: 76, 65, … Dann zählst du im Alphabet ab A = 65 weiter.',sol:'76 = L, 65 = A, 71 = G, 69 = E, 82 = R → <b>LAGER</b>'}),
+  E('num','z7','Im Ordner liegt die Datei <b>LAGERFEUER.MP4</b>. Wie viele <b>Bit</b> braucht dieser Dateiname?',112,{unit:'Bit',hint:'Zähle alle Zeichen, auch den Punkt. Ein Zeichen = 1 Byte = 8 Bit.',sol:'LAGERFEUER.MP4 hat 14 Zeichen: 14 Byte = 14 · 8 = 112 Bit.'})]},
+ {t:'Zu groß für den Laptop?',k:'Einheitentreppe',txt:'Das Lagerfeuer-Video ist <b>2,4 GB</b> groß. Lia will es sofort auf ihren Laptop kopieren. Dort sind aber nur noch <b>1800 MB</b> frei.',ex:[
+  E('num','z8','2,4 GB = ? MB',2400,{unit:'MB',hint:'Treppe hinunter: · 1000.',sol:'2,4 · 1000 = 2400 MB.'}),
+  E('num','z9','Wie viele MB fehlen auf dem Laptop?',600,{unit:'MB',hint:'Speicherbedarf minus freier Speicher.',sol:'2400 MB − 1800 MB = 600 MB.'}),
+  E('num','z10','Lia löscht alte Fotos mit je 4 MB. Wie viele Fotos muss sie <b>mindestens</b> löschen, damit das Video passt?',150,{unit:'Fotos',hint:'Wie oft passen 4 MB in die fehlenden 600 MB?',sol:'600 MB : 4 MB = 150 Fotos.'})]},
+ {t:'Ab an die ganze Klasse',k:'Speicherbedarf',txt:'Das Video ist gerettet! Jetzt soll es jedes Kind bekommen. Aber im Klassenchat darf jede Datei höchstens <b>100 MB</b> groß sein.',ex:[
+  E('num','z11','In wie viele Teile muss Lia das 2,4-GB-Video <b>mindestens</b> schneiden?',24,{unit:'Teile',hint:'Rechne 2,4 GB erst in MB um und teile dann durch 100 MB.',sol:'2400 MB : 100 MB = 24 Teile.'}),
+  E('num','z12','Alle 27 Kinder laden das ganze Video herunter. Wie viele <b>GB</b> werden zusammen heruntergeladen?',64.8,{tol:0.01,unit:'GB',hint:'27 · 2,4 GB',sol:'27 · 2,4 GB = 64,8 GB. Fast so viel, wie auf ein ganzes 64-GB-Handy passt!'}),
+  E('choice','z13','Herr Bauer hat einen leeren 64-GB-Stick. Könnte er für <b>jedes</b> Kind eine Kopie des Videos darauf speichern?',1,{opts:['Ja, das passt','Nein, es fehlen 0,8 GB'],hint:'Vergleiche deine letzte Antwort mit 64 GB.',sol:'64,8 GB > 64 GB. Es fehlen 0,8 GB = 800 MB. Eine Kopie für alle über den Chat ist also die bessere Idee.'})]}];
+step({kind:'profi',chk:'k3',lesson:3,title:'Profi-Zone 3',sub:'Das Lagerfeuer-Video',min:0,b:PS.flatMap(p=>p.ex),
+ render:()=>ccDone('k3')?`
+<h1>Profi-Zone 3: Das Lagerfeuer-Video</h1>
+${say('Du hast den Check geschafft. Jetzt kommt mein schwierigster Fall. Hier brauchst du <b>alles</b>, was du gelernt hast.')}
+<div class="card story"><p class="lead">Zwei Wochen nach der Klassenfahrt kommt ein Päckchen aus dem Schullandheim. Darin liegt ein alter USB-Stick und ein Zettel von Herrn Bauer, dem Hausmeister:</p>
+<p class="note">„Ich habe am letzten Abend das Lagerfeuer gefilmt. Das Video gibt es nur auf diesem Stick. Damit es nicht verloren geht, habe ich ihn gesichert. Bitty hilft euch beim Knacken!“</p>
+<p>Löse die fünf Kapitel nacheinander. Jedes Kapitel öffnet das nächste.</p></div>
+${PS.map((p,i)=>`<section class="stage" id="stage${i}"><div class="stagehead"><span class="snum">${i+1}</span><div><h2>${p.t}</h2><small>${p.k}</small></div></div><div class="sbody"><p>${p.txt}</p>${exList(p.ex)}</div><div class="card lockcard slock" hidden>${ico('lock')} Löse zuerst Kapitel ${i}.</div></section>`).join('')}
+<div id="profEnd"></div>`:lockedProfi(15),
+ init:()=>profUpd()});
+
+const lockedProfi=st=>`<h1>${STEPS[st+1].title}</h1>
+<div class="card lockcard" style="padding:24px">${ico('lock')} <div><b>Noch verschlossen.</b> Die Profi-Zone öffnet sich, sobald du den Check komplett fertig hast.<div style="margin-top:12px"><button type="button" class="btn" data-go="${st}">Zum Check</button></div></div></div>`;
+
+/* ---------- check logic ---------- */
+function ccHTML(c,n){const a=S.cc[c.id];let body;
+ if(c.kind==='choice')body=`<div class="opts">${c.opts.map((o,i)=>`<button type="button" class="opt${a?(i===c.ans?' right':(+a.v===i?' wrong':'')):''}" data-cc="${c.id}" data-i="${i}"${a?' disabled':''}>${o}</button>`).join('')}</div>`;
+ else body=`<div class="row"><input id="cc-${c.id}" data-ccin="${c.id}" autocomplete="off" inputmode="decimal" aria-label="Antwort"${a?` value="${String(a.v).replace(/"/g,'')}" readonly`:''}>${c.unit?`<span class="unit">${c.unit}</span>`:''}${a?'':`<button type="button" class="btn" data-ccbtn="${c.id}">Abgeben</button>`}</div>`;
+ const fb=a?(a.ok?`<div class="fb good"><span class="okmark">Richtig!</span></div>`:`<div class="fb bad"><b>Leider falsch.</b> Richtig ist: <b>${correctText(c)}</b>. ${c.sol}</div>`):'<div class="fb" aria-live="polite"></div>';
+ return `<div class="ex${a&&a.ok?' ok':''}${a&&!a.ok?' no':''}" id="ccx-${c.id}"><div class="q"><span class="n">${n}</span>${c.q}</div>${body}${fb}</div>`}
+function ccSubmit(id,v){if(S.cc[id])return;const c=EX[id];const r=judge(c,v);
+ if(r.empty){const fb=$('#ccx-'+id+' .fb');fb.className='fb info';fb.textContent=r.msg;return}
+ S.cc[id]={v:String(v),ok:r.ok};save();const n=CHECKS[c.chk].tasks.findIndex(x=>x.id===id)+1;$('#ccx-'+id).outerHTML=ccHTML(c,n);ccResult(c.chk);if(c.chk==='k1')vaultUpd();renderNav()}
+function ccResult(k){const el=document.getElementById('ccRes-'+k);if(!el)return;const C=CHECKS[k];
+ if(!selfDone(k)||!ccDone(k)){el.innerHTML=selfDone(k)?`<p style="color:var(--soft)">Abgegeben: ${C.tasks.filter(c=>S.cc[c.id]).length} von ${C.tasks.length}</p>`:'';return}
+ const N=C.tasks.length,right=C.tasks.filter(c=>S.cc[c.id].ok).length,q=right/N;
+ const msg=right===N?'Perfekt! Du hast alles beim ersten Versuch richtig.':q>=.8?'Sehr gut! Nur kleine Lücken. Schau sie dir unten an.':q>=.5?'Gute Grundlage! Ein paar Dinge solltest du noch üben.':'Hier ist noch einiges zu tun. Wiederhole die markierten Stationen in Ruhe.';
+ const rows=C.skills.map((s,i)=>{const cs=C.tasks.filter(c=>c.k===i),r=cs.filter(c=>S.cc[c.id].ok).length,ok=r===cs.length,self=S.self[k+':'+i];
+  let note='';if(!ok&&self==='sicher')note='Du warst dir sicher, aber hier hat sich ein Fehler eingeschlichen. Schau noch einmal genau hin.';else if(ok&&self==='noch nicht')note='Besser als gedacht! Du kannst das schon.';
+  return `<div class="resrow ${ok?'good':'bad'}"><span class="rdot">${ok?ico('check',''):'!'}</span><div><b>${s.s}</b><small>Deine Einschätzung: ${self} · Im Check: ${r} von ${cs.length} richtig</small>${note?`<small class="rnote">${note}</small>`:''}</div>${ok?'<span class="okmark">sitzt</span>':`<button type="button" class="btn sm" data-go="${s.st}">Nochmal üben</button>`}</div>`}).join('');
+ el.innerHTML=`<h2>Dein Ergebnis</h2><div class="card"><div class="big">${right} / ${N}</div><p class="lead" style="margin-top:6px">${msg}</p>${rows}</div>
+ <h2>Hefter-Check</h2><p>Sind alle Einträge dieser Stunde in deinem Hefter? Fehlt einer, springe zur Station und hole ihn nach.</p>
+ <ul class="hlist">${C.hef.map(id=>`<li><span class="st2${S.hef[id]?' y':''}">${S.hef[id]?ico('check',''):''}</span><span>${HEF[id].title}</span><button type="button" class="btn ghost sm" data-go="${HEF[id].step}">Zur Station</button></li>`).join('')}</ul>
+ <div class="card unlock">${ico('star','')}<div><b>Die Profi-Zone ist offen!</b><br>${k==='k1'?'Knifflige Aufgaben und Rätsel warten auf dich.':(k==='k2'?'Bittys Rechenwerk wartet: knifflige Aufgaben, Fehlersuche und Rätsel.':'Ein kniffliger Fall wartet auf dich: Das Lagerfeuer-Video.')}<div class="row"><button type="button" class="btn pro" data-go="${C.profi}">Zur Profi-Zone</button><button type="button" class="btn ghost" data-again="${k}">Check nochmal machen</button></div></div></div>`}
+
+function vaultUpd(){const v=$('#vault');if(!v)return;CHECKS.k1.tasks.forEach((t,i)=>{const l=document.getElementById('led'+i);if(l)l.setAttribute('fill',S.cc[t.id]?(S.cc[t.id].ok?'#2ecc85':'#ff9f1c'):'#2a3348')});
+ const all=ccDone('k1');v.classList.toggle('open',all);$('#treasure').setAttribute('opacity',all?1:0)}
+function secUpd(groups,endId,msg){groups.forEach(([k,a])=>{const e=document.getElementById('pc-'+k);if(e)e.textContent=a.filter(i=>S.done[i]).length;const sec=document.getElementById('p'+k);if(sec)sec.classList.toggle('sdone',a.every(i=>S.done[i]))});
+ const e=document.getElementById(endId);if(e)e.innerHTML=groups.every(([k,a])=>a.every(i=>S.done[i]))?`<div class="card unlock">${ico('star','')}<div>${msg}</div></div>`:''}
+const prof1Upd=()=>secUpd([['x',PX],['w',PW],['r',PR]],'profEnd1','<b>Alles gelöst!</b> Du bist ein echter Binär-Profi. Bitty ist beeindruckt.');
+const prof2Upd=()=>secUpd([['y',PY],['f',PF],['q',PQ]],'profEnd2','<b>Alles gelöst!</b> Du bist ein echter Rechenprofi. Bitty überlegt, dich als Rechenwerk einzustellen.');
+function profUpd(){if(!ccDone('k3'))return;let open=true;PS.forEach((p,i)=>{const sec=document.getElementById('stage'+i);if(!sec)return;sec.querySelector('.sbody').hidden=!open;sec.querySelector('.slock').hidden=open;sec.classList.toggle('locked',!open);const d=p.ex.every(x=>S.done[x]);sec.classList.toggle('sdone',open&&d);if(!d)open=false});
+ const all=PS.every(p=>p.ex.every(x=>S.done[x]));const e=$('#profEnd');if(e)e.innerHTML=all?`<div class="card unlock">${ico('star','')}<div><b>Fall gelöst!</b> Das Lagerfeuer-Video ist gerettet und auf dem Weg zu allen 27 Kindern. Du hast Binärzahlen, Bit und Byte, die Einheitentreppe und Speicherbedarf gemeistert. Respekt, Profi!</div></div>`:''}
+
+/* ---------- widgets ---------- */
+function lamps(id,n,targets,char){const host=document.getElementById(id);if(!host)return;let bits=Array(n).fill(0),ti=0;const got=new Set();
+ const draw=()=>{const v=bits.reduce((a,b,i)=>a+b*2**(n-1-i),0);const terms=bits.map((b,i)=>b?2**(n-1-i):0).filter(x=>x);
+  const ch=v>=32&&v<=126?String.fromCharCode(v):'–';
+  host.innerHTML=`<div class="lamps">${bits.map((b,i)=>`<button type="button" class="bit${b?' on':''}" data-b="${i}" aria-pressed="${!!b}" aria-label="Stellenwert ${2**(n-1-i)}"><span class="pv">${2**(n-1-i)}</span><span class="bulb">${b}</span></button>`).join('')}</div>
+  <div class="readout"><span>Binär</span><b>${bits.join('')}<sub>2</sub></b><span>Dezimal</span><b class="dec">${terms.length>1?terms.join(' + ')+' = ':''}${v}</b>${char?`<span>Zeichen</span><span class="charbox">${ch}</span>`:''}</div>
+  <div class="chal">${targets.length?`<span>Stelle ein:</span>${targets.map((t,i)=>`<span class="chip${got.has(i)?' got':i===ti?' now':''}">${t.l}</span>`).join('')}`:''}<button type="button" class="btn ghost sm" data-reset="1">Alle aus</button></div>
+  <div class="msg" aria-live="polite">${targets.length&&ti>=targets.length?'Alle gefunden. Stark!':''}</div>`;
+  if(ti<targets.length&&v===targets[ti].v){got.add(ti);ti++;host.querySelector('.msg').textContent=ti>=targets.length?'Alle gefunden. Stark!':`Richtig! ${targets[ti-1].l} = ${bits.join('')}. Weiter mit ${targets[ti].l}.`;host.querySelectorAll('.chip')[ti-1].className='chip got';if(ti<targets.length)host.querySelectorAll('.chip')[ti].className='chip now'}};
+ host.addEventListener('click',e=>{const b=e.target.closest('[data-b]');if(b){bits[+b.dataset.b]^=1;draw();host.querySelector(`[data-b="${b.dataset.b}"]`).focus()}if(e.target.closest('[data-reset]')){bits.fill(0);draw()}});draw();
+ host.setBits=v=>{bits=bits.map((_,i)=>(v>>(n-1-i))&1);draw()}}
+
+function gen(id,type){const host=document.getElementById(id);let lvl='b',cur,right=0;
+ const neu=(foc)=>{const n=lvl==='b'?rnd(1,15):rnd(16,255);cur=n;host.querySelector('.gq').innerHTML=type==='b2d'?`${bin(n)}<sub>2</sub> = ? <span class="unit">(dezimal)</span>`:`${n} = ? <span class="unit">(binär)</span>`;const i=host.querySelector('input');i.value='';if(foc)i.focus({preventScroll:true});host.querySelector('.fb').className='fb';host.querySelector('.fb').innerHTML=''};
+ host.innerHTML=`<div class="seg" style="margin-bottom:8px"><button type="button" data-l="b" aria-pressed="true">4 Bit</button><button type="button" data-l="p" aria-pressed="false">8 Bit</button></div><div class="q gq" style="font-weight:700;font-size:1.15rem"></div><div class="row"><input aria-label="Antwort" autocomplete="off" inputmode="decimal"><button type="button" class="btn" data-g="chk">Prüfen</button><button type="button" class="btn ghost" data-g="new">Neue Aufgabe</button><span class="count gc">Richtig: 0</span></div><div class="fb" aria-live="polite"></div>`;
+ const chk=()=>{const v=host.querySelector('input').value.trim();const fb=host.querySelector('.fb');let ok;if(type==='b2d')ok=parseDE(v)===cur;else ok=/^[01]+$/.test(v)&&parseInt(v,2)===cur;
+  if(!v){fb.className='fb info';fb.textContent='Gib zuerst eine Antwort ein.';return}
+  if(ok){right++;host.querySelector('.gc').textContent='Richtig: '+right;fb.className='fb good';fb.innerHTML='<span class="okmark">Richtig!</span> Klicke auf „Neue Aufgabe“.'}else{fb.className='fb bad';fb.innerHTML='Noch nicht. Lösungsweg: '+(type==='b2d'?b2dText(bin(cur)):d2bText(cur))}};
+ host.addEventListener('click',e=>{const l=e.target.closest('[data-l]');if(l){lvl=l.dataset.l;host.querySelectorAll('[data-l]').forEach(b=>b.setAttribute('aria-pressed',b===l));neu(true)}const g=e.target.closest('[data-g]');if(g)g.dataset.g==='chk'?chk():neu(true)});
+ host.querySelector('input').addEventListener('keydown',e=>{if(e.key==='Enter')chk()});neu(false)}
+
+function adder(id,n,a0,b0,mode){const host=document.getElementById(id);if(!host)return;let A=a0,B=b0,shown=0;const ov=mode==='ov';
+ const bits=v=>Array.from({length:n},(_,i)=>(v>>(n-1-i))&1);
+ const calc=()=>{const a=bits(A),b=bits(B);let c=0;const res=[],cin=[],txt=[];for(let k=n-1;k>=0;k--){cin[k]=c;const s=a[k]+b[k]+c;res[k]=s%2;const nc=s>1?1:0;txt.push(`Stelle mit Wert ${2**(n-1-k)}: ${a[k]} + ${b[k]}${c?' + Übertrag 1':''} = ${s>1?bin(s):s} → schreibe <b>${s%2}</b>${nc?', Übertrag <b>1</b>':''}`);c=nc}
+  if(c)txt.push(ov?`Der Übertrag müsste in eine 5. Stelle. Die hat der 4-Bit-Rechner nicht → <b>Überlauf!</b>`:`Der letzte Übertrag wird vorne als neue Stelle angeschrieben: <b>1</b>`);return {a,b,res,cin,cout:c,txt}};
+ const rand=()=>{let a,b;if(mode==='free'){do{a=rnd(1,14);b=rnd(1,15)&~a&15}while(!b)}else if(mode==='carry'){do{a=rnd(1,14);b=rnd(1,14)}while(!(a&b)||a+b>15)}else{a=rnd(4,15);b=rnd(4,15)}A=a;B=b;shown=0;draw()};
+ const draw=()=>{const r=calc(),T=r.txt.length,done=shown>=T;const rev=k=>k>=n-shown;
+  const head=`<tr class="head"><td class="lbl">Stellenwert</td><td class="x">${ov?'Überlauf':2**n}</td>${r.a.map((_,k)=>`<td>${2**(n-1-k)}</td>`).join('')}</tr>`;
+  const car=`<tr class="car"><td class="lbl">Übertrag</td><td class="x">${shown>=n&&r.cout?'1':''}</td>${r.a.map((_,k)=>`<td>${k<n-1&&rev(k+1)&&r.cin[k]?'1':''}</td>`).join('')}</tr>`;
+  const row=(lbl,ab,v)=>`<tr><td class="lbl">${lbl}</td><td class="x"></td>${v.map((d,k)=>`<td><button type="button" class="ab${d?' on':''}" data-ab="${ab}${k}" aria-label="${lbl}, Stellenwert ${2**(n-1-k)}">${d}</button></td>`).join('')}</tr>`;
+  const res=`<tr class="res"><td class="lbl">Ergebnis</td><td class="x${ov&&done&&r.cout?' ovc':''}">${done&&r.cout?'1':''}</td>${r.res.map((d,k)=>`<td class="${rev(k)?'':'q'}">${rev(k)?d:'?'}</td>`).join('')}</tr>`;
+  const sum=A+B;let end='';
+  if(done){end=ov&&r.cout?`<div class="ovwarn">Überlauf! ${A} + ${B} = ${sum} braucht 5 Bit. Der 4-Bit-Rechner zeigt nur <b>${p4(sum%16)}<sub>2</sub> = ${sum%16}</b> an. Das ist falsch!</div>`:`<div class="msg">Probe: ${A} + ${B} = ${sum} = ${bin(sum)}<sub>2</sub> ✓${ov?' Kein Überlauf, das Ergebnis passt in 4 Bit.':''}</div>`}
+  host.innerHTML=`<div class="scroll"><table class="addt${ov?' ovmode':''}">${head}${car}${row('Zahl 1','a',r.a)}${row('+ Zahl 2','b',r.b)}${res}</table></div>
+  <div class="readout"><span>Zahl 1</span><b>${A}</b><span>Zahl 2</span><b>${B}</b></div>
+  <div class="chal"><button type="button" class="btn sm" data-ad="next"${done?' disabled':''}>Nächste Stelle</button><button type="button" class="btn ghost sm" data-ad="all">Alles zeigen</button><button type="button" class="btn ghost sm" data-ad="reset">Von vorn</button><button type="button" class="btn ghost sm" data-ad="rand">Neue Zahlen</button></div>
+  <ol class="addsteps">${r.txt.slice(0,shown).map(t=>`<li>${t}</li>`).join('')}</ol>${end}`};
+ host.addEventListener('click',e=>{const b=e.target.closest('[data-ab]');if(b){const w=b.dataset.ab[0],k=+b.dataset.ab.slice(1);if(w==='a')A^=1<<(n-1-k);else B^=1<<(n-1-k);shown=0;draw();return}
+  const d=e.target.closest('[data-ad]');if(!d)return;const T=calc().txt.length;const a=d.dataset.ad;if(a==='next')shown=Math.min(T,shown+1);else if(a==='all')shown=T;else if(a==='reset')shown=0;else rand();draw()});
+ draw();host.randomize=rand}
+
+function stepper(){const inp=$('#stIn'),out=$('#stOut');let rows=[],k=0,built=false;
+ const build=()=>{let n=parseInt(inp.value,10);rows=[];k=0;out.innerHTML='';if(isNaN(n)||n<0||n>255){out.innerHTML='<li>Bitte eine ganze Zahl von 0 bis 255 eingeben.</li>';return false}
+  let p=n>=16?128:8,r=n,d='';for(;p>=1;p/=2){if(p<=r){rows.push(`Passt <b>${p}</b> in ${r}? <b class="y">Ja</b> → <b>1</b>, Rest ${r} − ${p} = ${r-p}`);r-=p;d+='1'}else{rows.push(`Passt <b>${p}</b> in ${r}? <b class="n">Nein</b> → <b>0</b>`);d+='0'}}
+  rows.push(`Ergebnis: <b>${n} = ${d}<sub>2</sub></b>${n?` (Probe: ${b2dText(bin(n)).split(': ')[1]})`:''}`);return true};
+ inp.addEventListener('input',()=>{built=false;out.innerHTML=''});
+ $('#stNext').addEventListener('click',()=>{if(!built){built=build();if(!built)return}if(k<rows.length)out.insertAdjacentHTML('beforeend',`<li>${rows[k++]}</li>`)});
+ $('#stAll').addEventListener('click',()=>{if(!built){built=build();if(!built)return}while(k<rows.length)out.insertAdjacentHTML('beforeend',`<li>${rows[k++]}</li>`)})}
+
+function stairs(){const U=['Bit','Byte','kB','MB','GB','TB'];const F=$('#cvF'),T=$('#cvT'),Vv=$('#cvV'),st=$('#stairs');const fac=i=>i===1?8:1000;
+ F.innerHTML=U.map((u,i)=>`<option value="${i}">${u}</option>`).join('');T.innerHTML=F.innerHTML;F.value='4';T.value='3';
+ const draw=()=>{const f=+F.value,t=+T.value,lo=Math.min(f,t),hi=Math.max(f,t);
+  st.innerHTML=U.map((u,i)=>`<button type="button" class="stair${i===f?' from':i===t?' to':(i>lo&&i<hi)?' path':''}" data-u="${i}" style="height:${46+i*26}px">${i?`<span class="fac">${fac(i)}</span>`:''}${u}</button>`).join('');
+  const v=parseDE(Vv.value);if(isNaN(v)){$('#cvR').textContent='Bitte eine Zahl eingeben.';$('#cvC').textContent='';return}
+  let x=v,ch=[`${fmt(v)} ${U[f]}`];
+  if(t<f){for(let i=f;i>t;i--){x*=fac(i);ch.push(`· ${fac(i)} = ${fmt(x)} ${U[i-1]}`)}}else{for(let i=f;i<t;i++){x/=fac(i+1);ch.push(`: ${fac(i+1)} = ${fmt(x)} ${U[i+1]}`)}}
+  $('#cvR').textContent=`${fmt(v)} ${U[f]} = ${fmt(x)} ${U[t]}`;$('#cvC').textContent=f===t?'Gleiche Einheit, nichts zu rechnen.':`Rechenweg: ${ch.join('  ')} (${t<f?'Treppe hinunter → multiplizieren':'Treppe hinauf → dividieren'})`};
+ draw();[F,T].forEach(s=>s.addEventListener('change',draw));Vv.addEventListener('input',draw);
+ st.addEventListener('click',e=>{const b=e.target.closest('[data-u]');if(b){T.value=b.dataset.u;draw()}})}
+
+function pack(){let med='usb';const sel=new Set(['foto','song']);
+ const draw=()=>{document.querySelectorAll('[data-med]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.med===med));document.querySelectorAll('[data-item]').forEach(b=>b.setAttribute('aria-pressed',sel.has(b.dataset.item)));
+  const m=MEDIA.find(x=>x.id===med);const tot=ITEMS.filter(t=>sel.has(t.id)).reduce((a,t)=>a+t.mb,0);const p=Math.min(100,tot/m.mb*100);const r=x=>fmt(Math.round(x*100)/100);
+  const bar=$('#pkBar');bar.classList.toggle('full',tot>m.mb);bar.querySelector('i').style.width=p+'%';
+  $('#pkS').innerHTML=!sel.size?'Noch nichts eingepackt.':`${r(tot)} MB von ${fmt(m.mb)} MB belegt. `+(tot<=m.mb?`<span style="color:var(--green)">Passt! Noch ${r(m.mb-tot)} MB frei.</span>`:`<span style="color:var(--bad)">Zu voll! ${r(tot-m.mb)} MB zu viel.</span>`)};
+ $('#pkM').addEventListener('click',e=>{const b=e.target.closest('[data-med]');if(b){med=b.dataset.med;draw()}});
+ $('#pkI').addEventListener('click',e=>{const b=e.target.closest('[data-item]');if(b){const k=b.dataset.item;sel.has(k)?sel.delete(k):sel.add(k);draw()}});
+ draw();
+ if(S.guess!=null)$('#guessBack').innerHTML=say(`Zu Beginn hast du geschätzt: <b>${GUESS[S.guess]}</b>. Packe alle fünf Daten ein und prüfe deine Schätzung! Dann beantworte die letzte Frage.`)}
+
+/* ---------- plenum (beamer) ---------- */
+const PLAN1=[['0–4 min','Begrüßung, Ziel der Stunde, PCs starten, Labor öffnen','Plenum'],['4–6','Station 1: Start','EA am PC'],['6–12','Station 2: Was ist eine Binärzahl? (Hefter: Stellenwerte)','EA am PC'],['12–21','Station 3: Binär → Dezimal (Hefter: Vorgehen)','EA am PC'],['21–31','Station 4: Dezimal → Binär (Hefter: Vorgehen)','EA am PC'],['31–37','Check: Bittys Tresor (Einschätzung + 9 Aufgaben)','EA am PC'],['ab ca. 30','Profi-Zone 1 als Puffer für Schnelle','EA am PC'],['37–45','Gemeinsamer Abschluss: Menschliche Binärzahl + Lernziel-Daumen','Plenum']];
+const PLAN2=[['0–4 min','Begrüßung, Rückblick auf Stunde 1, Labor öffnen (Schritt 7)','Plenum'],['4–13','Station 7: Addition ohne Übertrag (Aufwärmen, Hefter)','EA am PC'],['13–23','Station 8: Addition mit Übertrag (Hefter)','EA am PC'],['23–31','Station 9: Der Überlauf (Hefter)','EA am PC'],['31–37','Check: Bittys Rechenwerk','EA am PC'],['ab ca. 30','Profi-Zone 2 als Puffer für Schnelle','EA am PC'],['37–45','Gemeinsamer Abschluss: Rechenmaschine am Beamer + Lernziel-Daumen','Plenum']];
+const PLAN3=[['0–4 min','Begrüßung, Rückblick auf Stunde 2, Labor öffnen (Schritt 12)','Plenum'],['4–8','Station 12: Mission (Aufwärmen + Auftrag)','EA am PC'],['8–15','Station 13: Bit und Byte (Hefter)','EA am PC'],['15–23','Station 14: Einheitentreppe (Hefter)','EA am PC'],['23–32','Station 15: Speicher-Check (Hefter)','EA am PC'],['32–38','Abschluss-Check','EA am PC'],['ab ca. 30','Profi-Zone 3 als Puffer für Schnelle','EA am PC'],['38–45','Gemeinsamer Abschluss','Plenum']];
+const planTable=p=>`<div class="scroll"><table class="plan">${p.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td style="color:var(--soft)">${r[2]}</td></tr>`).join('')}</table></div>`;
+function plenum(){dialog(`<h2 style="margin-top:0">Gemeinsamer Abschluss Stunde 1</h2>
+<p><b>1. Menschliche Binärzahl</b> (ca. 5 min): Fünf Kinder stehen vorn mit Karten 16, 8, 4, 2, 1. Stehen = 1, Hocken = 0. Würfeln Sie eine Zahl, die Klasse dirigiert die fünf. Danach umgekehrt. Mit den Lampen unten können Sie die Lösung am Beamer zeigen.</p>
+<div class="row"><button type="button" class="btn" id="plD">Dezimalzahl würfeln</button><button type="button" class="btn" id="plB">Binärzahl würfeln</button><button type="button" class="btn ghost" id="plS">Lösung zeigen</button></div>
+<div class="plq" id="plQ">Würfeln Sie eine Aufgabe.</div>
+<div class="lab" id="plL"></div>
+<p><b>2. Lernziel-Daumen</b> (ca. 2 min): Lesen Sie die Lernziele vor. Daumen hoch, waagerecht oder runter. Die Kinder vergleichen mit ihrem Check-Ergebnis.</p>
+<ol class="goals"><li>Ich kann erklären, wie eine Binärzahl aufgebaut ist.</li><li>Ich kann Binärzahlen in Dezimalzahlen umrechnen.</li><li>Ich kann Dezimalzahlen in Binärzahlen umrechnen.</li></ol>
+<p><b>3. Ausblick</b> (1 min): „Mit 8 Lampen kann man 256 Zahlen darstellen. Was könnte ein Computer damit noch speichern?“ (Buchstaben, Stunde 2)</p>
+<div class="acts"><button type="button" class="btn" data-close>Schließen</button></div>`,'beamer');
+ lamps('plL',5,[]);let cur=null,mode='';const q=$('#plQ'),L=$('#plL');
+ const roll=m=>{mode=m;cur=rnd(3,31);L.setBits(0);q.innerHTML=m==='d'?`Zeigt die Zahl <b>${cur}</b> als Binärzahl!`:`Welche Zahl ist <b>${bin(cur).padStart(5,'0')}<sub>2</sub></b>?`};
+ $('#plD').onclick=()=>roll('d');$('#plB').onclick=()=>roll('b');
+ $('#plS').onclick=()=>{if(cur==null)return;L.setBits(cur);q.innerHTML+=` <span class="okmark">→ ${bin(cur).padStart(5,'0')}<sub>2</sub> = ${cur}</span>`}}
+
+function plenum2(){dialog(`<h2 style="margin-top:0">Gemeinsamer Abschluss Stunde 2</h2>
+<p><b>1. Rechenduell</b> (ca. 5 min): Klicken Sie auf „Neue Zahlen“. Alle rechnen auf einem Zettel oder Mini-Whiteboard und halten das Ergebnis hoch. Danach deckt die Klasse mit „Nächste Stelle“ gemeinsam auf. Frage jedes Mal: <i>Gibt es einen Überlauf?</i></p>
+<div class="lab" id="plA"></div>
+<p><b>2. Lernziel-Daumen</b> (ca. 2 min): Daumen hoch, waagerecht oder runter. Die Kinder vergleichen mit ihrem Check-Ergebnis.</p>
+<ol class="goals"><li>Ich kann Binärzahlen ohne Übertrag addieren.</li><li>Ich kann Binärzahlen mit Übertrag addieren.</li><li>Ich kann erkennen, wann ein Überlauf entsteht.</li></ol>
+<p><b>3. Ausblick</b> (1 min): „Ein Byte hat 8 Bit. Wie viel Speicher braucht dann ein Foto?“ (Stunde 3)</p>
+<div class="acts"><button type="button" class="btn" data-close>Schließen</button></div>`,'beamer');adder('plA',4,11,6,'ov')}
+/* ---------- status & nav ---------- */
+const PCOL={s1:'var(--blue)',s2:'var(--violet)',s3:'var(--red)',check:'var(--green)',profi:'var(--pro)'};
+const LNAME={1:'Binärzahlen',2:'Rechnen mit Binärzahlen',3:'Bit, Byte, Einheiten'},LCOL={1:'var(--blue)',2:'var(--violet)',3:'var(--red)'};
+function stepDone(i){const s=STEPS[i];if(s.kind==='check')return selfDone(s.chk)&&ccDone(s.chk);const req=s.b.length+s.h.length;if(!req)return !!S.seen[i];return s.b.every(x=>S.done[x])&&s.h.every(x=>S.hef[x])}
+const tagName=s=>s.kind==='check'?`Stunde ${s.lesson}: Check`:s.kind==='profi'?'Für Profis':`Stunde ${s.lesson}: ${LNAME[s.lesson]}`;
+function renderNav(){let h='';
+ STEPS.forEach((s,i)=>{const first=i===0||STEPS[i-1].lesson!==s.lesson,last=i===STEPS.length-1||STEPS[i+1].lesson!==s.lesson;
+  if(first)h+=`<div class="mpart" style="color:${LCOL[s.lesson]}">Stunde ${s.lesson}: ${LNAME[s.lesson]}</div>`;
+  const locked=s.kind==='profi'&&!ccDone(s.chk),dn=stepDone(i);
+  h+=`<button type="button" class="st${first?' first':''}${last?' last':''}${dn?' ok':''}${i===S.step?' cur':''}" style="--c:${PCOL[s.kind]}" data-go="${i}" ${i===S.step?'aria-current="step"':''}><span class="dot">${dn?ico('check',''):locked?ico('lock',''):''}</span><span>${s.title}<small>${s.sub}${s.min?`, ca. ${s.min} min`:locked?', öffnet nach dem Check':', für Schnelle'}</small></span></button>`});
+ $('#metro').innerHTML=h;
+ $('#prog').innerHTML=STEPS.map((s,i)=>`<i class="${stepDone(i)?'ok':''}${i===S.step?' cur':''}" style="--c:${PCOL[s.kind]}" title="${s.title}"></i>`).join('');
+ const s=STEPS[S.step];
+ $('#pagerMid').textContent=`Schritt ${S.step+1} von ${STEPS.length}: ${s.title}`;
+ $('#prevBtn').style.visibility=S.step===0?'hidden':'visible';
+ $('#nextBtn').textContent=S.step===STEPS.length-1?'Fertig':s.kind==='check'?'Zur Profi-Zone':S.step===5?'Weiter zu Stunde 2':S.step===10?'Weiter zu Stunde 3':'Weiter'}
+function update(){renderNav();const i=S.step,el=document.getElementById('cnt-'+i);if(el)el.textContent=`${STEPS[i].b.filter(x=>S.done[x]).length} / ${STEPS[i].b.length}`;
+ if(i===5)prof1Upd();if(i===10)prof2Upd();if(i===16)profUpd()}
+const closeDlg=()=>{const o=document.getElementById('ov');if(o)o.className='ov'};
+function go(i,noScroll){closeDlg();i=Math.max(0,Math.min(STEPS.length-1,i));S.step=i;S.seen[i]=1;save();
+ const s=STEPS[i];document.documentElement.style.setProperty('--part',PCOL[s.kind]);
+ $('#main').innerHTML=`<div class="kicker"><span class="tag part">${tagName(s)}</span><span class="tag">Schritt ${i+1} von ${STEPS.length}</span>${s.min?`<span class="tag">${ico('clock')} ca. ${s.min} min</span>`:''}</div>`+s.render();
+ Object.keys(EX).forEach(id=>{if(S.done[id]&&document.getElementById('ex-'+id))solved(id,false);else if(S.tries[id])helpBtns(id)});
+ s.init&&s.init();renderNav();
+ if(location.hash!=='#schritt-'+(i+1))history.replaceState(null,'','#schritt-'+(i+1));
+ if(!noScroll)window.scrollTo({top:0})}
+
+/* ---------- dialog ---------- */
+const ov=$('#ov'),dlg=$('#dlg');
+function dialog(html,cls=''){dlg.innerHTML=html;ov.className='ov show '+cls;const f=dlg.querySelector('button');f&&f.focus()}
+ov.addEventListener('click',e=>{if(e.target===ov||e.target.closest('[data-close]'))closeDlg()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDlg()});
+
+function next(){const s=STEPS[S.step];
+ if(S.step===STEPS.length-1){dialog(`<h2 style="margin-top:0">Fertig!</h2><p>Du bist am Ende des Datenlabors. Zeige deiner Lehrkraft dein Ergebnis aus dem Abschluss-Check und deinen Hefter.</p><div class="acts"><button type="button" class="btn" data-close>Schließen</button></div>`);return}
+ if(s.kind==='check'&&!(selfDone(s.chk)&&ccDone(s.chk))){dialog(`<h2 style="margin-top:0">Erst der Check!</h2><p>Die Profi-Zone öffnet sich, wenn du dich eingeschätzt und alle Aufgaben abgegeben hast.</p><div class="acts"><button type="button" class="btn" data-close>Okay</button></div>`);return}
+ if(s.kind==='profi'&&S.step<STEPS.length-1){const L=s.lesson+1;dialog(`<h2 style="margin-top:0">Ende von Stunde ${s.lesson}</h2><p>Stunde ${L} beginnt mit „${STEPS[S.step+1].title}“. Wenn deine Lehrkraft es sagt, geht es dort weiter.</p><div class="acts"><button type="button" class="btn" id="dGo">Zu Stunde ${L}</button><button type="button" class="btn ghost" data-close>Hier bleiben</button></div>`);$('#dGo').onclick=()=>go(S.step+1);return}
+ const openH=s.h.filter(x=>!S.hef[x]),openB=s.b.filter(x=>!S.done[x]);
+ if(s.kind!=='profi'&&(openH.length||openB.length)){dialog(`<h2 style="margin-top:0">Moment noch!</h2>${openH.length?`<div class="hef" style="margin:12px 0"><div class="hh">${ico('book')} Hefter-Auftrag offen</div><p style="margin:0">Hast du „${openH.map(h=>HEF[h].title).join('“, „')}“ in deinen Hefter übernommen? Setze danach den Haken.</p></div>`:''}${openB.length?`<p>Du hast noch <b>${openB.length}</b> Basis-Aufgabe${openB.length>1?'n':''} offen.</p>`:''}<div class="acts"><button type="button" class="btn" id="dBack">${openH.length?'Zum Hefter-Auftrag':'Zu den Aufgaben'}</button><button type="button" class="btn ghost" id="dGo">Trotzdem weiter</button></div>`);
+  $('#dBack').onclick=()=>{closeDlg();const t=openH.length?document.getElementById('hef-'+openH[0]):document.getElementById('ex-'+openB[0]);t&&t.scrollIntoView({behavior:'smooth',block:'center'})};
+  $('#dGo').onclick=()=>go(S.step+1);return}
+ if(s.kind==='check')return go(CHECKS[s.chk].profi);
+ go(S.step+1)}
+$('#nextBtn').addEventListener('click',next);
+$('#prevBtn').addEventListener('click',()=>go(S.step-1));
+$('#stepsBtn').addEventListener('click',()=>{dialog(`<nav class="metro" style="display:block;position:static;max-height:none;padding:0">${$('#metro').innerHTML}</nav><div class="acts"><button type="button" class="btn ghost" data-close>Schließen</button></div>`,'drawer')});
+$('#fontBtn').addEventListener('click',()=>{dialog(`<h2 style="margin-top:0">Schriftgröße</h2><div class="seg">${[[15,'Klein'],[17,'Normal'],[20,'Groß']].map(([v,l])=>`<button type="button" data-fs="${v}" aria-pressed="${S.fs===v}">${l}</button>`).join('')}</div><div class="acts"><button type="button" class="btn" data-close>Fertig</button></div>`)});
+$('#teachBtn').addEventListener('click',()=>{dialog(`<h2 style="margin-top:0">Hinweise für Lehrkräfte</h2>
+<h3>Stunde 1: Binärzahlen</h3>${planTable(PLAN1)}
+<div class="row"><button type="button" class="btn" id="plOpen">Gemeinsamer Abschluss Stunde 1 (Beamer)</button></div>
+<h3 style="margin-top:16px">Stunde 2: Rechnen mit Binärzahlen</h3>${planTable(PLAN2)}
+<div class="row"><button type="button" class="btn" id="plOpen2">Gemeinsamer Abschluss Stunde 2 (Beamer)</button></div>
+<h3 style="margin-top:16px">Stunde 3: Bit, Byte, Einheiten</h3>${planTable(PLAN3)}
+<p><b>Sicherung:</b> 3 Hefter-Aufträge pro Stunde. Beim Klick auf „Weiter“ werden offene Aufträge angemahnt, im Check gibt es eine Hefter-Übersicht.</p>
+<p><b>Grundniveau:</b> Basis-Aufgaben in jeder Station, Tipps nach 1, Lösungen nach 2 Fehlversuchen.</p>
+<p><b>Checks:</b> Selbsteinschätzung, dann Aufgaben mit je einem Versuch (Stunde 1 und 2: je 9, Stunde 3: 10). Die Auswertung zeigt pro Kompetenz „sitzt“ oder verlinkt zur passenden Station und vergleicht mit der Einschätzung.</p>
+<p><b>Erhöhtes Niveau:</b> Die Profi-Zonen öffnen sich erst nach dem jeweiligen Check und dienen als Puffer.</p>
+<p>Der Fortschritt wird nur im jeweiligen Browser gespeichert.</p>
+<div class="acts"><button type="button" class="btn ghost" id="rst">Fortschritt zurücksetzen</button><button type="button" class="btn" data-close>Schließen</button></div>`);
+ $('#plOpen').onclick=plenum;$('#plOpen2').onclick=plenum2;
+ $('#rst').onclick=askReset});
+function resetAll(){try{localStorage.removeItem(KEY)}catch(x){}const fs=S.fs;S=fresh();S.fs=fs;S.vault={a:rnd(5,15),b:rnd(3,15),c:rnd(17,31)};save();location.hash='';location.reload()}
+function askReset(){dialog(`<h2 style="margin-top:0">Fortschritt löschen?</h2><p>Alle Antworten, Hefter-Haken, Einschätzungen und Check-Ergebnisse in diesem Browser werden gelöscht. Das Labor startet danach wieder bei Schritt 1.</p><p><b>Das kann man nicht rückgängig machen.</b></p><div class="acts"><button type="button" class="btn ghost" data-close>Abbrechen</button><button type="button" class="btn danger" id="rstYes">Ja, alles löschen</button></div>`);$('#rstYes').onclick=resetAll}
+$('#resetBtn').addEventListener('click',askReset);
+
+/* ---------- delegated events ---------- */
+document.addEventListener('click',e=>{const t=e.target;let b;
+ if(b=t.closest('[data-check]')){const id=b.dataset.check;check(id,$('#in-'+id).value)}
+ else if(b=t.closest('[data-choice]')){check(b.dataset.choice,b.dataset.i,b)}
+ else if(b=t.closest('[data-ccbtn]')){const id=b.dataset.ccbtn;ccSubmit(id,$('#cc-'+id).value)}
+ else if(b=t.closest('[data-cc]')){ccSubmit(b.dataset.cc,b.dataset.i)}
+ else if(b=t.closest('[data-again]')){const k=b.dataset.again;CHECKS[k].tasks.forEach(c=>delete S.cc[c.id]);save();go(CHECKS[k].step)}
+ else if(b=t.closest('[data-hint]')){const d=EX[b.dataset.hint];const fb=$('#ex-'+d.id+' .fb');fb.className='fb info';fb.innerHTML='<b>Tipp:</b> '+d.hint}
+ else if(b=t.closest('[data-sol]')){const id=b.dataset.sol,d=EX[id];S.done[id]=1;save();const inp=$('#in-'+id);if(inp)inp.value=correctText(d);solved(id,false);$('#ex-'+id+' .fb').innerHTML='<b>Lösung:</b> '+(d.sol||correctText(d))+'<br>Schau dir den Weg genau an und probiere die nächste Aufgabe selbst.';update()}
+ else if(b=t.closest('[data-go]')){go(+b.dataset.go)}
+ else if(b=t.closest('.pjump')){e.preventDefault();const tg=document.querySelector(b.getAttribute('href'));tg&&tg.scrollIntoView({behavior:'smooth'})}
+ else if(b=t.closest('[data-guess]')){S.guess=+b.dataset.guess;save();document.querySelectorAll('[data-guess]').forEach(x=>x.setAttribute('aria-pressed',x===b));$('#guessNote').innerHTML=guessNote()}
+ else if(b=t.closest('[data-self]')){const k=b.dataset.self.split(':')[0];const was=selfDone(k);S.self[b.dataset.self]=b.dataset.v;save();b.parentNode.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));if(!was&&selfDone(k)){$('#ccArea-'+k).innerHTML=ccArea(k);$('#ccArea-'+k).scrollIntoView({behavior:'smooth',block:'start'})}ccResult(k);renderNav()}
+ else if(b=t.closest('[data-fs]')){S.fs=+b.dataset.fs;save();document.documentElement.style.setProperty('--fs',S.fs+'px');b.parentNode.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b))}});
+document.addEventListener('keydown',e=>{const d=e.target.dataset;if(e.key!=='Enter'||!d)return;if(d.in)check(d.in,e.target.value);else if(d.ccin)ccSubmit(d.ccin,e.target.value)});
+document.addEventListener('change',e=>{const id=e.target.dataset&&e.target.dataset.hef;if(id){S.hef[id]=e.target.checked;save();e.target.closest('.hef').classList.toggle('done',e.target.checked);renderNav()}});
+const fromHash=()=>{const m=location.hash.match(/^#schritt-(\d+)$/);return m?+m[1]-1:null};
+window.addEventListener('hashchange',()=>{const h=fromHash();if(h!==null&&h!==S.step)go(h)});
+const h0=fromHash();go(h0!==null?h0:Math.min(S.step,STEPS.length-1),true);
+}
+</script>
+</body>
+</html>
