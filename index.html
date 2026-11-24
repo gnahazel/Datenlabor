@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Datenlabor Bit Byte Einheiten</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+/* VOICE everyday learning for 12-year-olds: friendly, clear, calm working surface
+   IDEA a metro map through the lab: each step is a station, Teil 1 blue line, Teil 2 red line
+   PICTURE the live widget of each station (bit lamps, safe, unit staircase, storage bar) drawn large
+   COLOUR white ground, metro blue and red per part, amber lined paper for Hefter tasks, green for Basis/correct
+   TYPE Figtree 800 for titles, Figtree 400/600 for text
+   LAYOUT laptop: metro line left, station content right, pager bottom; phone: content only, metro as drawer */
+:root{color-scheme:light dark;--fs:17px;--bg:light-dark(#ffffff,#0e1116);--ink:light-dark(#151821,#eef1f6);--soft:light-dark(#596072,#a7aebd);--line:light-dark(#dde2ea,#2b313d);--panel:light-dark(#f3f5f9,#161a22);--blue:light-dark(#0a5cff,#5b8cff);--red:light-dark(#e6261f,#ff5d55);--amber:#ffb400;--paper:light-dark(#fff7dc,#2a2414);--pline:light-dark(#f0dca0,#4a3f22);--green:light-dark(#00975a,#2ecc85);--gsoft:light-dark(#e3f6ec,#123224);--bad:light-dark(#c0261c,#ff7a70);--bsoft:light-dark(#fde8e6,#3a1714);--part:var(--blue);--pro:light-dark(#1f2638,#3d4866);--violet:light-dark(#6a3fd0,#8a66f0)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+[hidden]{display:none!important}
+html{font-size:var(--fs);scroll-padding-top:80px}
+body{margin:0;background:var(--bg);color:var(--ink);font:1rem/1.55 Figtree,system-ui,sans-serif;overflow-x:clip}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+h1,h2,h3{line-height:1.1;letter-spacing:-.02em;margin:0;text-wrap:balance}
+h1{font-size:clamp(1.9rem,4vw,2.6rem);font-weight:800}
+h2{font-size:1.35rem;font-weight:800;margin-top:1.6rem}
+h3{font-size:1.08rem;font-weight:800}
+p{margin:.5rem 0;max-width:68ch}
+sub{font-size:.7em}
+.top{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;gap:10px;padding:8px max(16px,3vw)}
+.brand{display:flex;align-items:center;gap:10px;margin-right:auto}
+.brand svg{width:38px;height:38px;flex:none}
+.brand b{font-size:1.15rem;font-weight:800;display:block;line-height:1.1}
+.brand span{font-size:.8rem;color:var(--soft)}
+.tbtn{min-height:44px;padding:0 14px;border:1px solid var(--line);border-radius:10px;background:var(--panel);font-weight:600}
+.tbtn:hover{border-color:var(--soft)}
+#stepsBtn{display:none}
+.lk2{display:none}
+.prog{display:flex;gap:3px;padding:0 max(16px,3vw) 8px}
+.prog i{flex:1;height:6px;border-radius:3px;background:var(--line)}
+.prog i{background:color-mix(in srgb,var(--c) 28%,var(--line))}
+.prog i.ok{background:var(--c)}
+.prog i.cur{outline:2px solid var(--ink);outline-offset:1px}
+.wrap{display:grid;grid-template-columns:250px minmax(0,1fr);max-width:1240px;margin:0 auto}
+.metro{position:sticky;top:80px;align-self:start;padding:22px 10px 22px max(16px,2vw);max-height:calc(100vh - 80px);overflow:auto}
+.mpart{font-size:.82rem;font-weight:800;margin:6px 0 6px 2px;color:var(--soft)}
+.mpart.t1{color:var(--blue)}.mpart.t2{color:var(--red);margin-top:14px}
+.st{display:flex;align-items:center;gap:12px;width:100%;min-height:44px;border:0;background:none;text-align:left;padding:4px 6px;border-radius:10px;position:relative}
+.st:hover{background:var(--panel)}
+.st .dot{width:22px;height:22px;border-radius:50%;border:4px solid var(--c);background:var(--bg);flex:none;position:relative;z-index:1;display:grid;place-items:center}
+.st::before{content:"";position:absolute;left:15px;top:-6px;bottom:-6px;width:6px;background:var(--c)}
+.st.first::before{top:50%}.st.last::before{bottom:50%}
+.st.ok .dot{background:var(--c)}
+.st.ok .dot svg{width:12px;height:12px;color:#fff}
+.st .dot svg{width:11px;height:11px;color:var(--c)}
+.st.cur .dot{transform:scale(1.25);box-shadow:0 0 0 4px color-mix(in srgb,var(--c) 25%,transparent)}
+.st.cur{font-weight:800;background:var(--panel)}
+.st small{display:block;color:var(--soft);font-size:.8rem;font-weight:400}
+main{padding:22px max(16px,3vw) 120px;max-width:900px}
+.kicker{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.tag{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:99px;font-size:.85rem;font-weight:600;background:var(--panel);border:1px solid var(--line);white-space:nowrap}
+.tag.part{background:var(--part);color:#fff;border-color:transparent}
+.bitty{display:flex;gap:12px;align-items:flex-start;margin:16px 0}
+.bitty svg{width:56px;height:56px;flex:none}
+.bitty p{margin:0;background:var(--panel);border:1px solid var(--line);border-radius:4px 16px 16px 16px;padding:10px 14px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;margin:14px 0}
+.lead{font-size:1.1rem}
+.ic{width:20px;height:20px;flex:none;vertical-align:-4px}
+/* Hefter */
+.hef{margin:18px 0;border-radius:6px 14px 14px 6px;background:var(--paper);background-image:repeating-linear-gradient(transparent 0 calc(1.55em - 1px),var(--pline) calc(1.55em - 1px) 1.55em);border:2px solid var(--amber);padding:14px 16px 12px 46px;position:relative}
+.hef::before{content:"";position:absolute;left:14px;top:12px;bottom:12px;width:14px;background:radial-gradient(circle at 7px 7px,var(--bg) 4px,transparent 5px) 0 0/14px 26px repeat-y}
+.hef .hh{display:flex;align-items:center;gap:8px;font-weight:800;color:light-dark(#7a5200,#ffcf5a);margin-bottom:4px}
+.hef .task{font-weight:600;margin:0 0 8px}
+.hef .copy{background:var(--bg);border:1px dashed var(--pline);border-radius:8px;padding:10px 14px}
+.hef .copy h3{margin-bottom:4px;text-decoration:underline;text-underline-offset:3px}
+.hef ol,.hef ul{margin:.3rem 0;padding-left:1.3rem}
+.chk{display:flex;align-items:center;gap:10px;margin-top:10px;min-height:44px;font-weight:600;cursor:pointer}
+.chk input{width:24px;height:24px;accent-color:var(--green)}
+.hef.done{border-color:var(--green)}
+/* levels */
+.lvl{display:flex;align-items:center;gap:10px;margin:26px 0 8px}
+.lvl .badge{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--green);color:#fff;flex:none}
+.lvl .badge svg{width:20px;height:20px}
+.lvl small{display:block;color:var(--soft);font-weight:400;font-size:.88rem}
+.count{margin-left:auto;font-weight:800;white-space:nowrap;color:var(--green)}
+.profi{margin:26px 0;border:2px solid var(--ink);border-radius:14px;overflow:hidden}
+.pz-toggle{width:100%;display:flex;align-items:center;gap:12px;padding:12px 16px;border:0;background:var(--ink);color:var(--bg);text-align:left;min-height:56px}
+.pz-toggle svg{width:24px;height:24px;flex:none;color:var(--amber)}
+.pz-toggle b{font-size:1.05rem}
+.pz-toggle small{display:block;opacity:.8}
+.pz-toggle .arr{margin-left:auto;font-size:1.3rem;transition:transform .2s}
+.pz-toggle[aria-expanded=true] .arr{transform:rotate(180deg)}
+.pz-toggle.ready{animation:pulse 1.6s ease-in-out 3}
+@keyframes pulse{50%{box-shadow:inset 0 0 0 4px var(--amber)}}
+.pz-body{padding:4px 16px 16px}
+/* exercises */
+.ex{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:10px 0;background:var(--bg)}
+.ex .q{font-weight:600}
+.ex .q .n{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--panel);border:1px solid var(--line);font-size:.85rem;margin-right:6px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px}
+.row input{width:11em;min-height:44px;padding:6px 10px;border:2px solid var(--line);border-radius:10px;background:var(--bg);font-size:1.05rem;font-variant-numeric:tabular-nums}
+.row input:focus{border-color:var(--part)}
+.unit{font-weight:600;white-space:nowrap}
+.btn{min-height:44px;padding:0 16px;border-radius:10px;border:0;background:var(--part);color:#fff;font-weight:700}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:var(--panel);color:var(--ink);border:1px solid var(--line)}
+.btn.sm{min-height:38px;padding:0 12px;font-size:.9rem}
+.opts{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.opt{min-height:44px;padding:6px 14px;border-radius:10px;border:2px solid var(--line);background:var(--bg);font-weight:600;text-align:left}
+.opt:hover{border-color:var(--part)}
+.opt.right{border-color:var(--green);background:var(--gsoft)}
+.opt.wrong{border-color:var(--bad);background:var(--bsoft)}
+.fb{margin-top:8px;border-radius:8px}
+.fb:empty{display:none}
+.fb.good{background:var(--gsoft);padding:8px 12px}
+.fb.bad{background:var(--bsoft);padding:8px 12px}
+.fb.info{background:var(--panel);padding:8px 12px;border:1px solid var(--line)}
+.help{display:flex;gap:8px;margin-top:6px}
+.help:empty{display:none}
+.ex.ok{border-color:var(--green);background:color-mix(in srgb,var(--gsoft) 45%,var(--bg))}
+.ex.ok input{border-color:var(--green)}
+.okmark{color:var(--green);font-weight:800}
+/* tables */
+.scroll{overflow-x:auto}
+table.pv{border-collapse:collapse;margin:10px 0;font-variant-numeric:tabular-nums}
+table.pv td,table.pv th{border:2px solid var(--line);padding:6px 12px;text-align:center;min-width:46px}
+table.pv th{background:var(--panel);font-size:.9rem}
+table.pv td.one{background:color-mix(in srgb,var(--part) 18%,var(--bg));font-weight:800}
+.plan{border-collapse:collapse;width:100%}
+.plan td{padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+.plan td:first-child{white-space:nowrap;font-weight:800;width:5.5em}
+/* lamps */
+.lab{background:light-dark(#10182b,#0a0e18);color:#eef1f6;border-radius:16px;padding:18px;margin:14px 0}
+.lamps{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.bit{width:64px;border:0;background:none;color:inherit;display:flex;flex-direction:column;align-items:center;gap:6px;padding:4px}
+.bulb{width:52px;height:52px;border-radius:50%;background:#2a3348;border:3px solid #3b4762;display:grid;place-items:center;font-size:1.5rem;font-weight:800;transition:background .15s,box-shadow .15s}
+.bit.on .bulb{background:#ffd23f;border-color:#fff1b8;color:#2a1d00;box-shadow:0 0 22px #ffd23f88}
+.bit .pv{font-size:.9rem;font-weight:700;color:#9fb0d0}
+.readout{display:flex;flex-wrap:wrap;gap:10px 24px;justify-content:center;align-items:baseline;margin-top:14px;font-variant-numeric:tabular-nums}
+.readout b{font-size:clamp(1.6rem,5vw,2.3rem);font-weight:800}
+.readout span{color:#9fb0d0}
+.chal{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:14px;align-items:center}
+.chip{padding:6px 12px;border-radius:99px;border:2px solid #3b4762;font-weight:700;white-space:nowrap}
+.chip.now{border-color:#ffd23f;color:#ffd23f}
+.chip.got{background:#1f7a4d;border-color:#1f7a4d}
+.lab .msg{text-align:center;margin-top:8px;min-height:1.6em;color:#c9f5dd;font-weight:600}
+.lab .btn.ghost{background:#222b40;color:#eef1f6;border-color:#3b4762}
+.charbox{display:grid;place-items:center;width:70px;height:70px;border-radius:12px;background:#fff;color:#10182b;font-size:2.4rem;font-weight:800}
+/* stepper */
+.steps{list-style:none;padding:0;margin:10px 0}
+.steps li{padding:8px 12px;border-left:4px solid var(--part);background:var(--bg);margin:6px 0;border-radius:0 8px 8px 0;font-variant-numeric:tabular-nums}
+.steps li b.y{color:var(--green)}.steps li b.n{color:var(--bad)}
+/* vault */
+.vault{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:18px;align-items:center}
+.vault svg{width:100%;height:auto}
+.door{transition:transform .9s ease,opacity .9s;transform-origin:26px 100px;transform-box:view-box}
+.open .door{transform:scaleX(.06);opacity:.35}
+/* stairs */
+.stairs{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px;align-items:end;margin:40px 0 6px}
+.stair{border:0;border-radius:8px 8px 0 0;background:color-mix(in srgb,var(--red) 16%,var(--bg));border:2px solid color-mix(in srgb,var(--red) 40%,var(--bg));display:flex;flex-direction:column;justify-content:flex-start;align-items:center;padding:8px 2px;position:relative;font-weight:800;font-size:clamp(.85rem,2.4vw,1.1rem)}
+.stair .fac{position:absolute;top:-30px;left:-14px;font-size:.78rem;background:var(--ink);color:var(--bg);border-radius:99px;padding:2px 7px;white-space:nowrap;z-index:1}
+.stair.path{background:color-mix(in srgb,var(--red) 40%,var(--bg))}
+.stair.from,.stair.to{background:var(--red);color:#fff;border-color:var(--red)}
+.slegend{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-weight:600;font-size:.92rem}
+.conv{display:grid;grid-template-columns:repeat(auto-fit,minmax(9em,1fr));gap:10px;margin-top:12px}
+.conv label{font-size:.88rem;font-weight:600;color:var(--soft);display:flex;flex-direction:column;gap:4px}
+.conv input,.conv select{min-height:44px;padding:6px 10px;border:2px solid var(--line);border-radius:10px;background:var(--bg);font-size:1rem}
+.result{font-size:clamp(1.5rem,5vw,2.2rem);font-weight:800;margin-top:12px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.chain{color:var(--soft);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.switch{display:flex;align-items:center;gap:8px;font-weight:600;min-height:44px}
+.switch input{width:22px;height:22px;accent-color:var(--ink)}
+/* mission */
+.items{display:grid;grid-template-columns:repeat(auto-fit,minmax(12em,1fr));gap:10px;margin:12px 0}
+.item{display:flex;gap:12px;align-items:center;padding:10px 12px;border:2px solid var(--line);border-radius:12px;background:var(--bg);text-align:left}
+.item svg{width:38px;height:38px;flex:none;color:var(--red)}
+.item b{display:block}
+.item small{color:var(--soft)}
+button.item[aria-pressed=true]{border-color:var(--red);background:color-mix(in srgb,var(--red) 10%,var(--bg))}
+.media{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:12px 0}
+.medium{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 6px;border:2px solid var(--line);border-radius:12px;background:var(--bg);text-align:center}
+.medium svg{width:46px;height:46px;color:var(--ink)}
+.medium small{color:var(--soft);white-space:nowrap}
+button.medium[aria-pressed=true]{border-color:var(--ink);box-shadow:inset 0 0 0 2px var(--ink)}
+.meter{height:34px;border-radius:10px;background:var(--bg);border:2px solid var(--ink);overflow:hidden;position:relative;margin-top:10px}
+.meter i{display:block;height:100%;background:var(--green);transition:width .3s}
+.meter.full i{background:var(--bad)}
+.mstat{font-weight:800;margin-top:8px;font-size:1.1rem}
+/* final */
+.selfrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 12px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}
+.seg{display:flex;gap:4px}
+.seg button{min-height:40px;padding:0 10px;border:2px solid var(--line);border-radius:8px;background:var(--bg);font-size:.88rem;font-weight:600}
+.seg button[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.hlist{list-style:none;padding:0}
+.hlist li{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}
+.hlist .st2{width:26px;height:26px;border-radius:50%;border:2px solid var(--amber);display:grid;place-items:center;flex:none}
+.hlist .st2.y{background:var(--green);border-color:var(--green);color:#fff}
+.hlist .st2 svg{width:14px;height:14px}
+.hlist button{margin-left:auto}
+.big{font-size:clamp(2rem,6vw,3rem);font-weight:800;line-height:1}
+
+.opt.pick[aria-pressed=true]{border-color:var(--part);background:color-mix(in srgb,var(--part) 14%,var(--bg));box-shadow:inset 0 0 0 2px var(--part);animation:pop .25s ease}
+.opt.pick[aria-pressed=true]::before{content:"✓ ";font-weight:800;color:var(--part)}
+@keyframes pop{50%{transform:scale(1.07)}}
+.seg button[aria-pressed=true]{animation:pop .2s ease}
+.lockcard{display:flex;gap:12px;align-items:flex-start;color:var(--soft)}
+.lockcard .ic{width:26px;height:26px;color:var(--ink);flex:none}
+.ex.no{border-color:var(--bad)}
+.resrow{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.resrow small{display:block;color:var(--soft)}
+.resrow .rnote{color:var(--ink);font-style:italic}
+.rdot{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:800}
+.rdot svg{width:16px;height:16px}
+.resrow.good .rdot{background:var(--green)}.resrow.bad .rdot{background:var(--bad)}
+.unlock{display:flex;gap:14px;align-items:flex-start;background:var(--pro);color:#fff;border:0}
+.unlock>svg{width:34px;height:34px;color:var(--amber);flex:none}
+.unlock .btn.ghost{background:transparent;color:#fff;border-color:#ffffff66}
+.btn.pro{background:var(--amber);color:#151821}
+.story .note{background:var(--paper);border-radius:10px;padding:10px 14px;font-style:italic}
+.stage{border:2px solid var(--line);border-radius:14px;padding:4px 16px 12px;margin:18px 0}
+.stage.sdone{border-color:var(--green)}
+.stage.locked{opacity:.75}
+.stagehead{display:flex;gap:12px;align-items:center}
+.stagehead h2{margin-top:12px}
+.stagehead small{color:var(--soft);font-weight:600}
+.snum{width:38px;height:38px;border-radius:50%;background:var(--pro);color:var(--amber);display:grid;place-items:center;font-weight:800;flex:none;margin-top:10px}
+.stage.sdone .snum{background:var(--green);color:#fff}
+@media(max-width:600px){.resrow{grid-template-columns:auto minmax(0,1fr)}.resrow>:last-child{grid-column:2}.unlock{flex-direction:column}}
+
+.beamer .dlg{max-width:980px}
+.beamer .bit{width:110px}.beamer .bulb{width:90px;height:90px;font-size:2.6rem}.beamer .bit .pv{font-size:1.4rem}
+.plq{font-size:clamp(1.4rem,3.5vw,2.2rem);font-weight:700;margin:12px 0;min-height:1.4em}
+.goals li{font-size:1.15rem;margin:4px 0}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(12em,1fr));gap:10px;margin:14px 0}
+.pjump{display:flex;gap:10px;align-items:center;padding:12px 14px;border-radius:12px;background:var(--pro);color:#fff;text-decoration:none;min-height:56px}
+.pjump svg{width:24px;height:24px;color:var(--amber);flex:none}
+.pjump small{display:block;opacity:.8}
+table.abc td,table.abc th{min-width:30px;padding:4px 6px;font-size:.88rem}
+
+.rules{display:flex;flex-wrap:wrap;gap:10px}
+.rules span{padding:10px 16px;border-radius:10px;background:var(--bg);border:2px solid var(--line);font-size:1.2rem;font-variant-numeric:tabular-nums}
+.rules span small{font-size:.85rem;color:var(--soft)}
+.rules span.later{border-style:dashed;color:var(--soft)}
+.addt{border-collapse:collapse;margin:0 auto;font-variant-numeric:tabular-nums}
+.addt td{width:56px;height:52px;text-align:center;font-size:1.6rem;font-weight:800}
+.addt td.lbl{width:auto;text-align:right;padding-right:14px;font-size:.9rem;color:#9fb0d0;font-weight:600;white-space:nowrap}
+.addt tr.head td{font-size:.85rem;color:#9fb0d0;height:28px;font-weight:700}
+.addt tr.car td{font-size:1.05rem;color:#ffd23f;height:26px}
+.addt tr.car td.lbl{font-size:.9rem;color:#ffd23f}
+.addt tr.res td{border-top:3px solid #eef1f6}
+.addt tr.res td.lbl{border-top:0}
+.addt td.q{color:#5b6683}
+.addt td.x{color:#9fb0d0}
+.addt.ovmode td.x{border:2px dashed #ff7a70;border-width:0 2px;background:#ff5d5512}
+.addt.ovmode tr.head td.x{border-top-width:2px;font-size:.72rem;color:#ff9d96}
+.addt.ovmode tr.res td.x{border-bottom-width:2px;border-top:3px solid #eef1f6}
+.addt td.ovc{color:#ff7a70}
+.ab{width:46px;height:46px;border-radius:10px;border:2px solid #3b4762;background:#2a3348;color:#eef1f6;font:inherit;font-size:1.4rem;font-weight:800;cursor:pointer}
+.ab.on{background:#ffd23f;color:#2a1d00;border-color:#fff1b8}
+.addsteps{margin:12px auto 0;max-width:620px;padding-left:1.4rem;color:#dfe6f3}
+.addsteps li{margin:3px 0}
+.ovwarn{margin:12px auto 0;max-width:620px;background:#5a1712;border:2px solid #ff7a70;color:#ffe3e0;border-radius:10px;padding:10px 14px;font-weight:600;text-align:center}
+.lab .btn[disabled]{opacity:.45}
+.pyr{display:flex;flex-direction:column;align-items:center;gap:6px;margin:12px 0 16px}
+.pyr>div{display:flex;gap:6px}
+.brick{min-width:84px;padding:10px 12px;text-align:center;font-weight:800;font-size:1.1rem;border-radius:6px;background:color-mix(in srgb,var(--part) 18%,var(--bg));border:2px solid var(--part);font-variant-numeric:tabular-nums}
+.brick.q{background:var(--bg);border-style:dashed;color:var(--soft)}
+@media(max-width:600px){.addt td{width:40px;height:44px;font-size:1.25rem}.ab{width:36px;height:36px;font-size:1.1rem}.addt td.lbl{padding-right:6px;font-size:.78rem}.brick{min-width:64px;font-size:.95rem;padding:8px 6px}}
+.btn.danger{background:var(--bad);color:#fff}
+#resetBtn{color:var(--bad)}
+
+.hef mark,.note mark{background:color-mix(in srgb,var(--amber) 55%,transparent);color:inherit;font-weight:700;padding:0 3px;border-radius:3px}
+table.pfx{border-collapse:collapse;width:100%}
+table.pfx th,table.pfx td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left}
+table.pfx th small{display:block;font-weight:400;color:var(--soft)}
+table.pfx td:first-child{color:var(--soft);white-space:nowrap}
+.diff{display:grid;gap:4px}
+.drow{display:grid;grid-template-columns:3.2em minmax(0,1fr) 4.5em;gap:10px;align-items:center}
+.drow .dl{font-weight:600;white-space:nowrap}
+.dbar{height:20px}
+.dbar i{display:block;height:100%;border-radius:0 4px 4px 0}
+.dbar i.si{background:color-mix(in srgb,var(--part) 35%,var(--bg))}
+.dbar i.bi{background:var(--part)}
+.drow .dv{font-weight:800;white-space:nowrap;text-align:right;color:var(--part)}
+.drow:nth-child(2n){margin-bottom:10px}
+.why{border-left:0}
+.note{display:flex;gap:12px;align-items:flex-start;background:var(--pro);color:#fff;border-radius:14px;padding:14px 16px;margin:14px 0}
+.note .ic{width:24px;height:24px;color:var(--amber);flex:none}
+.medgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(10.5em,1fr));gap:8px;margin:10px 0 14px}
+.med{display:flex;gap:10px;align-items:center;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+.med svg{width:34px;height:34px;flex:none}
+.med b{display:block;font-size:.92rem}.med small{color:var(--soft);white-space:nowrap}
+/* explorer (fixed light, like Windows) */
+.exw{position:relative;background:#fff;color:#1b1b1f;border:1px solid #c9ced8;border-radius:10px;overflow:hidden;margin:14px 0;font-size:.95rem;box-shadow:0 6px 24px rgba(0,0,0,.12);user-select:none;-webkit-user-select:none}
+.exw button{color:#1b1b1f;font:inherit}
+.fico{width:20px;height:20px;flex:none}
+.exbar{display:flex;justify-content:space-between;align-items:flex-end;background:#e8ecf3;padding:8px 10px 0}
+.extab{display:flex;gap:8px;align-items:center;background:#fff;border-radius:8px 8px 0 0;padding:8px 14px;font-weight:600}
+.exwin{color:#5a6070;padding-bottom:8px;letter-spacing:.1em}
+.exnav{display:flex;gap:12px;align-items:center;padding:8px 10px;border-bottom:1px solid #e3e6ec}
+.exarr{color:#8a90a0;white-space:nowrap}
+.excrumb{flex:1;border:1px solid #d6dae2;border-radius:6px;padding:4px 10px;overflow-wrap:anywhere}
+.extool{padding:6px 10px;border-bottom:1px solid #e3e6ec}
+.extb{border:1px solid transparent;background:none;border-radius:6px;padding:6px 10px;min-height:36px}
+.extb:not([disabled]):hover{background:#eef2f8;border-color:#d6dae2}
+.extb[disabled]{color:#a0a6b4!important;cursor:default}
+.exmain{display:grid;grid-template-columns:170px minmax(0,1fr);min-height:230px}
+.exside{border-right:1px solid #e3e6ec;padding:6px}
+.exf{display:flex;gap:8px;align-items:center;width:100%;border:0;background:none;border-radius:6px;padding:8px 10px;text-align:left;min-height:40px;position:relative}
+.exf:hover{background:#f1f4f9}
+.exf.on{background:#e3eefc}
+.exf.on::before{content:"";position:absolute;left:0;top:8px;bottom:8px;width:3px;border-radius:2px;background:#1a5fd0}
+.exlist{padding:4px 8px}
+.exhead,.exfile{display:grid;grid-template-columns:22px minmax(0,1fr) 9em;gap:8px;align-items:center}
+.exhead{grid-template-columns:minmax(0,1fr) 9em;padding:6px 8px 6px 38px;color:#5a6070;font-size:.85rem;border-bottom:1px solid #e3e6ec}
+.exfile{width:100%;border:1px solid transparent;background:none;border-radius:6px;padding:7px 8px;text-align:left;min-height:40px}
+.exfile:hover{background:#f1f4f9}
+.exfile.on{background:#cce4ff;border-color:#99c8ff}
+.ext{color:#5a6070;font-size:.85rem}
+.exstat{border-top:1px solid #e3e6ec;padding:6px 12px;font-size:.82rem;color:#5a6070}
+.exmenu{position:absolute;z-index:5;background:#fff;border:1px solid #c9ced8;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.18);padding:4px;min-width:160px}
+.exmenu button{display:block;width:100%;text-align:left;border:0;background:none;padding:8px 12px;border-radius:5px}
+.exmenu button:not([disabled]):hover{background:#e3eefc}
+.exmenu button[disabled]{color:#a0a6b4}
+.exmenu hr{border:0;border-top:1px solid #e3e6ec;margin:4px 0}
+.exprops{position:absolute;inset:0;z-index:6;background:rgba(20,24,34,.25);display:grid;place-items:center;padding:12px}
+.expbox{background:#fff;border:1px solid #c9ced8;border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,.25);width:min(380px,100%);overflow:hidden}
+.expt{background:#e8ecf3;padding:8px 12px;font-size:.88rem;font-weight:600}
+.exph{display:flex;gap:10px;align-items:center;padding:14px 14px 6px}
+.exph .fico{width:32px;height:32px}
+.expbox table{margin:6px 14px;border-collapse:collapse;font-size:.92rem}
+.expbox td{padding:5px 8px 5px 0;vertical-align:top}
+.expbox td:first-child{color:#5a6070;white-space:nowrap}
+.expa{display:flex;justify-content:flex-end;padding:8px 14px 14px}
+.expa .btn{background:#1a5fd0;color:#fff!important}
+@media(max-width:600px){.exmain{grid-template-columns:minmax(0,1fr)}.exside{display:flex;flex-wrap:wrap;border-right:0;border-bottom:1px solid #e3e6ec}.exf{width:auto}.exf.on::before{display:none}.exhead,.exfile{grid-template-columns:22px minmax(0,1fr)}.exhead{grid-template-columns:minmax(0,1fr);padding-left:38px}.exhead span:last-child,.ext{display:none}.exwin{display:none}}
+
+main>h2{border-top:2px solid var(--line);padding-top:22px;margin-top:36px}
+main>.lvl{border-top:2px solid var(--line);padding-top:22px;margin-top:36px}
+main>.lvl+h2{border-top:0;padding-top:0;margin-top:14px}
+main>.hef{margin:32px 0}
+.lupeseg{flex-wrap:wrap;margin-bottom:14px}
+.lupe{display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;margin:6px 0 10px}
+.lone,.lmany{display:flex;flex-direction:column;align-items:center;gap:8px}
+.cell.big{display:block;background:var(--part)}
+.lgrid{display:grid;gap:1px}
+.lgrid span{aspect-ratio:1;background:var(--part)}
+.leq{font-weight:800;font-size:1.3rem;color:var(--soft)}
+.legend{display:flex;flex-direction:column;gap:8px}
+.legend>span{display:flex;align-items:center;gap:10px}
+.legend .badge,.lg-ab,.lg-pro{width:30px;height:30px;display:grid;place-items:center;flex:none}
+.legend .badge{border-radius:50%;background:var(--green);color:#fff}
+.legend .badge svg{width:18px;height:18px}
+.lg-ab{border-radius:8px;background:var(--paper);border:2px solid var(--amber)}
+.lg-pro{border-radius:50%;background:var(--pro);color:var(--amber)}
+table.units td,table.units th{text-align:left}
+
+.zsel{display:flex;flex-wrap:wrap;gap:12px}
+.zsel label{display:flex;align-items:center;gap:8px;font-weight:600}
+.zsel select{min-height:44px;padding:6px 10px;border:2px solid var(--line);border-radius:10px;background:var(--bg);font-size:1rem}
+.zres{display:flex;flex-direction:column;gap:4px;margin:14px 0}
+.zres>b{font-size:clamp(1.3rem,4vw,1.9rem);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.zpath{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 0 14px}
+.zpath span{padding:4px 10px;border-radius:99px;border:2px solid var(--line);font-weight:700;font-size:.9rem}
+.zpath span.done{background:color-mix(in srgb,var(--part) 18%,var(--bg))}
+.zpath span.now{background:var(--part);color:#fff;border-color:var(--part)}
+.zpath i{font-style:normal;color:var(--soft)}
+.zview{display:flex;flex-wrap:wrap;gap:18px;align-items:center}
+.zwin{width:240px;height:240px;overflow:hidden;flex:none;border-radius:6px;background:var(--panel);display:flex;align-items:flex-start}
+.zgrid{display:grid;gap:1px;width:240px;transform-origin:0 0}
+.zgrid.anim{animation:zoomout 1.1s ease both}
+.zgrid span{aspect-ratio:1;background:color-mix(in srgb,var(--part) 70%,var(--bg))}
+.zgrid span.me{background:var(--amber);outline:2px solid #fff;position:relative;z-index:1}
+@keyframes zoomout{from{transform:translate(var(--tx),var(--ty)) scale(var(--z))}to{transform:translate(0,0) scale(1)}}
+.zcap{flex:1 1 220px;font-size:1rem}
+.zcap b{font-size:1.2rem}
+.mk{background:var(--amber);color:#151821;padding:0 4px;border-radius:3px;font-weight:700}
+.zbtn{justify-content:flex-start}
+.zbtn .btn[disabled]{opacity:.4}
+.prog{align-items:center;gap:10px}
+.prog .pbar{flex:1;height:10px;border-radius:5px;background:var(--line);overflow:hidden}
+.prog .pbar i{display:block;height:100%;background:var(--green);border-radius:5px;transition:width .6s ease;outline:0}
+.ppct{font-weight:800;min-width:3.4em;text-align:right;font-variant-numeric:tabular-nums}
+.st.locked{opacity:.5;cursor:not-allowed}
+.st.locked:hover{background:none}
+#conn{display:flex;align-items:center;gap:4px;font-size:.85rem;font-weight:600;padding:6px 10px;border:1px solid var(--line);border-radius:99px;background:var(--panel);white-space:nowrap;min-height:36px}
+.cdot{width:10px;height:10px;border-radius:50%;background:var(--bad);display:inline-block;margin-right:4px;flex:none}
+.cdot.on{background:var(--green)}.cdot.wait{background:var(--amber)}
+.phint{font-size:.9rem;color:var(--soft);font-weight:600;text-align:right}
+.cele{position:fixed;inset:0;z-index:80;display:none;place-items:center;background:rgba(10,14,24,.25);cursor:pointer}
+.cele.show{display:grid}
+.cbox{position:relative;background:var(--bg);border:3px solid var(--amber);border-radius:22px;padding:22px 34px;text-align:center;animation:popin .55s cubic-bezier(.2,1.6,.4,1);max-width:90vw}
+.cbox svg{width:70px;height:70px;animation:hop .8s ease .3s 2}
+.cpct{font-size:clamp(2.6rem,8vw,3.8rem);font-weight:800;color:var(--green);line-height:1}
+.cmsg{font-size:1.25rem;font-weight:800;margin-top:6px}
+.cbox i{position:absolute;left:50%;top:40%;width:10px;height:10px;border-radius:2px;background:var(--c);animation:burst 1.1s ease-out forwards}
+@keyframes popin{from{transform:scale(.3);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes hop{50%{transform:translateY(-14px)}}
+@keyframes burst{from{transform:rotate(var(--a)) translateY(0);opacity:1}to{transform:rotate(var(--a)) translateY(-150px);opacity:0}}
+.match{display:grid;gap:8px;margin-top:8px}
+.mrow{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:6px 8px;border-radius:10px;border:2px solid transparent}
+.mrow.bad{border-color:var(--bad);background:var(--bsoft)}
+.ml{font-weight:800;min-width:7em;font-variant-numeric:tabular-nums}
+.marr{color:var(--soft);font-weight:800}
+.mrow select{min-height:44px;padding:6px 10px;border:2px solid var(--line);border-radius:10px;background:var(--bg);font-size:1rem;min-width:10em}
+.sortl{list-style:none;padding:0;margin:10px 0;display:grid;gap:6px;counter-reset:s;max-width:560px}
+.sortl li{display:flex;align-items:center;gap:10px;padding:6px 8px 6px 12px;border:2px solid var(--line);border-radius:10px;background:var(--panel)}
+.sortl li::before{counter-increment:s;content:counter(s) ".";font-weight:800;color:var(--soft);min-width:1.4em}
+.sl{flex:1;font-weight:700;font-variant-numeric:tabular-nums}
+.sbtns{display:flex;gap:4px}
+.sb{width:40px;height:40px;border-radius:8px;border:2px solid var(--line);background:var(--bg);font-size:.9rem}
+.sb:not([disabled]):hover{border-color:var(--part)}
+.sb[disabled]{opacity:.3;cursor:default}
+.ex.ok .sortl li{border-color:var(--green)}
+.sccard{border:2px solid var(--green);border-radius:12px;padding:12px 14px;background:var(--gsoft);display:grid;gap:4px}
+.sccard .btn{justify-self:start;margin-top:6px}
+.scline{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.rt{padding:2px 9px;border-radius:99px;font-size:.85rem;font-weight:800;white-space:nowrap}
+.rt0,.r0{background:#2ecc85;color:#0b2a1a}.rt1,.r1{background:#ffd23f;color:#2a1d00}.rt2,.r2{background:#ff7a70;color:#3a0b07}
+.schead{display:flex;gap:10px;align-items:center;margin-bottom:8px}
+.schead>svg{width:30px;height:30px;color:var(--green);flex:none}
+.schead>svg.jb{width:48px;height:48px}
+.lg-sc{width:30px;height:30px;border-radius:50%;background:var(--green);color:#fff;font-weight:800;display:grid;place-items:center;flex:none}
+.jform{display:grid;grid-template-columns:repeat(auto-fit,minmax(10em,1fr));gap:12px}
+.jform label{display:flex;flex-direction:column;gap:6px;font-weight:700}
+.jform input{min-height:56px;font-size:1.5rem;letter-spacing:.2em;text-transform:uppercase;padding:6px 12px;border:2px solid var(--line);border-radius:12px;background:var(--bg);font-family:ui-monospace,Menlo,Consolas,monospace}
+.jform input:focus{border-color:var(--red)}
+.linkb{background:none;border:0;color:var(--soft);text-decoration:underline;padding:6px 2px;font-size:.9rem}
+.jalt{text-align:center;margin-top:16px}
+.ov.host .dlg{max-width:1120px}
+.hhead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px}
+.hsec{border-top:2px solid var(--line);padding-top:12px;margin-top:14px}
+.hsec h3 small{font-weight:600;color:var(--soft)}
+.hroom{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.hroom span{font-weight:700;color:var(--soft)}
+.hroom b{font-size:clamp(2.4rem,7vw,3.8rem);letter-spacing:.15em;font-family:ui-monospace,Menlo,Consolas,monospace}
+.hcodes{display:grid;grid-template-columns:repeat(auto-fill,minmax(5.5em,1fr));gap:6px;margin-top:10px}
+.hcodes span{font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:700;padding:6px;border:1px solid var(--line);border-radius:8px;text-align:center;background:var(--panel)}
+.htab{border-collapse:collapse;font-size:.9rem}
+.htab th,.htab td{padding:6px 7px;border-bottom:1px solid var(--line);text-align:center;white-space:nowrap}
+.htab th:nth-child(-n+4),.htab td:nth-child(-n+4){text-align:left}
+.htab th{font-size:.8rem;color:var(--soft)}
+.mini{display:inline-block;width:56px;height:8px;border-radius:4px;background:var(--line);overflow:hidden;vertical-align:middle}
+.mini i{display:block;height:100%;background:var(--green)}
+.lz{font-weight:800;font-size:1.05rem}.lz.ok{color:var(--green)}.lz.part{color:#d89a00}.lz.no{color:var(--bad)}
+.hleg{display:grid;grid-template-columns:repeat(auto-fit,minmax(18em,1fr));gap:12px;font-size:.86rem;color:var(--soft);margin-top:10px}
+.hleg ol{margin:4px 0;padding-left:1.6em}
+.ztabs{margin:6px 0 12px;flex-wrap:wrap}
+.zlead{margin-top:0}
+.zsvg{width:240px;height:240px;flex:none;background:var(--panel);border-radius:6px}
+.zbars{display:flex;gap:20px;align-items:flex-end;height:240px;padding:10px 14px 6px;background:var(--panel);border-radius:6px;flex:none}
+.zbars>div{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px;width:96px;height:100%}
+.zbars i{display:block;width:44px;border-radius:4px 4px 0 0}
+.zb1{background:var(--part)}.zb2{background:var(--soft)}
+.zbars span{font-size:.75rem;text-align:center;line-height:1.2;min-height:2.4em}
+@media(max-width:600px){.phint{display:none}#conn{font-size:.75rem;padding:4px 8px}.htab{font-size:.8rem}}
+.ver{font-size:.72rem;color:var(--line);user-select:none;-webkit-user-select:none;cursor:default;padding:4px}
+.xflow{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin-bottom:10px}
+.xflow span{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 12px;border-radius:10px;background:var(--bg);border:1px solid var(--line);text-align:center}
+.xflow small{color:var(--soft);font-size:.8rem}
+.xflow b{font-size:1.4rem;font-variant-numeric:tabular-nums}
+.xflow b.xk{display:grid;place-items:center;width:44px;height:44px;border-radius:8px;background:#fff;color:#10182b;border:2px solid var(--line)}
+.xflow b.xm{font-family:ui-monospace,Menlo,Consolas,monospace;letter-spacing:.08em;color:var(--part)}
+.xflow i{font-style:normal;font-weight:800;color:var(--soft)}
+@media(max-width:600px){.xflow i{display:none}}
+.calcb{width:44px;height:44px;border-radius:10px;border:2px solid var(--line);background:var(--panel);display:grid;place-items:center;color:var(--ink)}
+.calcb:hover{border-color:var(--part)}
+.calcb svg{width:22px;height:22px}
+.calc{position:fixed;right:16px;bottom:84px;z-index:45;width:260px;background:var(--bg);border:2px solid var(--ink);border-radius:16px;padding:10px;box-shadow:0 14px 40px rgba(0,0,0,.28)}
+.chd{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.chd svg{width:20px;height:20px}
+.chd b{flex:1}
+.cx{width:36px;height:36px;border-radius:8px;border:1px solid var(--line);background:var(--panel)}
+.cdisp{background:#10182b;color:#eef1f6;border-radius:10px;padding:8px 12px;text-align:right;font-variant-numeric:tabular-nums;min-height:64px}
+.cexpr{font-size:1.15rem;overflow-wrap:anywhere}
+.cres{font-size:1.45rem;font-weight:800;color:#ffd23f;min-height:1.4em}
+.ckeys{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:8px 0}
+.ckeys button{height:44px;border-radius:10px;border:1px solid var(--line);background:var(--panel);font-size:1.15rem;font-weight:700}
+.ckeys button:hover{border-color:var(--ink)}
+.ckeys .ko{background:color-mix(in srgb,var(--part) 18%,var(--panel))}
+.ckeys .kc{color:var(--bad)}
+.ckeys [data-k="="]{background:var(--part);color:#fff;border-color:var(--part)}
+.ctake{width:100%}
+.ctake[disabled]{opacity:.45}
+@media(max-width:600px){.calc{left:8px;right:8px;width:auto;bottom:72px}}
+.calcg{display:inline-flex;align-items:center;gap:8px}
+.calcg svg{width:20px;height:20px}
+@media(max-width:600px){.calcg span{display:none}.calcg{min-width:0!important;padding:0 12px}}
+.cs{display:none}
+@media(max-width:600px){#conn .cl{display:none}#conn .cs{display:inline}}
+/* pager */
+.pager{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--bg);border-top:1px solid var(--line);padding:10px max(16px,3vw) max(10px,env(safe-area-inset-bottom))}
+.pager .in{display:flex;gap:10px;align-items:center;max-width:1240px;margin:0 auto}
+.pager .mid{flex:1;text-align:center;font-weight:600;color:var(--soft);font-size:.92rem}
+.pager .btn{min-width:7.5em}
+/* dialog */
+.ov{position:fixed;inset:0;z-index:50;background:rgba(10,14,24,.55);display:none;align-items:center;justify-content:center;padding:16px}
+.ov.show{display:flex}
+.dlg{background:var(--bg);border-radius:16px;max-width:560px;width:100%;max-height:88vh;overflow:auto;padding:20px;border:1px solid var(--line)}
+.dlg .acts{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;margin-top:16px}
+.drawer .dlg{max-width:340px}
+footer.foot{color:var(--soft);font-size:.85rem;padding:0 max(16px,3vw) 100px;max-width:1240px;margin:0 auto}
+@media(max-width:900px){.wrap{grid-template-columns:minmax(0,1fr)}.metro{display:none}#stepsBtn{display:inline-block}.brand span{display:none}}
+@media(max-width:600px){.vault{grid-template-columns:minmax(0,1fr)}.vault svg{max-width:200px;margin:auto}.bit{width:52px}.bulb{width:44px;height:44px;font-size:1.25rem}.lamps{gap:4px}.pager .mid{display:none}.pager .in{justify-content:space-between}.media{grid-template-columns:minmax(0,1fr)}.medium{flex-direction:row;justify-content:flex-start;text-align:left}.selfrow{grid-template-columns:minmax(0,1fr)}.tbtn{padding:0 10px}.lk{display:none}.lk2{display:inline}.brand b{display:none}.stair .fac{left:-8px;font-size:.7rem;padding:1px 5px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media print{.top,.metro,.pager,.foot,.lvl,.ex,.profi,.lab,.bitty{display:none!important}.wrap{display:block}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+ <symbol id="i-bitty" viewBox="0 0 64 64"><line x1="32" y1="4" x2="32" y2="14" stroke="#596072" stroke-width="3"/><circle cx="32" cy="5" r="4" fill="#e6261f"/><rect x="8" y="13" width="48" height="38" rx="12" fill="#0a5cff"/><rect x="8" y="13" width="48" height="10" rx="10" fill="#3d7dff"/><rect x="14" y="22" width="36" height="22" rx="7" fill="#10182b"/><circle cx="24" cy="31" r="4.5" fill="#ffd23f"/><circle cx="40" cy="31" r="4.5" fill="#ffd23f"/><rect x="25" y="38" width="14" height="3" rx="1.5" fill="#2ecc85"/><rect x="4" y="27" width="5" height="12" rx="2" fill="#596072"/><rect x="55" y="27" width="5" height="12" rx="2" fill="#596072"/><rect x="20" y="51" width="24" height="9" rx="3" fill="#596072"/></symbol>
+ <symbol id="i-book" viewBox="0 0 24 24"><path d="M5 3h11a3 3 0 0 1 3 3v15H8a3 3 0 0 1-3-3z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5 18a3 3 0 0 1 3-3h11M9 7h6M9 10h6" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+ <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.2l7.1-.6z" fill="currentColor"/></symbol>
+ <symbol id="i-base" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+ <symbol id="i-check" viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+ <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2.2"/></symbol>
+ <symbol id="i-cd" viewBox="0 0 48 48"><circle cx="24" cy="24" r="20" fill="#c7ccd6"/><circle cx="24" cy="24" r="20" fill="url(#cdg)" opacity=".6"/><circle cx="24" cy="24" r="6" fill="#f4f6fa" stroke="#9aa2b4" stroke-width="2"/><defs><linearGradient id="cdg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8fb0ff"/><stop offset=".5" stop-color="#ffd23f"/><stop offset="1" stop-color="#ff6a63"/></linearGradient></defs></symbol>
+ <symbol id="i-ssd" viewBox="0 0 48 48"><rect x="6" y="12" width="36" height="24" rx="3" fill="#3a4256"/><rect x="10" y="16" width="20" height="16" rx="2" fill="#5b6683"/><rect x="34" y="17" width="4" height="14" rx="1" fill="#c7ccd6"/><text x="20" y="27" text-anchor="middle" font-size="7" font-weight="800" fill="#fff">SSD</text></symbol>
+ <symbol id="i-calc" viewBox="0 0 24 24"><rect x="5" y="2.5" width="14" height="19" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><rect x="8" y="5.5" width="8" height="4" rx="1" fill="currentColor"/><circle cx="9" cy="13" r="1.2" fill="currentColor"/><circle cx="12" cy="13" r="1.2" fill="currentColor"/><circle cx="15" cy="13" r="1.2" fill="currentColor"/><circle cx="9" cy="17" r="1.2" fill="currentColor"/><circle cx="12" cy="17" r="1.2" fill="currentColor"/><circle cx="15" cy="17" r="1.2" fill="currentColor"/></symbol>
+ <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+ <symbol id="i-cam" viewBox="0 0 40 40"><rect x="4" y="11" width="32" height="22" rx="4" fill="currentColor" opacity=".18"/><rect x="4" y="11" width="32" height="22" rx="4" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M13 11l3-4h8l3 4" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="20" cy="22" r="6" fill="none" stroke="currentColor" stroke-width="2.5"/></symbol>
+ <symbol id="i-film" viewBox="0 0 40 40"><rect x="4" y="9" width="24" height="22" rx="4" fill="currentColor" opacity=".18"/><rect x="4" y="9" width="24" height="22" rx="4" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M28 17l8-5v16l-8-5z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/></symbol>
+ <symbol id="i-music" viewBox="0 0 40 40"><path d="M15 29V9l17-4v20" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="11" cy="29" r="5" fill="currentColor" opacity=".3" stroke="currentColor" stroke-width="2.5"/><circle cx="28" cy="25" r="5" fill="currentColor" opacity=".3" stroke="currentColor" stroke-width="2.5"/></symbol>
+ <symbol id="i-chat" viewBox="0 0 40 40"><path d="M6 8h28v18H17l-7 6v-6H6z" fill="currentColor" fill-opacity=".18" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><path d="M12 15h16M12 20h10" stroke="currentColor" stroke-width="2.5"/></symbol>
+ <symbol id="i-doc" viewBox="0 0 40 40"><path d="M10 4h14l7 7v25H10z" fill="currentColor" fill-opacity=".18" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><path d="M24 4v7h7M15 19h11M15 24h11M15 29h7" fill="none" stroke="currentColor" stroke-width="2.5"/></symbol>
+ <symbol id="i-disk" viewBox="0 0 48 48"><rect x="6" y="6" width="36" height="36" rx="3" fill="#3a4256"/><rect x="14" y="6" width="20" height="12" fill="#c7ccd6"/><rect x="27" y="8" width="4" height="8" fill="#3a4256"/><rect x="11" y="25" width="26" height="15" rx="2" fill="#f4f6fa"/><path d="M14 30h20M14 34h14" stroke="#9aa2b4" stroke-width="2"/></symbol>
+ <symbol id="i-usb" viewBox="0 0 48 48"><rect x="17" y="3" width="14" height="11" fill="#c7ccd6"/><rect x="20" y="6" width="3" height="3" fill="#3a4256"/><rect x="25" y="6" width="3" height="3" fill="#3a4256"/><rect x="12" y="13" width="24" height="32" rx="5" fill="#e6261f"/><rect x="12" y="13" width="7" height="32" rx="3" fill="#ff6a63"/><circle cx="24" cy="37" r="3" fill="#fff"/></symbol>
+ <symbol id="i-phone" viewBox="0 0 48 48"><rect x="11" y="3" width="26" height="42" rx="6" fill="#151821"/><rect x="14" y="8" width="20" height="31" rx="2" fill="#5b8cff"/><rect x="14" y="8" width="20" height="10" fill="#8fb0ff"/><circle cx="24" cy="42" r="1.6" fill="#596072"/></symbol>
+</svg>
+
+<header class="top">
+ <div class="bar">
+  <div class="brand"><svg aria-hidden="true"><use href="#i-bitty"/></svg><div><b>Datenlabor</b><span>Informatik Klasse 7: Bit, Byte und Einheiten</span></div></div>
+  <button class="tbtn" id="stepsBtn" type="button">Schritte</button>
+  <button type="button" id="conn" hidden></button>
+  <button class="tbtn" id="resetBtn" type="button"><span class="lk">Neu starten</span><span class="lk2">Neu</span></button>
+  <button class="tbtn" id="fontBtn" type="button" aria-label="Schriftgröße">Aa</button>
+ </div>
+ <div class="prog" id="prog"></div>
+</header>
+
+<div class="wrap">
+ <nav class="metro" id="metro" aria-label="Schritte"></nav>
+ <main id="main"></main>
+</div>
+
+<div class="pager"><div class="in">
+ <span id="ver" class="ver" title="">v2.1</span>
+ <button class="btn ghost" id="prevBtn" type="button">Zurück</button>
+ <button class="btn ghost calcg" id="calcBtn" type="button" aria-label="Taschenrechner öffnen"><svg aria-hidden="true"><use href="#i-calc"/></svg><span>Taschenrechner</span></button>
+ <div class="mid" id="pagerMid"></div>
+ <span class="phint" id="pagerHint" hidden>Löse zuerst alle Aufgaben dieser Station.</span>
+ <button class="btn" id="nextBtn" type="button">Weiter</button>
+</div></div>
+
+<div class="ov" id="ov" role="dialog" aria-modal="true"><div class="dlg" id="dlg"></div></div>
+<div id="cele" class="cele" aria-live="polite"></div>
+
+<script>
+{
+const $=s=>document.querySelector(s);
+const ico=(n,c='ic')=>`<svg class="${c}" aria-hidden="true"><use href="#i-${n}"/></svg>`;
+const fmt=x=>Number(x).toLocaleString('de-DE',{maximumFractionDigits:4});
+const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const esc=v=>String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const KEY='bbe-v2',HKEY='bbe-host-v1',PREFIX='datenlabor-bbe-',ALPH='ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+const genCode=n=>Array.from({length:n},()=>ALPH[Math.floor(Math.random()*ALPH.length)]).join('');
+const fresh=()=>({step:0,done:{},tries:{},hef:{},sc:{},cc:{},seen:{},fs:17,gen:null,join:null,cele:{},sortcur:{},matchcur:{}});
+let S=fresh();
+try{const r=JSON.parse(localStorage.getItem(KEY)||'null');if(r)S=Object.assign(S,r)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){};sendState()};
+document.documentElement.style.setProperty('--fs',S.fs+'px');
+const parseDE=s=>{s=String(s).trim().replace(/\s/g,'');if(!s)return NaN;if(s.includes(','))s=s.replace(/\./g,'').replace(',','.');else if(/^\d{1,3}(\.\d{3})+$/.test(s))s=s.replace(/\./g,'');return Number(s)};
+const norm=s=>String(s).trim().toLowerCase().replace(/ä/g,'ae').replace(/ö/g,'oe').replace(/ü/g,'ue').replace(/ß/g,'ss').replace(/\s+/g,'');
+const say=t=>`<div class="bitty"><svg aria-hidden="true"><use href="#i-bitty"/></svg><p>${t}</p></div>`;
+const BU=['Bit','Byte','KiB','MiB','GiB','TiB'],BS=[1,8,8192,8388608,8589934592,8796093022208],bfac=i=>i===1?8:1024,UN=['Byte','KiB','MiB','GiB'];
+const fmtInt=n=>BigInt(Math.round(n)).toLocaleString('de-DE');
+
+/* ---------- random tasks per student ---------- */
+function makeGen(){const w=shuffle(['SCHULE','KLASSE','LEHRER','PAUSE','TAFEL','HEFTER','COMPUTER','SPEICHER','INFORMATIK','FERIEN']);
+ const v=shuffle([2,3,4,5,6,7,8,9]),k=pick([2,3]);
+ const sortItems=[[`1 ${k===2?'MB':'GB'}`,1000**k],[`1 ${k===2?'MiB':'GiB'}`,1024**k],[`1000 ${k===2?'KiB':'MiB'}`,1000*1024**(k-1)],[`${1000+(k===2?rnd(5,20):rnd(5,40))} ${k===2?'kB':'MB'}`,0]];
+ sortItems[3][1]=parseInt(sortItems[3][0])*1000**(k-1);
+ const g={perm:{},
+  warm:[rnd(30,127),rnd(128,255)],
+  byte:{n1:rnd(2,9),m2:8*rnd(2,10),w3:w[0],w4:w[1],a5:rnd(1,5),b5:rnd(1,7)},
+  st:{d1:{i:rnd(3,5),down:Math.random()<.5},c2:{i:rnd(2,4),n:rnd(2,8)},c3:{i:rnd(3,5),n:rnd(2,8)},
+   match:[[`${v[0]} KiB`,`${v[0]*1024} Byte`],[`${v[1]} MiB`,`${v[1]*1024} KiB`],[`${v[2]} GiB`,`${v[2]*1024} MiB`],[`${v[3]*1024} KiB`,`${v[3]} MiB`]],mperm:shuffle([0,1,2,3]),
+   sort:sortItems},
+  f:{abl:rnd(150,400),elt:rnd(100,250),kfo:rnd(50,95)/10,sel:rnd(20,45)/10,vid:rnd(12,26)/10,tra:rnd(80,200),s1:rnd(3,6),s2:rnd(5,9),cd:pick(['vid','tra'])},
+  ex:{t2:rnd(20,90),t5:rnd(2,9),t6:pick([2,4,8])},
+  pr:{p1:rnd(1,6)+.5,p3:rnd(2,9)}};
+ const sortStart=a=>{let p;do{p=shuffle(a.map((_,i)=>i))}while(p.every((x,i)=>i===0||a[p[i-1]][1]<=a[x][1]));return p};
+ g.st.sstart=sortStart(g.st.sort);
+ const fs=[['Elternbrief.pdf',g.f.elt,1],['Selfie.jpg',g.f.sel,2],['Song2.mp3',g.f.s2,2],['Erinnerungsvideo.mp4',g.f.vid,3]];g.f.sortItems=fs.map(x=>[`${x[0]} (${fmt(x[1])} ${UN[x[2]]})`,x[1]*1024**x[2]]);g.f.sstart=sortStart(g.f.sortItems);
+ return g}
+if(!S.gen){S.gen=makeGen();try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+const G=S.gen;
+function CH(id,opts,ans){let p=G.perm[id];if(!p||p.length!==opts.length){p=shuffle(opts.map((_,i)=>i));G.perm[id]=p}return {opts:p.map(i=>opts[i]),ans:p.indexOf(ans)}}
+
+/* ---------- exercises ---------- */
+const EX={};
+function E(kind,id,q,ans,x={}){if(kind==='choice'){const c=CH(id,x.opts,ans);x.opts=c.opts;ans=c.ans}EX[id]=Object.assign({kind,id,q,ans},x);return id}
+function exHTML(id,n){const d=EX[id];let body;
+ if(d.kind==='choice')body=`<div class="opts">${d.opts.map((o,i)=>`<button type="button" class="opt" data-choice="${id}" data-i="${i}">${o}</button>`).join('')}</div>`;
+ else if(d.kind==='match'){const cur=S.matchcur[id]||[];body=`<div class="match">${d.left.map((l,i)=>`<div class="mrow" data-mrow="${i}"><span class="ml">${l}</span><span class="marr">=</span><select data-match="${id}" data-i="${i}" aria-label="${l} zuordnen"><option value="">bitte wählen</option>${d.right.map((r,j)=>`<option value="${j}"${cur[i]==j&&cur[i]!==''&&cur[i]!=null?' selected':''}>${r}</option>`).join('')}</select></div>`).join('')}</div><div class="row"><button type="button" class="btn" data-check="${id}">Prüfen</button></div>`}
+ else if(d.kind==='sort'){body=`<ol class="sortl" id="sl-${id}">${sortList(id)}</ol><div class="row"><button type="button" class="btn" data-check="${id}">Prüfen</button></div>`}
+ else body=`<div class="row"><input id="in-${id}" data-in="${id}" autocomplete="off" spellcheck="false" inputmode="${d.kind==='text'?'text':'decimal'}" aria-label="Antwort">${d.unit?`<span class="unit">${d.unit}</span>`:''}${d.kind==='num'?`<button type="button" class="calcb" data-calc="in-${id}" title="Taschenrechner" aria-label="Taschenrechner öffnen">${ico('calc','')}</button>`:''}<button type="button" class="btn" data-check="${id}">Prüfen</button></div>`;
+ return `<div class="ex" id="ex-${id}"><div class="q">${n?`<span class="n">${n}</span>`:''}${d.q}</div>${body}<div class="fb" aria-live="polite"></div><div class="help"></div></div>`}
+function sortList(id){const d=EX[id];const cur=S.sortcur[id]||d.start;const L=cur.length;return cur.map((ix,p)=>`<li><span class="sl">${d.items[ix][0]}</span><span class="sbtns"><button type="button" class="sb" data-sort="${id}" data-p="${p}" data-d="-1" aria-label="nach oben"${p===0?' disabled':''}>▲</button><button type="button" class="sb" data-sort="${id}" data-p="${p}" data-d="1" aria-label="nach unten"${p===L-1?' disabled':''}>▼</button></span></li>`).join('')}
+const exList=(ids,o=0)=>ids.map((id,i)=>exHTML(id,i+1+o)).join('');
+function correctText(d){if(d.kind==='choice')return d.opts[d.ans];if(d.kind==='text')return d.ans[0].toUpperCase();if(d.kind==='match'||d.kind==='sort')return '';return fmt(d.ans)}
+function judge(d,v){
+ if(d.kind==='choice')return {ok:+v===d.ans};
+ if(d.kind==='match'){if(v.some(x=>x===''||x==null))return {ok:false,msg:'Ordne zuerst jeder Angabe etwas zu.',empty:1};return {ok:v.every((x,i)=>+x===d.ans[i]),wrong:v.map((x,i)=>+x!==d.ans[i])}}
+ if(d.kind==='sort'){const vals=v.map(i=>d.items[i][1]);return {ok:vals.every((x,i)=>i===0||vals[i-1]<x)}}
+ if(d.kind==='text'){if(!String(v).trim())return {ok:false,msg:'Gib zuerst eine Antwort ein.',empty:1};return {ok:d.ans.map(norm).includes(norm(v))}}
+ if(String(v).trim()==='')return {ok:false,msg:'Gib zuerst eine Antwort ein.',empty:1};const x=parseDE(v);if(isNaN(x))return {ok:false,msg:'Das ist keine Zahl. Schreibe nur Ziffern (Komma ist erlaubt).',empty:1};
+ return {ok:Math.abs(x-d.ans)<=(d.tol||1e-9)}}
+function readVal(id){const d=EX[id];if(d.kind==='match')return [...document.querySelectorAll(`[data-match="${id}"]`)].map(s=>s.value);if(d.kind==='sort')return S.sortcur[id]||d.start;const i=$('#in-'+id);return i?i.value:''}
+function check(id,v,btn){const d=EX[id];const el=$('#ex-'+id);if(!el||S.done[id])return;
+ const r=judge(d,v);const fb=el.querySelector('.fb');
+ if(r.empty){fb.className='fb info';fb.textContent=r.msg;return}
+ if(d.kind==='match')el.querySelectorAll('.mrow').forEach((m,i)=>m.classList.toggle('bad',!!(r.wrong&&r.wrong[i])));
+ if(r.ok){S.done[id]=1;save();if(btn)btn.classList.add('right');solved(id,true);update();return}
+ S.tries[id]=(S.tries[id]||0)+1;save();if(btn)btn.classList.add('wrong');
+ fb.className='fb bad';fb.innerHTML=(d.kind==='match'?'Rot markierte Zuordnungen stimmen noch nicht. ':d.kind==='sort'?'Die Reihenfolge stimmt noch nicht. ':'')+['Versuch es noch einmal!','Schau dir den Tipp an.','Du kannst dir die Lösung zeigen lassen.'][Math.min(S.tries[id]-1,2)];
+ helpBtns(id)}
+function helpBtns(id){const d=EX[id],t=S.tries[id]||0,el=$('#ex-'+id);if(!el)return;const h=el.querySelector('.help');let s='';
+ if(t>=1&&d.hint)s+=`<button type="button" class="btn ghost sm" data-hint="${id}">Tipp</button>`;
+ if(t>=2)s+=`<button type="button" class="btn ghost sm" data-sol="${id}">Lösung zeigen</button>`;h.innerHTML=s}
+function solved(id,isNew){const d=EX[id],el=$('#ex-'+id);if(!el)return;el.classList.add('ok');
+ const inp=el.querySelector('input');if(inp){if(!inp.value)inp.value=correctText(d);inp.readOnly=true}
+ const b=el.querySelector('[data-check]');if(b)b.remove();const cb=el.querySelector('.calcb');if(cb)cb.remove();
+ if(d.kind==='choice')el.querySelectorAll('.opt').forEach(b=>{if(+b.dataset.i===d.ans)b.classList.add('right');b.disabled=true});
+ if(d.kind==='match')el.querySelectorAll('select').forEach((s,i)=>{s.value=d.ans[i];s.disabled=true;s.closest('.mrow').classList.remove('bad')});
+ if(d.kind==='sort'){S.sortcur[id]=d.items.map((_,i)=>i).sort((a,b)=>d.items[a][1]-d.items[b][1]);$('#sl-'+id).innerHTML=sortList(id);el.querySelectorAll('.sb').forEach(b=>b.disabled=true)}
+ const fb=el.querySelector('.fb');fb.className='fb good';fb.innerHTML=`<span class="okmark">${isNew?pick(['Richtig!','Super!','Stark!','Genau!']):'Erledigt.'}</span> ${d.sol||''}`;el.querySelector('.help').innerHTML=''}
+
+/* ---------- Arbeitsblatt ---------- */
+const HEF={h4:{step:'byte',title:'Bit und Byte',ab:1},h5:{step:'stairs',title:'Einheiten und Präfixe',ab:2},h6:{step:'store',title:'Dateigrößen im Vergleich',ab:3}};
+function hef(id,copy){const H=HEF[id];return `<div class="hef${S.hef[id]?' done':''}" id="hef-${id}"><div class="hh">${ico('book')} Arbeitsblatt-Auftrag</div><p class="task">Ergänze auf deinem Arbeitsblatt im <b>Kasten ${H.ab} „${H.title}“</b> die Lücken. Die <mark>markierten</mark> Wörter gehören in die Lücken.</p><div class="copy"><h3>Kasten ${H.ab}: ${H.title}</h3>${copy}</div><label class="chk"><input type="checkbox" data-hef="${id}"${S.hef[id]?' checked':''}> Erledigt: Die Lücken auf meinem Arbeitsblatt sind ausgefüllt.</label></div>`}
+
+/* ---------- self-checks ---------- */
+const SC={warm:['Ich kann Zahlen mit der 8-Bit-Stellenwerttafel darstellen.'],byte:['Ich weiß, was ein Bit und ein Byte ist.','Ich kann zwischen Bit und Byte umrechnen.'],stairs:['Ich kann SI- und Binärpräfixe unterscheiden.','Ich kann mit der Einheitentreppe umrechnen.'],store:['Ich kann einschätzen, wie viel Speicher verschiedene Dateien brauchen.','Ich kann entscheiden, auf welchen Speicher Daten passen.']};
+const RATE=['sicher','fast','noch nicht'];
+const SCALL=Object.entries(SC).flatMap(([k,a])=>a.map((t,i)=>({key:k+':'+i,t})));
+
+/* ---------- steps ---------- */
+const STEPS=[];
+const step=o=>{o.b=o.b||[];o.h=o.h||[];o.sc=SC[o.key]?SC[o.key].map((_,i)=>o.key+':'+i):[];STEPS.push(o)};
+const SI=k=>STEPS.findIndex(s=>s.key===k);
+function lvlHead(key){const ids=STEPS[SI(key)].b;const n=ids.filter(i=>S.done[i]).length;return `<div class="lvl"><span class="badge">${ico('base','')}</span><div><h3>Basis-Aufgaben</h3><small>Hier übst du das Wichtigste. Löse alle Aufgaben, bevor du weitergehst.</small></div><span class="count" id="cnt-${key}">${n} / ${ids.length}</span></div>`}
+const scCard=key=>`<div class="sccard" id="sccard">${SC[key].map((t,i)=>{const v=S.sc[key+':'+i];return `<div class="scline"><span>${t}</span><b class="rt rt${RATE.indexOf(v)}">${v||'–'}</b></div>`}).join('')}<button type="button" class="btn ghost sm" data-scedit="${key}">Einschätzung ändern</button></div>`;
+const scSlot=key=>`<div id="scslot"></div>`;
+
+// A Aufwärmen
+step({key:'warm',title:'Aufwärmen: 8 Bit',sub:'Stellenwerttafel wiederholen',min:2,b:['l1','l2'],
+ render:()=>`
+<h1>Aufwärmen: Die 8-Bit-Stellenwerttafel</h1>
+${say('Hallo, ich bin <b>Bitty</b>! Heute findest du heraus, wie viel Speicher Daten brauchen. Dafür brauchst du die Stellenwerttafel mit <b>8 Stellen</b>. Weißt du noch, wie sie funktioniert?')}
+<div class="card legend"><span><span class="badge">${ico('base','')}</span><b>Basis-Aufgaben</b> löst du alle</span><span><span class="lg-ab">${ico('book')}</span><b>Arbeitsblatt-Auftrag</b>: Lücken ausfüllen, dann Haken setzen</span><span><span class="lg-sc">?</span><b>Selbstcheck</b>: Am Ende jeder Station schätzt du dich ein</span><span><span class="lg-pro">${ico('star','ic')}</span><b>Profi-Zone</b> öffnet sich nach dem Exit-Check</span></div>
+<div class="card"><h3>Kurz wiederholt</h3><p style="margin-top:0">Jede Stelle hat einen Stellenwert. Von rechts nach links verdoppelt er sich. Eine <b>1</b> heißt: Der Stellenwert zählt mit. Eine <b>0</b> heißt: Er zählt nicht mit.</p>
+<div class="scroll"><table class="pv"><tr><th>128</th><th>64</th><th>32</th><th>16</th><th>8</th><th>4</th><th>2</th><th>1</th></tr></table></div></div>
+<h2>Probier es aus</h2>
+<p>Schalte die Lampen an und aus. <b>So rechnest du:</b> Jede Lampe, die leuchtet, steht für eine 1. Ihre Zahl darüber wird <b>dazugezählt</b>. Lampen, die aus sind, zählen nicht mit. Leuchten zum Beispiel die Lampen über 8, 4 und 1, ist die Zahl 8 + 4 + 1 = <b>13</b>. Unter den Lampen rechnet Bitty mit, damit du dich kontrollieren kannst.</p>
+${lvlHead('warm')}
+<div class="card" style="margin-top:0"><b>Übung:</b> Stelle nacheinander diese Zahlen mit den Lampen ein. Sobald es stimmt, wird die Zahl grün.<br>1) die Zahl <b>${G.warm[0]}</b> &nbsp;&nbsp; 2) die Zahl <b>${G.warm[1]}</b></div>
+<div class="lab" id="lampW"></div>${scSlot('warm')}`,
+ init:()=>lamps('lampW',8,[{v:G.warm[0],l:String(G.warm[0]),id:'l1'},{v:G.warm[1],l:String(G.warm[1]),id:'l2'}])});
+
+// B Bit & Byte
+const gb=G.byte;
+step({key:'byte',title:'Bit und Byte',sub:'Die kleinsten Einheiten',min:10,
+ b:[E('num','b1',`${gb.n1} Byte = ? Bit`,gb.n1*8,{unit:'Bit',hint:'Jedes Byte hat 8 Bit.',sol:`${gb.n1} · 8 = ${gb.n1*8} Bit.`}),
+    E('num','b2',`${gb.m2} Bit = ? Byte`,gb.m2/8,{unit:'Byte',hint:`Wie oft passen 8 Bit in ${gb.m2} Bit?`,sol:`${gb.m2} : 8 = ${gb.m2/8} Byte.`}),
+    E('num','b3',`Wie viel Speicher braucht das Wort <b>${gb.w3}</b>?`,gb.w3.length,{unit:'Byte',hint:'Jeder Buchstabe braucht 1 Byte. Zähle die Buchstaben.',sol:`${gb.w3} hat ${gb.w3.length} Zeichen = ${gb.w3.length} Byte.`}),
+    E('num','b4',`Wie viele <b>Bit</b> braucht das Wort <b>${gb.w4}</b>?`,gb.w4.length*8,{unit:'Bit',hint:'Erst Buchstaben zählen (= Byte), dann mal 8.',sol:`${gb.w4} hat ${gb.w4.length} Zeichen: ${gb.w4.length} Byte = ${gb.w4.length*8} Bit.`}),
+    E('num','b5',`${gb.a5} Byte und ${gb.b5} Bit sind zusammen wie viele Bit?`,gb.a5*8+gb.b5,{unit:'Bit',hint:'Rechne zuerst die Byte in Bit um, dann addiere.',sol:`${gb.a5} · 8 + ${gb.b5} = ${gb.a5*8+gb.b5} Bit.`})],
+ h:['h4'],
+ render:()=>`
+<h1>Bit und Byte</h1>
+${say('Ein einzelnes Bit kann nur 0 oder 1 sein. Das ist ziemlich wenig. Darum fasse ich immer <b>8 Bit</b> zu einem Paket zusammen. Dieses Paket heißt <b>Byte</b>. Mit einem Byte kann ich eine Zahl von 0 bis 255 speichern. Und damit auch Buchstaben, wie du gleich siehst.')}
+<h2>Wie wird aus einer Zahl ein Buchstabe?</h2>
+<p>Ein Computer kann nur <b>Zahlen</b> speichern, genauer gesagt nur 0 und 1. Buchstaben kennt er eigentlich gar nicht. Damit er trotzdem Text speichern kann, gibt es eine <b>Zeichentabelle</b> (ASCII-Code): Darin hat jedes Zeichen eine feste Nummer. Alle Computer verwenden dieselbe Tabelle, deshalb kann jeder Computer deinen Text lesen.</p>
+<div class="card"><div class="xflow"><span><small>Du tippst</small><b class="xk">A</b></span><i>→</i><span><small>Nummer in der Tabelle</small><b>65</b></span><i>→</i><span><small>als Binärzahl gespeichert</small><b class="xm">01000001</b></span><i>→</i><span><small>Bildschirm zeigt</small><b class="xk">A</b></span></div>
+<p style="margin-bottom:0">Der Computer <b>übersetzt</b> also für dich: Beim Speichern wird aus dem Buchstaben eine Zahl in 8 Bit, beim Anzeigen wird aus der Zahl wieder ein Buchstabe.</p></div>
+<div class="scroll"><table class="pv"><tr><th>Zeichen</th><td>A</td><td>B</td><td>C</td><td>D</td><td>a</td><td>b</td><td>Leerzeichen</td></tr><tr><th>Nummer</th><td>65</td><td>66</td><td>67</td><td>68</td><td>97</td><td>98</td><td>32</td></tr></table></div>
+<h2>Der Byte-Baukasten</h2>
+<p>Die Lampen sind dieselbe 8-Bit-Stellenwerttafel wie beim Aufwärmen. Neu ist nur das Feld „Zeichen“: Dort zeigt der Computer, welcher Buchstabe zu der Zahl gehört. Schalte die 8 Bit so, dass A, B und C erscheinen.</p>
+<div class="lab" id="lampC"></div>
+${hef('h4',`<ul><li>Ein <mark>Bit</mark> ist die kleinste Dateneinheit. Es hat genau zwei mögliche Werte: <mark>0</mark> oder <mark>1</mark>.</li><li><mark>8</mark> Bit = 1 <mark>Byte</mark> (Abkürzung: B)</li><li>Ein Zeichen (z. B. ein Buchstabe) braucht <mark>1 Byte</mark> Speicher.</li><li>Damit der Computer Text speichern kann, hat jedes Zeichen eine feste <mark>Nummer</mark> in einer Zeichentabelle (ASCII-Code). Beispiel: A = <mark>65</mark>.</li></ul>`)}
+${lvlHead('byte')}${exList(STEPS[SI('byte')].b)}${scSlot('byte')}`,
+ init:()=>lamps('lampC',8,[{v:65,l:'A'},{v:66,l:'B'},{v:67,l:'C'}],true)});
+
+// C Einheitentreppe
+const gs=G.st,d1=gs.d1;
+step({key:'stairs',title:'Die Einheitentreppe',sub:'Präfixe, Umrechnen, Zuordnen',min:10,
+ b:[E('choice','c1',`Du rechnest von <b>${d1.down?BU[d1.i]:BU[d1.i-1]}</b> in <b>${d1.down?BU[d1.i-1]:BU[d1.i]}</b>. Was machst du?`,d1.down?0:1,{opts:['mal 1024','durch 1024','mal 8','plus 1024'],hint:d1.down?'Treppe hinunter: Die Zahl wird größer.':'Treppe hinauf: Die Zahl wird kleiner.',sol:d1.down?'Treppe hinunter: multiplizieren.':'Treppe hinauf: dividieren.'}),
+    E('num','c2',`${gs.c2.n} ${BU[gs.c2.i]} = ? ${BU[gs.c2.i-1]}`,gs.c2.n*1024,{unit:BU[gs.c2.i-1],hint:'Eine Stufe hinunter: · 1024.',sol:`${gs.c2.n} · 1024 = ${fmt(gs.c2.n*1024)} ${BU[gs.c2.i-1]}.`}),
+    E('num','c3',`${fmt(gs.c3.n*1024)} ${BU[gs.c3.i-1]} = ? ${BU[gs.c3.i]}`,gs.c3.n,{unit:BU[gs.c3.i],hint:'Eine Stufe hinauf: : 1024.',sol:`${fmt(gs.c3.n*1024)} : 1024 = ${gs.c3.n} ${BU[gs.c3.i]}.`}),
+    (EX.c4={kind:'match',id:'c4',q:'<b>Zuordnen:</b> Welche Angabe ist gleich groß? Wähle zu jedem Speicher die passende Größe.',left:gs.match.map(p=>p[0]),right:gs.mperm.map(i=>gs.match[i][1]),ans:gs.match.map((_,i)=>gs.mperm.indexOf(i)),hint:'Überlege bei jeder Zeile: Eine Stufe hinunter heißt · 1024, eine Stufe hinauf heißt : 1024.',sol:gs.match.map(p=>`${p[0]} = ${p[1]}`).join(' · ')},'c4'),
+    (EX.c5={kind:'sort',id:'c5',q:'<b>Sortieren:</b> Bringe die Speichergrößen in die richtige Reihenfolge, von <b>klein</b> (oben) nach <b>groß</b> (unten). Achtung: SI- und Binärpräfixe sind gemischt!',items:gs.sort,start:gs.sstart,hint:'SI-Präfixe (k, M, G) rechnen mit 1000, Binärpräfixe (Ki, Mi, Gi) mit 1024. Rechne alles in die gleiche Einheit um oder überlege, welche Angabe mit 1024 gerechnet ist.',sol:'Mit 1024 gerechnete Angaben sind größer: '+gs.sort.slice().sort((a,b)=>a[1]-b[1]).map(x=>x[0]).join(' < ')},'c5')],
+ h:['h5'],
+ render:()=>`
+<h1>Die Einheitentreppe</h1>
+${say('Fotos und Videos sind riesig. Niemand sagt „4 000 000 Byte“. Darum gibt es Vorsilben, die <b>Präfixe</b>.')}
+<div class="card"><h3>Zwei Arten von Präfixen</h3><p style="margin-top:0"><b>SI-Präfixe</b> wie kilo (k) rechnen mit <b>1000</b>, wie bei Kilometer. <b>Binärpräfixe</b> wie kibi (Ki) rechnen mit <b>1024</b> = 2<sup>10</sup>, weil Computer im Zweiersystem arbeiten.</p>
+<p style="margin-bottom:0"><b>Warum ist das wichtig?</b> Hersteller von Festplatten und USB-Sticks rechnen mit 1000, dein Computer rechnet mit 1024. Deshalb zeigt der Computer bei einer 1-TB-Festplatte nur etwa <b>931 GiB</b> an. Es fehlt nichts, es wird nur anders gezählt. Achtung: Windows schreibt „KB, MB, GB“, meint aber KiB, MiB, GiB.</p></div>
+<div class="note">${ico('star','ic')}<div><b>Ab jetzt rechnen wir nur noch mit Binärpräfixen: Jede Stufe ist 1024-mal so groß.</b> Nur zwischen Bit und Byte ist der Faktor 8.</div></div>
+<h2>Die Einheitentreppe</h2>
+<div class="card">
+<div class="slegend"><span>← Treppe hinunter: <b>multiplizieren</b></span><span>Treppe hinauf: <b>dividieren</b> →</span></div>
+<div class="stairs" id="stairs"></div>
+<div class="conv"><label>Wert<input id="cvV" inputmode="decimal" value="2"></label><label>von<select id="cvF"></select></label><label>nach<select id="cvT"></select></label></div>
+<div class="result" id="cvR"></div><div class="chain" id="cvC"></div>
+<p style="color:var(--soft);font-size:.9rem">Tipp: Du kannst auch auf eine Stufe klicken, um das Ziel zu wählen.</p></div>
+<h2>Größen-Zoom: Wie viel größer ist das wirklich?</h2>
+<p>Wähle zwei Einheiten, zum Beispiel <b>Bit</b> und <b>GiB</b>, und schau dir den Unterschied auf drei Arten an.</p>
+<div class="card" id="lupe"></div>
+${hef('h5',`<p>SI-Präfix: kilo (k) = <mark>1000</mark> &nbsp;&nbsp;|&nbsp;&nbsp; Binärpräfix: kibi (Ki) = <mark>1024</mark></p>
+<p><b>Bit</b> –(· <mark>8</mark>)→ <b>Byte</b> –(· <mark>1024</mark>)→ <b>KiB</b> –(· 1024)→ <b>MiB</b> –(· 1024)→ <b>GiB</b> –(· 1024)→ <b>TiB</b></p>
+<ul><li>Treppe hinunter (zur kleineren Einheit): <mark>multiplizieren</mark></li><li>Treppe hinauf (zur größeren Einheit): <mark>dividieren</mark></li><li>Hersteller rechnen mit <mark>1000</mark>, der Computer rechnet mit <mark>1024</mark>. Deshalb zeigt der Computer <mark>weniger</mark> Speicher an, als auf der Packung steht.</li></ul>`)}
+${lvlHead('stairs')}${exList(STEPS[SI('stairs')].b)}${scSlot('stairs')}`,
+ init:()=>{stairs();lupe()}});
+
+// D Speicher-Check
+const gf=G.f;
+const FOLD={Dokumente:[['Ablaufplan.pdf','PDF-Dokument',gf.abl,1],['Elternbrief.pdf','PDF-Dokument',gf.elt,1]],Bilder:[['Klassenfoto.jpg','JPG-Bild',gf.kfo,2],['Selfie.jpg','JPG-Bild',gf.sel,2]],Videos:[['Erinnerungsvideo.mp4','MP4-Video',gf.vid,3],['trailer_film.mp4','MP4-Video',gf.tra,2]],Musik:[['Song1.mp3','MP3-Audio',gf.s1,2],['Song2.mp3','MP3-Audio',gf.s2,2]]};
+const fIcon=t=>t.startsWith('PDF')?'doc':t.includes('Bild')?'img':t.includes('Video')?'film':'music';
+const MED=[['Diskette','disk','≈ 1,4 MiB'],['CD','cd','≈ 700 MiB'],['DVD','cd','≈ 4,4 GiB'],['USB-Stick (64 GB)','usb','≈ 59,6 GiB'],['Handy (128 GB)','phone','≈ 119 GiB'],['SSD (1 TB)','ssd','≈ 931 GiB']];
+const SZ=[E('num','s1','Größe eintragen: <b>Ablaufplan.pdf</b>',gf.abl,{unit:'KiB',hint:'Ordner „Dokumente“: Rechtsklick auf die Datei → Eigenschaften.',sol:`Ablaufplan.pdf: ${gf.abl} KiB`}),
+ E('num','s2','Größe eintragen: <b>Klassenfoto.jpg</b>',gf.kfo,{unit:'MiB',hint:'Ordner „Bilder“: Rechtsklick auf die Datei → Eigenschaften.',sol:`Klassenfoto.jpg: ${fmt(gf.kfo)} MiB`}),
+ E('num','s3','Größe eintragen: <b>Song1.mp3</b>',gf.s1,{unit:'MiB',hint:'Ordner „Musik“: Rechtsklick auf die Datei → Eigenschaften.',sol:`Song1.mp3: ${gf.s1} MiB`}),
+ E('num','s4','Größe eintragen: <b>Erinnerungsvideo.mp4</b>',gf.vid,{unit:'GiB',hint:'Ordner „Videos“: Rechtsklick auf die Datei → Eigenschaften.',sol:`Erinnerungsvideo.mp4: ${fmt(gf.vid)} GiB`})];
+const songs=Math.floor(gf.vid*1024/gf.s1);
+const CMP=[E('choice','v1','Welche Dateiart braucht am <b>meisten</b> Speicher, welche am <b>wenigsten</b>?',0,{opts:['Videos am meisten, Dokumente am wenigsten','Bilder am meisten, Musik am wenigsten','Musik am meisten, Videos am wenigsten','Dokumente am meisten, Bilder am wenigsten'],hint:'Vergleiche die Einheiten: GiB ist größer als MiB, MiB größer als KiB.',sol:'Videos (GiB) brauchen am meisten, Textdokumente (KiB) am wenigsten. Ein Video besteht aus vielen Bildern pro Sekunde plus Ton.'}),
+ (EX.v2={kind:'sort',id:'v2',q:'<b>Sortieren:</b> Ordne die Dateien nach ihrer Größe, von <b>klein</b> (oben) nach <b>groß</b> (unten).',items:gf.sortItems,start:gf.sstart,hint:'Achte zuerst auf die Einheit (KiB < MiB < GiB), dann auf die Zahl.',sol:'Erst die Einheit vergleichen, dann die Zahl.'},'v2'),
+ E('num','v3',`Statt des Erinnerungsvideos (${fmt(gf.vid)} GiB) könntest du Songs wie Song1 (${gf.s1} MiB) speichern. Wie viele <b>ganze</b> Songs passen in den gleichen Platz?`,songs,{unit:'Songs',hint:`Rechne ${fmt(gf.vid)} GiB in MiB um (· 1024) und teile durch ${gf.s1}.`,sol:`${fmt(gf.vid)} · 1024 = ${fmt(gf.vid*1024)} MiB. ${fmt(gf.vid*1024)} : ${gf.s1} ≈ ${fmt(Math.round(gf.vid*1024/gf.s1*10)/10)}, also ${songs} ganze Songs.`})];
+const cdV=gf.cd==='vid';
+const LNK=[E('choice','m1','Warum kann man das Erinnerungsvideo <b>nicht</b> auf einer Diskette speichern?',0,{opts:[`Das Video (${fmt(gf.vid)} GiB) ist über 800-mal größer als die Speicherkapazität der Diskette (1,4 MiB).`,'Disketten können keine Videos abspielen.','Videos darf man nur auf dem Handy speichern.'],hint:`Wie viele MiB sind ${fmt(gf.vid)} GiB? Vergleiche mit 1,4 MiB.`,sol:`${fmt(gf.vid)} GiB ≈ ${fmtInt(gf.vid*1024)} MiB. Das ist viel mehr, als auf die Diskette passt.`}),
+ E('choice','m2',`Passt <b>${cdV?'das Erinnerungsvideo':'trailer_film.mp4'}</b> auf eine CD (≈ 700 MiB)?`,cdV?1:0,{opts:['Ja','Nein'],hint:cdV?`${fmt(gf.vid)} GiB = ${fmtInt(gf.vid*1024)} MiB.`:`Schau im Explorer nach, wie groß trailer_film.mp4 ist.`,sol:cdV?`${fmtInt(gf.vid*1024)} MiB > 700 MiB: passt nicht.`:`${gf.tra} MiB < 700 MiB: passt.`}),
+ E('choice','m3','Was ist das <b>kleinste</b> Speichermedium aus der Liste, auf das das Erinnerungsvideo passt?',2,{opts:['Diskette','CD','DVD','SSD'],hint:`Das Video hat ${fmt(gf.vid)} GiB. Welches Medium hat gerade mehr als das?`,sol:'Die DVD hat ≈ 4,4 GiB. Das reicht. Eine SSD ginge auch, wäre aber viel größer als nötig.'})];
+step({key:'store',title:'Speicher-Check',sub:'Dateien im Explorer untersuchen',min:15,b:[...SZ,...CMP,...LNK],h:['h6'],
+ render:()=>`
+<h1>Speicher-Check: Die Klassenfahrt-Dateien</h1>
+${say('Eure Klasse war auf Klassenfahrt! Lia hat alle Erinnerungen in den Tauschordner der Schule gelegt: Dokumente, Bilder, Videos und Musik. Aber wie viel Speicher braucht das eigentlich? Finde es heraus!')}
+<div class="card"><b>So geht’s:</b> Öffne links einen Ordner. Klicke dann mit der <b>rechten Maustaste</b> auf eine Datei und wähle <b>Eigenschaften</b>. Dort steht die Größe. <span style="color:var(--soft)">(Am Tablet: Datei antippen und oben auf „Eigenschaften“.)</span></div>
+<div class="exw" id="explorer"></div>
+${lvlHead('store')}
+<h2>1. Größen eintragen</h2>${exList(SZ)}
+${hef('h6',`<div class="scroll"><table class="pv"><tr><th>Datei</th><th>Dateiart</th><th>Größe (deine Werte aus dem Explorer)</th></tr><tr><td>Ablaufplan.pdf</td><td>Dokument</td><td><mark>${gf.abl} KiB</mark></td></tr><tr><td>Klassenfoto.jpg</td><td>Bild</td><td><mark>${fmt(gf.kfo)} MiB</mark></td></tr><tr><td>Song1.mp3</td><td>Musik</td><td><mark>${gf.s1} MiB</mark></td></tr><tr><td>Erinnerungsvideo.mp4</td><td>Video</td><td><mark>${fmt(gf.vid)} GiB</mark></td></tr></table></div>
+<ul><li>Am meisten Speicher brauchen <mark>Videos</mark>, am wenigsten <mark>Textdokumente</mark>.</li><li>Damit Daten auf einen Speicher passen, muss der Speicherbedarf kleiner sein als die <mark>Speicherkapazität</mark>.</li></ul>`)}
+<h2>2. Vergleichen</h2>${exList(CMP,4)}
+<h2>3. Welcher Speicher passt?</h2>
+<p>Wie viel ein Speicher aufnehmen kann, heißt <b>Speicherkapazität</b>. Hier siehst du typische Werte, schon in Binärpräfixe umgerechnet:</p>
+<div class="medgrid">${MED.map(([n,i,c])=>`<div class="med">${ico(i,'')}<span><b>${n}</b><small>${c}</small></span></div>`).join('')}</div>
+${exList(LNK,7)}${scSlot('store')}`,
+ init:()=>explorer()});
+
+// Exit-Check
+const ge=G.ex;
+const SKILLS=[{s:'Bit und Byte',st:'byte',sc:['byte:0','byte:1']},{s:'SI- und Binärpräfixe',st:'stairs',sc:['stairs:0']},{s:'Umrechnen mit Binärpräfixen',st:'stairs',sc:['stairs:1']},{s:'Dateigrößen und Speicher',st:'store',sc:['store:0','store:1']}];
+const CC=[
+ {id:'t1',k:0,kind:'choice',q:'Warum nutzt der Computer für einen Buchstaben 8 Bit und nicht nur 1 Bit?',opts:['Mit 1 Bit gibt es nur 2 Möglichkeiten, mit 8 Bit 256. Das reicht für alle Buchstaben, Ziffern und Zeichen.','Weil 8 eine Glückszahl ist.','Weil ein Buchstabe immer 8 Striche hat.'],ans:0,sol:'Mit 8 Bit gibt es 2<sup>8</sup> = 256 verschiedene Muster.'},
+ {id:'t3',k:1,kind:'choice',q:'Auf einer Festplatte steht „500 GB“, der Computer zeigt aber nur etwa 465 GiB. Warum?',opts:['Die Festplatte ist kaputt.','Der Hersteller rechnet mit 1000, der Computer mit 1024.','Der Computer hat schon Dateien darauf gespeichert.'],ans:1,sol:'Gleiche Datenmenge, nur anders gezählt: SI-Präfixe (1000) gegen Binärpräfixe (1024).'},
+ {id:'t5',k:2,kind:'num',q:`${ge.t5} GiB = ? MiB`,unit:'MiB',ans:ge.t5*1024,sol:`Treppe hinunter: ${ge.t5} · 1024 = ${fmt(ge.t5*1024)} MiB`},
+ {id:'t6',k:2,kind:'num',q:`Ein Song hat ${ge.t6} MiB. Wie viele Songs passen auf einen leeren 1-GiB-Stick?`,unit:'Songs',ans:1024/ge.t6,sol:`1 GiB = 1024 MiB. 1024 : ${ge.t6} = ${1024/ge.t6} Songs`},
+ {id:'t7',k:3,kind:'choice',q:'Lea will 30 Urlaubsvideos sichern, jedes etwa 1 GiB groß. Was ist sinnvoll?',opts:['eine DVD (≈ 4,4 GiB)','ein USB-Stick mit 64 GB (≈ 59,6 GiB)','eine CD (≈ 700 MiB)','eine Diskette (≈ 1,4 MiB)'],ans:1,sol:'30 GiB passen nur auf den USB-Stick. Die anderen Medien sind viel zu klein.'}];
+CC.forEach(c=>{if(c.kind==='choice'){const r=CH(c.id,c.opts,c.ans);c.opts=r.opts;c.ans=r.ans}EX[c.id]=c});
+const ccDone=()=>CC.every(c=>S.cc[c.id]);
+step({key:'exit',title:'Exit-Check',sub:'Was hast du verstanden?',min:5,
+ render:()=>`
+<h1>Dein Exit-Check</h1>
+${say('Zum Schluss prüfst du, was du heute verstanden hast. Dabei musst du dein Wissen <b>verknüpfen</b>. <b>Jede Aufgabe hat nur einen Versuch</b>, es gibt keine Tipps. Danach vergleiche ich das Ergebnis mit deinen Selbstchecks.')}
+<div id="ccArea">${CC.map((c,i)=>ccHTML(c,i+1)).join('')}</div><div id="ccRes"></div>`,
+ init:()=>ccResult()});
+
+// Profi
+const gp=G.pr;
+const PV=[E('num','pv1',`Ein Film hat ${fmt(gp.p1)} GiB. Wie viele MiB sind das?`,gp.p1*1024,{unit:'MiB',hint:'Eine Stufe hinunter: · 1024.',sol:`${fmt(gp.p1)} · 1024 = ${fmt(gp.p1*1024)} MiB.`}),
+ E('num','pv3',`Wie viele Bit sind ${gp.p3} KiB?`,gp.p3*8192,{unit:'Bit',hint:'Zwei Schritte: erst in Byte (· 1024), dann in Bit (· 8).',sol:`${gp.p3} · 1024 = ${fmt(gp.p3*1024)} Byte, · 8 = ${fmt(gp.p3*8192)} Bit.`})];
+if(!G.lg){G.lg={tot:pick([32,64,128])};G.lg.used=G.lg.tot-rnd(3,Math.round(G.lg.tot/3))}
+const gl=G.lg;
+const PL=[E('num','pl1',`Bens Handy hat <b>${gl.tot} GiB</b> Speicher. Davon sind schon <b>${gl.used} GiB</b> belegt. Wie viel Speicher ist noch frei?`,gl.tot-gl.used,{unit:'GiB',hint:'Gesamter Speicher minus belegter Speicher.',sol:`${gl.tot} GiB − ${gl.used} GiB = ${gl.tot-gl.used} GiB sind frei.`}),
+ E('choice','pl2','Auf Lias Handy sind noch <b>2 GiB</b> frei. Was kann sie <b>noch</b> speichern?',1,{opts:['einen Film mit 3 GiB','300 Fotos mit je 4 MiB (zusammen 1200 MiB)','ein Spiel mit 5 GiB'],hint:'2 GiB sind 2048 MiB. Was ist kleiner als das?',sol:'1200 MiB ist weniger als 2048 MiB. Film und Spiel sind größer als 2 GiB.'}),
+ E('choice','pl3','Bens Speicher ist voll. Was bringt am <b>meisten</b> freien Platz?',2,{opts:['20 Chatnachrichten löschen','5 Fotos mit je 3 MiB löschen','1 Video mit 2 GiB löschen'],hint:'Vergleiche die Einheiten: Byte, MiB oder GiB?',sol:'Das Video hat 2 GiB = 2048 MiB. Die Fotos sind nur 15 MiB, die Nachrichten nur ein paar KiB.'}),
+ E('choice','pl4','Welche Angabe passt <b>nicht</b> in die Reihe? Alle anderen sind gleich groß.',3,{opts:['1 GiB','1024 MiB','1 048 576 KiB','1000 MiB'],hint:'1 GiB = 1024 MiB = 1024 · 1024 KiB.',sol:'1000 MiB ist etwas weniger als 1 GiB. Die anderen drei sind genau 1 GiB.'}),
+ E('choice','pl5','Stimmt das? „Auf einen leeren 1-GiB-Stick passen genau 1000 Songs mit je 1 MiB.“',1,{opts:['Ja, das stimmt.','Nein, es passen mehr.','Nein, es passen weniger.'],hint:'Wie viele MiB hat 1 GiB?',sol:'1 GiB = 1024 MiB, also passen 1024 Songs, also mehr als 1000.'})];
+const PSW=[E('text','ps1','ETBY',['byte'],{hint:'8 Bit sind ein …',sol:'BYTE'}),E('text','ps2','BIKI',['kibi'],{hint:'Der Binärpräfix für 1024.',sol:'KIBI'}),E('text','ps3','CHEPREIS',['speicher'],{hint:'Darauf legt man Daten ab.',sol:'SPEICHER'}),E('text','ps4','FIXPRÄ',['präfix','praefix'],{hint:'Eine Vorsilbe wie kilo oder kibi.',sol:'PRÄFIX'})];
+step({key:'profi',title:'Profi-Zone',sub:'Vertiefung für Schnelle',min:0,b:[...PV,...PL,...PSW],
+ render:()=>ccDone()?`
+<h1>Profi-Zone: Speicher-Experten</h1>
+${say('Du hast den Exit-Check geschafft! Hier warten zwei knifflige Rechnungen, Logik-Rätsel rund um Speicher und ein Wortsalat.')}
+<div class="pgrid"><a class="pjump" href="#pv">${ico('star','')}<span><b>Knifflige Rechnungen</b><small>2 Aufgaben</small></span></a><a class="pjump" href="#pl">${ico('star','')}<span><b>Logik-Rätsel</b><small>Speicher im Alltag</small></span></a><a class="pjump" href="#ps">${ico('star','')}<span><b>Wortsalat</b><small>4 Fachbegriffe</small></span></a></div>
+<section class="stage" id="pv"><div class="stagehead"><span class="snum">1</span><div><h2>Knifflige Rechnungen</h2><small><span id="pc-v">0</span> von ${PV.length} gelöst</small></div></div>${exList(PV)}</section>
+<section class="stage" id="pl"><div class="stagehead"><span class="snum">2</span><div><h2>Logik-Rätsel</h2><small><span id="pc-l">0</span> von ${PL.length} gelöst</small></div></div><p>Hier musst du vor allem gut überlegen, kaum rechnen.</p>${exList(PL)}</section>
+<section class="stage" id="ps"><div class="stagehead"><span class="snum">3</span><div><h2>Wortsalat</h2><small><span id="pc-s">0</span> von ${PSW.length} gelöst</small></div></div><p>Wie heißen die Fachbegriffe richtig?</p>${exList(PSW)}</section>
+<div id="profEnd"></div>`:`<h1>Profi-Zone</h1><div class="card lockcard" style="padding:24px">${ico('lock')} <div><b>Noch verschlossen.</b> Die Profi-Zone öffnet sich, sobald du den Exit-Check fertig hast.</div></div>`,
+ init:()=>profUpd()});
+
+/* ---------- exit check logic ---------- */
+function ccHTML(c,n){const a=S.cc[c.id];let body;
+ if(c.kind==='choice')body=`<div class="opts">${c.opts.map((o,i)=>`<button type="button" class="opt${a?(i===c.ans?' right':(+a.v===i?' wrong':'')):''}" data-cc="${c.id}" data-i="${i}"${a?' disabled':''}>${o}</button>`).join('')}</div>`;
+ else body=`<div class="row"><input id="cc-${c.id}" data-ccin="${c.id}" autocomplete="off" inputmode="decimal" aria-label="Antwort"${a?` value="${esc(a.v)}" readonly`:''}>${c.unit?`<span class="unit">${c.unit}</span>`:''}${a?'':`<button type="button" class="calcb" data-calc="cc-${c.id}" title="Taschenrechner" aria-label="Taschenrechner öffnen">${ico('calc','')}</button><button type="button" class="btn" data-ccbtn="${c.id}">Abgeben</button>`}</div>`;
+ const fb=a?(a.ok?`<div class="fb good"><span class="okmark">Richtig!</span></div>`:`<div class="fb bad"><b>Leider falsch.</b> Richtig ist: <b>${correctText(c)}</b>. ${c.sol}</div>`):'<div class="fb" aria-live="polite"></div>';
+ return `<div class="ex${a&&a.ok?' ok':''}${a&&!a.ok?' no':''}" id="ccx-${c.id}"><div class="q"><span class="n">${n}</span>${c.q}</div>${body}${fb}</div>`}
+function ccSubmit(id,v){if(S.cc[id])return;const c=EX[id];const r=judge(c,v);
+ if(r.empty){const fb=$('#ccx-'+id+' .fb');fb.className='fb info';fb.textContent=r.msg;return}
+ S.cc[id]={v:String(v),ok:r.ok};save();$('#ccx-'+id).outerHTML=ccHTML(c,CC.indexOf(c)+1);ccResult();update()}
+function skillRes(){return SKILLS.map((s,i)=>{const cs=CC.filter(c=>c.k===i);return {r:cs.filter(c=>S.cc[c.id]&&S.cc[c.id].ok).length,a:cs.filter(c=>S.cc[c.id]).length,n:cs.length}})}
+function ccResult(){const el=$('#ccRes');if(!el)return;
+ if(!ccDone()){el.innerHTML=`<p style="color:var(--soft)">Abgegeben: ${CC.filter(c=>S.cc[c.id]).length} von ${CC.length}</p>`;return}
+ const N=CC.length,right=CC.filter(c=>S.cc[c.id].ok).length,q=right/N,SR=skillRes();
+ const msg=right===N?'Perfekt! Du hast alles richtig.':q>=.75?'Sehr gut! Nur kleine Lücken. Schau sie dir unten an.':q>=.5?'Gute Grundlage! Ein paar Dinge solltest du noch üben.':'Hier ist noch einiges zu tun. Wiederhole die markierten Stationen in Ruhe.';
+ const rows=SKILLS.map((s,i)=>{const {r,n}=SR[i],ok=r===n,selfs=s.sc.map(k=>S.sc[k]).filter(Boolean);const sure=selfs.includes('sicher'),weak=selfs.includes('noch nicht');
+  let note='';if(!ok&&sure)note='Du warst dir sicher, aber hier hat sich ein Fehler eingeschlichen. Schau noch einmal genau hin.';else if(ok&&weak)note='Besser als gedacht! Du kannst das schon.';
+  return `<div class="resrow ${ok?'good':'bad'}"><span class="rdot">${ok?ico('check',''):'!'}</span><div><b>${s.s}</b><small>Dein Selbstcheck: ${selfs.join(', ')||'–'} · Im Exit-Check: ${r} von ${n} richtig</small>${note?`<small class="rnote">${note}</small>`:''}</div>${ok?'<span class="okmark">sitzt</span>':`<button type="button" class="btn sm" data-go="${SI(s.st)}">Nochmal üben</button>`}</div>`}).join('');
+ el.innerHTML=`<h2>Dein Ergebnis</h2><div class="card"><div class="big">${right} / ${N}</div><p class="lead" style="margin-top:6px">${msg}</p>${rows}</div>
+ <h2>Arbeitsblatt-Check</h2><p>Sind alle Lücken auf deinem Arbeitsblatt ausgefüllt? Fehlt etwas, springe zur Station und hole es nach.</p>
+ <ul class="hlist">${Object.keys(HEF).map(id=>`<li><span class="st2${S.hef[id]?' y':''}">${S.hef[id]?ico('check',''):''}</span><span>Kasten ${HEF[id].ab}: ${HEF[id].title}</span><button type="button" class="btn ghost sm" data-go="${SI(HEF[id].step)}">Zur Station</button></li>`).join('')}</ul>
+ <div class="card unlock">${ico('star','')}<div><b>Die Profi-Zone ist offen!</b><br>Knifflige Rechnungen, Logik-Rätsel und ein Wortsalat warten.<div class="row"><button type="button" class="btn pro" data-go="${SI('profi')}">Zur Profi-Zone</button></div></div></div>`}
+function profUpd(){[['v',PV],['l',PL],['s',PSW]].forEach(([k,a])=>{const e=document.getElementById('pc-'+k);if(e)e.textContent=a.filter(i=>S.done[i]).length;const sec=document.getElementById('p'+k);if(sec)sec.classList.toggle('sdone',a.every(i=>S.done[i]))});
+ const e=$('#profEnd');if(e)e.innerHTML=[...PV,...PL,...PSW].every(i=>S.done[i])?`<div class="card unlock">${ico('star','')}<div><b>Alles gelöst!</b> Du bist ein echter Speicher-Experte. Bitty ist beeindruckt.</div></div>`:''}
+
+/* ---------- widgets ---------- */
+function lamps(id,n,targets,char){const host=document.getElementById(id);if(!host)return;let bits=Array(n).fill(0),ti=0;const got=new Set();targets.forEach((t,i)=>{if(t.id&&S.done[t.id]){got.add(i);if(ti===i)ti++}});
+ const draw=()=>{const v=bits.reduce((a,b,i)=>a+b*2**(n-1-i),0);const terms=bits.map((b,i)=>b?2**(n-1-i):0).filter(x=>x);
+  const ch=v>=32&&v<=126?String.fromCharCode(v):'–';
+  host.innerHTML=`<div class="lamps">${bits.map((b,i)=>`<button type="button" class="bit${b?' on':''}" data-b="${i}" aria-pressed="${!!b}" aria-label="Stellenwert ${2**(n-1-i)}"><span class="pv">${2**(n-1-i)}</span><span class="bulb">${b}</span></button>`).join('')}</div>
+  <div class="readout"><span>Binär</span><b>${bits.join('')}<sub>2</sub></b><span>Dezimal</span><b class="dec">${terms.length>1?terms.join(' + ')+' = ':''}${v}</b>${char?`<span>Zeichen</span><span class="charbox">${ch}</span>`:''}</div>
+  <div class="chal">${targets.length?`<span>Stelle ein:</span>${targets.map((t,i)=>`<span class="chip${got.has(i)?' got':i===ti?' now':''}">${t.l}</span>`).join('')}`:''}<button type="button" class="btn ghost sm" data-reset="1">Alle aus</button></div>
+  <div class="msg" aria-live="polite">${targets.length&&ti>=targets.length?'Alle gefunden. Stark!':''}</div>`;
+  if(ti<targets.length&&v===targets[ti].v){got.add(ti);if(targets[ti].id){S.done[targets[ti].id]=1;save();setTimeout(update)}ti++;host.querySelector('.msg').textContent=ti>=targets.length?'Alle gefunden. Stark!':`Richtig! ${targets[ti-1].l} = ${bits.join('')}. Weiter mit ${targets[ti].l}.`;host.querySelectorAll('.chip')[ti-1].className='chip got';if(ti<targets.length)host.querySelectorAll('.chip')[ti].className='chip now'}};
+ host.addEventListener('click',e=>{const b=e.target.closest('[data-b]');if(b){bits[+b.dataset.b]^=1;draw();host.querySelector(`[data-b="${b.dataset.b}"]`).focus()}if(e.target.closest('[data-reset]')){bits.fill(0);draw()}});draw();
+ host.setBits=v=>{bits=bits.map((_,i)=>(v>>(n-1-i))&1);draw()}}
+
+function explorer(){const host=$('#explorer');if(!host)return;let folder='Dokumente',sel=null,menu=null,props=null;
+ const fi=t=>{const k=fIcon(t);const c={doc:'#d93025',img:'#0f9d58',film:'#7b4fe0',music:'#f29900'}[k];return `<svg class="fico" viewBox="0 0 20 20" aria-hidden="true">${k==='doc'?`<path d="M5 2h7l4 4v12H5z" fill="${c}" opacity=".18"/><path d="M5 2h7l4 4v12H5zM12 2v4h4" fill="none" stroke="${c}" stroke-width="1.6"/>`:k==='img'?`<rect x="2" y="4" width="16" height="12" rx="2" fill="${c}" opacity=".2"/><rect x="2" y="4" width="16" height="12" rx="2" fill="none" stroke="${c}" stroke-width="1.6"/><path d="M4 14l4-4 3 3 2-2 3 3" fill="none" stroke="${c}" stroke-width="1.6"/>`:k==='film'?`<rect x="2" y="5" width="11" height="10" rx="2" fill="${c}"/><path d="M13 9l5-3v8l-5-3z" fill="${c}"/>`:`<path d="M7 15V5l9-2v10" fill="none" stroke="${c}" stroke-width="1.8"/><circle cx="5" cy="15" r="2.5" fill="${c}"/><circle cx="14" cy="13" r="2.5" fill="${c}"/>`}</svg>`};
+ const fold=`<svg class="fico" viewBox="0 0 20 20" aria-hidden="true"><path d="M2 5a1 1 0 0 1 1-1h5l2 2h7a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z" fill="#f6c343"/><path d="M2 8h16v8a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z" fill="#ffd866"/></svg>`;
+ const bytes=(v,k)=>Math.round(v*1024**k).toLocaleString('de-DE');
+ const draw=()=>{const files=FOLD[folder];const f=sel!=null?files[sel]:null;
+  host.innerHTML=`<div class="exbar"><span class="extab">${fold}${folder}</span><span class="exwin">–&nbsp;&nbsp;□&nbsp;&nbsp;✕</span></div>
+  <div class="exnav"><span class="exarr">‹ › ↑</span><span class="excrumb">Schule › Klassenfahrt › ${folder}</span></div>
+  <div class="extool"><button type="button" class="extb" data-ex="props"${f?'':' disabled'}>Eigenschaften</button></div>
+  <div class="exmain"><nav class="exside">${Object.keys(FOLD).map(k=>`<button type="button" class="exf${k===folder?' on':''}" data-folder="${k}">${fold}${k}</button>`).join('')}</nav>
+  <div class="exlist"><div class="exhead"><span>Name</span><span>Typ</span></div>${files.map((x,i)=>`<button type="button" class="exfile${i===sel?' on':''}" data-file="${i}">${fi(x[1])}<span class="exn">${x[0]}</span><span class="ext">${x[1]}</span></button>`).join('')}</div></div>
+  <div class="exstat">${files.length} Elemente${f?' &nbsp;|&nbsp; 1 Element ausgewählt':''}</div>
+  ${menu?`<div class="exmenu" style="left:${menu.x}px;top:${menu.y}px"><button type="button" disabled>Öffnen</button><button type="button" disabled>Kopieren</button><hr><button type="button" data-ex="props">Eigenschaften</button></div>`:''}
+  ${props&&f?`<div class="exprops"><div class="expbox"><div class="expt">Eigenschaften von ${f[0]}</div><div class="exph">${fi(f[1])}<b>${f[0]}</b></div><table><tr><td>Dateityp:</td><td>${f[1]} (.${f[0].split('.').pop()})</td></tr><tr><td>Ort:</td><td>Schule\\Klassenfahrt\\${folder}</td></tr><tr><td>Größe:</td><td><b>${fmt(f[2])} ${UN[f[3]]}</b> (${bytes(f[2],f[3])} Bytes)</td></tr></table><div class="expa"><button type="button" class="btn sm" data-ex="close">OK</button></div></div></div>`:''}`};
+ host.addEventListener('click',e=>{const t=e.target;let b;
+  if(b=t.closest('[data-folder]')){folder=b.dataset.folder;sel=null;menu=null;props=null;draw()}
+  else if(b=t.closest('[data-ex]')){if(b.dataset.ex==='props'&&sel!=null)props=true;else props=null;menu=null;draw()}
+  else if(b=t.closest('[data-file]')){sel=+b.dataset.file;menu=null;draw()}
+  else if(menu){menu=null;draw()}});
+ host.addEventListener('dblclick',e=>{const b=e.target.closest('[data-file]');if(b){sel=+b.dataset.file;props=true;menu=null;draw()}});
+ host.addEventListener('contextmenu',e=>{const b=e.target.closest('[data-file]');e.preventDefault();if(!b)return;sel=+b.dataset.file;const r=host.getBoundingClientRect();menu={x:Math.min(e.clientX-r.left,r.width-170),y:Math.min(e.clientY-r.top,r.height-120)};props=null;draw()});
+ draw()}
+
+function stairs(){const U=BU;const F=$('#cvF'),T=$('#cvT'),Vv=$('#cvV'),st=$('#stairs');const fac=bfac;
+ F.innerHTML=U.map((u,i)=>`<option value="${i}">${u}</option>`).join('');T.innerHTML=F.innerHTML;F.value='4';T.value='3';
+ const draw=()=>{const f=+F.value,t=+T.value,lo=Math.min(f,t),hi=Math.max(f,t);
+  st.innerHTML=U.map((u,i)=>`<button type="button" class="stair${i===f?' from':i===t?' to':(i>lo&&i<hi)?' path':''}" data-u="${i}" style="height:${46+i*26}px">${i?`<span class="fac">${fac(i)}</span>`:''}${u}</button>`).join('');
+  const v=parseDE(Vv.value);if(isNaN(v)){$('#cvR').textContent='Bitte eine Zahl eingeben.';$('#cvC').textContent='';return}
+  let x=v,ch=[`${fmt(v)} ${U[f]}`];
+  if(t<f){for(let i=f;i>t;i--){x*=fac(i);ch.push(`· ${fac(i)} = ${fmt(x)} ${U[i-1]}`)}}else{for(let i=f;i<t;i++){x/=fac(i+1);ch.push(`: ${fac(i+1)} = ${fmt(x)} ${U[i+1]}`)}}
+  $('#cvR').textContent=`${fmt(v)} ${U[f]} = ${fmt(x)} ${U[t]}`;$('#cvC').textContent=f===t?'Gleiche Einheit, nichts zu rechnen.':`Rechenweg: ${ch.join('  ')} (${t<f?'Treppe hinunter → multiplizieren':'Treppe hinauf → dividieren'})`};
+ draw();[F,T].forEach(s=>s.addEventListener('change',draw));Vv.addEventListener('input',draw);
+ st.addEventListener('click',e=>{const b=e.target.closest('[data-u]');if(b){T.value=b.dataset.u;draw()}})}
+
+/* Größen-Zoom */
+function lenTxt(mm){if(mm<10)return fmt(Math.round(mm*10)/10)+' mm';if(mm<1000)return fmt(Math.round(mm/10*10)/10)+' cm';if(mm<1e6)return fmt(Math.round(mm/1000*10)/10)+' m';return fmt(Math.round(mm/1e6*10)/10)+' km'}
+function countTime(n){const y=n/31557600;if(n<60)return fmt(n)+' Sekunden';if(n<3600)return fmt(Math.round(n/60))+' Minuten';if(n<86400)return fmt(Math.round(n/360)/10)+' Stunden';if(n<31557600)return fmt(Math.round(n/86400))+' Tage';return fmt(y<10?Math.round(y*10)/10:Math.round(y))+' Jahre'}
+const AREF=[['ein Stecknadelkopf',2],['eine 1-Euro-Münze',23],['ein Handy',150],['ein Schultisch',1200],['ein Klassenzimmer',9000],['ein Fußballfeld',105000],['die Länge von 10 Fußballfeldern',1050000],['eine Großstadt (ca. 10 km)',1e7]];
+const HREF=[['ein Schulranzen',400],['eine Tür',2000],['ein Haus mit 3 Stockwerken',10000],['der Fernsehturm Dresden',252000],['die Zugspitze',2962000],['der Mount Everest',8849000],['die Raumstation ISS (Flughöhe)',4e8],['der Mond (Entfernung)',3.844e11]];
+const refFor=(list,v)=>list.reduce((r,x)=>Math.abs(Math.log(x[1]/v))<Math.abs(Math.log(r[1]/v))?x:r,list[0]);
+function lupe(){const host=$('#lupe');if(!host)return;let A=0,B=4,L=1,mode='trip',timer=null;
+ const stop=()=>{if(timer){clearInterval(timer);timer=null}};
+ const tripHTML=anim=>{if(L<=A)L=A+1;if(L>B)L=B;const n=bfac(L),cols=n===8?4:32,rows=n/cols,mr=Math.floor(rows/2),mc=Math.floor(cols/2),cw=240/cols,mi=mr*cols+mc;
+  return `<div class="zpath">${BU.slice(A,B+1).map((u,i)=>`<span class="${A+i===L?'now':A+i<L?'done':''}">${u}</span>`).join('<i>→</i>')}</div>
+  <div class="zview"><div class="zwin"><div class="zgrid${anim?' anim':''}" style="grid-template-columns:repeat(${cols},1fr);--z:${cols};--tx:${-cols*mc*cw}px;--ty:${-cols*mr*cw}px">${Array.from({length:n},(_,i)=>i===mi?'<span class="me"></span>':'<span></span>').join('')}</div></div>
+  <div class="zcap"><b>1 ${BU[L]} = ${n} ${BU[L-1]}</b><br>Jedes Kästchen ist 1 ${BU[L-1]}. Das <span class="mk">gelbe</span> Kästchen ist das ganze Bild von davor.${L>A+1?`<br>Bis hierher: 1 ${BU[L]} = ${fmtInt(BS[L]/BS[A])} ${BU[A]}`:''}</div></div>
+  <div class="chal zbtn"><button type="button" class="btn ghost sm" data-z="prev"${L<=A+1?' disabled':''}>◀ kleiner</button><button type="button" class="btn sm" data-z="next"${L>=B?' disabled':''}>größer ▶</button><button type="button" class="btn ghost sm" data-z="play">${timer?'Stopp':'Ganze Reise abspielen'}</button></div>`};
+ const areaHTML=()=>{const N=BS[B]/BS[A],side=Math.sqrt(N),ref=refFor(AREF,side),big=Math.max(side,ref[1]),sc=200/big,sp=side*sc,rp=ref[1]*sc;
+  return `<p class="zlead">Stell dir vor, <b>1 ${BU[A]}</b> ist ein Kästchen mit <b>1 mm</b> Seitenlänge. Lege ${fmtInt(N)} Kästchen zu einem Quadrat zusammen: Das ist <b>1 ${BU[B]}</b>.</p>
+  <div class="zview"><svg class="zsvg" viewBox="0 0 240 240" role="img" aria-label="Flächenvergleich"><rect x="${20}" y="${220-sp}" width="${Math.max(sp,.6)}" height="${Math.max(sp,.6)}" fill="var(--part)" opacity=".85"/><rect x="${20}" y="${220-rp}" width="${Math.max(rp,.6)}" height="${Math.max(rp,.6)}" fill="none" stroke="var(--ink)" stroke-width="2" stroke-dasharray="5 3"/><line x1="10" y1="221" x2="230" y2="221" stroke="var(--soft)"/></svg>
+  <div class="zcap"><b>Seitenlänge: ${lenTxt(side)}</b><br>Gestrichelt zum Vergleich: ${ref[0]} (${lenTxt(ref[1])}), im gleichen Maßstab.<br>Das einzelne ${BU[A]}-Kästchen mit 1 mm wäre hier ${side>200?'viel zu klein zum Sehen':'gerade noch erkennbar'}.</div></div>`};
+ const stackHTML=()=>{const N=BS[B]/BS[A],h=N*0.1,ref=refFor(HREF,h),big=Math.max(h,ref[1]),hp=h/big*190,rp=ref[1]/big*190,f=h/ref[1];
+  return `<p class="zlead">Stell dir vor, jedes <b>${BU[A]}</b> ist ein Blatt Papier (0,1 mm dick). Staple ${fmtInt(N)} Blätter für <b>1 ${BU[B]}</b>.</p>
+  <div class="zview"><div class="zbars"><div><i style="height:${Math.max(hp,1)}px" class="zb1"></i><span>Stapel für 1 ${BU[B]}</span></div><div><i style="height:${Math.max(rp,1)}px" class="zb2"></i><span>${ref[0]}</span></div></div>
+  <div class="zcap"><b>Der Stapel wäre ${lenTxt(h)} hoch.</b><br>${f>=1.05?`Das ist etwa <b>${fmt(f<10?Math.round(f*10)/10:Math.round(f))}-mal</b> so hoch wie ${ref[0]} (${lenTxt(ref[1])}).`:f<=0.95?`Das ist etwa <b>${fmt(Math.round(f*100))} %</b> der Höhe von ${ref[0]} (${lenTxt(ref[1])}).`:`Das ist ungefähr so hoch wie ${ref[0]} (${lenTxt(ref[1])}).`}</div></div>`};
+ const draw=anim=>{const N=BS[B]/BS[A];
+  host.innerHTML=`<div class="zsel"><label>Vergleiche <select id="zA">${BU.map((u,i)=>`<option value="${i}"${i===A?' selected':''}>1 ${u}</option>`).join('')}</select></label><label>mit <select id="zB">${BU.map((u,i)=>`<option value="${i}"${i===B?' selected':''}>1 ${u}</option>`).join('')}</select></label></div>
+  <div class="zres"><b>1 ${BU[B]} = ${fmtInt(N)} ${BU[A]}</b><span class="chain">Rechnung: 1${BU.slice(A+1,B+1).map((u,i)=>' · '+bfac(A+1+i)).join('')} = ${fmtInt(N)}</span><span>Würdest du jede Sekunde 1 ${BU[A]} zählen, bräuchtest du etwa <b>${countTime(N)}</b>.</span></div>
+  <div class="seg ztabs">${[['trip','Schritt für Schritt'],['area','Als Fläche'],['stack','Als Papierstapel']].map(([k,l])=>`<button type="button" data-zm="${k}" aria-pressed="${mode===k}">${l}</button>`).join('')}</div>
+  <div class="zbody">${mode==='trip'?tripHTML(anim):mode==='area'?areaHTML():stackHTML()}</div>`;
+  $('#zA').onchange=e=>{A=+e.target.value;if(B<=A)B=Math.min(5,A+1);L=A+1;stop();draw(true)};
+  $('#zB').onchange=e=>{B=+e.target.value;if(A>=B)A=Math.max(0,B-1);L=A+1;stop();draw(true)}};
+ host.addEventListener('click',e=>{const m=e.target.closest('[data-zm]');if(m){mode=m.dataset.zm;stop();draw(true);return}
+  const b=e.target.closest('[data-z]');if(!b)return;const a=b.dataset.z;
+  if(a==='next'&&L<B){L++;draw(true)}else if(a==='prev'&&L>A+1){L--;draw(true)}
+  else if(a==='play'){if(timer){stop();draw()}else{L=A+1;timer=setInterval(()=>{if(L>=B){stop();draw()}else{L++;draw(true)}},1800);draw(true)}}});
+ draw(false)}
+
+
+/* ---------- Taschenrechner ---------- */
+const CALC={target:null,expr:'',open:false};
+function calcEval(src){const t=src.replace(/·/g,'*').replace(/:/g,'/').replace(/−/g,'-').replace(/,/g,'.').match(/\d+(\.\d+)?|\.\d+|[-+*/()]/g)||[];let i=0;
+ const peek=()=>t[i],next=()=>t[i++];
+ const factor=()=>{const x=next();if(x==='-')return -factor();if(x==='+')return factor();if(x==='('){const v=expr();if(next()!==')')throw 0;return v}const n=parseFloat(x);if(isNaN(n))throw 0;return n};
+ const term=()=>{let v=factor();while(peek()==='*'||peek()==='/'){const o=next(),w=factor();v=o==='*'?v*w:v/w}return v};
+ const expr=()=>{let v=term();while(peek()==='+'||peek()==='-'){const o=next(),w=term();v=o==='+'?v+w:v-w}return v};
+ if(!t.length)return null;const v=expr();if(i<t.length||!isFinite(v))throw 0;return Math.round(v*1e9)/1e9}
+function calcRes(){try{return calcEval(CALC.expr)}catch(e){return undefined}}
+function calcDraw(){const el=$('#calc');if(!el)return;const r=calcRes();
+ el.querySelector('.cexpr').textContent=CALC.expr||'0';
+ el.querySelector('.cres').textContent=CALC.expr?(r===undefined?'…':'= '+r.toLocaleString('de-DE',{maximumFractionDigits:6})):'';
+ const tk=el.querySelector('.ctake');tk.hidden=!CALC.target||!document.getElementById(CALC.target)||document.getElementById(CALC.target).readOnly;tk.disabled=r===undefined||r===null}
+function calcOpen(target){CALC.target=target;let el=$('#calc');
+ if(!el){el=document.createElement('div');el.id='calc';el.className='calc';el.setAttribute('role','dialog');el.setAttribute('aria-label','Taschenrechner');
+  const K=['C','⌫','(',')','7','8','9',':','4','5','6','·','1','2','3','−','0',',','=','+'];
+  el.innerHTML=`<div class="chd">${ico('calc','')}<b>Taschenrechner</b><button type="button" class="cx" data-k="x" aria-label="Schließen">✕</button></div><div class="cdisp"><div class="cexpr"></div><div class="cres" aria-live="polite"></div></div><div class="ckeys">${K.map(k=>`<button type="button" data-k="${k}" class="${'C⌫'.includes(k)?'kc':':·−+='.includes(k)?'ko':''}">${k}</button>`).join('')}</div><button type="button" class="btn ctake" data-k="take">Ergebnis übernehmen</button>`;
+  document.body.appendChild(el);
+  el.addEventListener('click',e=>{const b=e.target.closest('[data-k]');if(b)calcKey(b.dataset.k)})}
+ el.hidden=false;CALC.open=true;calcDraw()}
+function calcKey(k){if(k==='x'){$('#calc').hidden=true;CALC.open=false;return}
+ if(k==='C')CALC.expr='';else if(k==='⌫')CALC.expr=CALC.expr.slice(0,-1);
+ else if(k==='='){const r=calcRes();if(r!=null&&r!==undefined)CALC.expr=String(r).replace('.',',')}
+ else if(k==='take'){const r=calcRes(),inp=document.getElementById(CALC.target);if(r==null||!inp)return;inp.value=String(r).replace('.',',');$('#calc').hidden=true;CALC.open=false;inp.focus();return}
+ else{if(CALC.expr.length<40)CALC.expr+=k}
+ calcDraw()}
+document.addEventListener('keydown',e=>{if(!CALC.open)return;const a=document.activeElement;if(a&&(a.tagName==='INPUT'||a.tagName==='SELECT'))return;
+ const m={'*':'·','x':'·','/':':',':':':','-':'−','+':'+','.':',',',':',','(':'(',')':')','Enter':'=','=':'=','Backspace':'⌫','Delete':'C','Escape':'x'};
+ const k=/^[0-9]$/.test(e.key)?e.key:m[e.key];if(k){e.preventDefault();calcKey(k)}});
+
+/* ---------- progress & flow ---------- */
+const chapters=()=>STEPS.filter(s=>s.key!=='exit'&&s.key!=='profi');
+function stepDone(i){const s=STEPS[i];if(s.key==='exit')return ccDone();if(s.key==='profi')return s.b.every(x=>S.done[x]);return s.b.every(x=>S.done[x])&&s.h.every(x=>S.hef[x])&&s.sc.every(x=>S.sc[x])}
+function tasksDone(s){return s.b.every(x=>S.done[x])&&s.h.every(x=>S.hef[x])}
+function pct(){let t=0,d=0;chapters().forEach(s=>{t+=s.b.length+s.h.length+s.sc.length;d+=s.b.filter(x=>S.done[x]).length+s.h.filter(x=>S.hef[x]).length+s.sc.filter(x=>S.sc[x]).length});t+=CC.length;d+=CC.filter(c=>S.cc[c.id]).length;return Math.round(d/t*100)}
+function firstOpen(){for(let i=0;i<STEPS.length-1;i++)if(!stepDone(i))return i;return STEPS.length-1}
+const canGo=i=>hosting()&&H.preview||i<=firstOpen();
+function renderNav(){const fo=firstOpen();let h=`<div class="mpart" style="color:var(--red)">Bit, Byte, Einheiten</div>`;
+ STEPS.forEach((s,i)=>{const dn=stepDone(i),lock=!canGo(i);const c=s.key==='exit'?'var(--green)':s.key==='profi'?'var(--pro)':'var(--red)';
+  h+=`<button type="button" class="st${i===0?' first':''}${i===STEPS.length-1?' last':''}${dn?' ok':''}${i===S.step?' cur':''}${lock?' locked':''}" style="--c:${c}" data-go="${i}"${lock?' aria-disabled="true"':''} ${i===S.step?'aria-current="step"':''}><span class="dot">${dn?ico('check',''):lock?ico('lock',''):''}</span><span>${s.title}<small>${s.sub}${s.min?`, ca. ${s.min} min`:''}${lock?' · noch gesperrt':''}</small></span></button>`});
+ $('#metro').innerHTML=h;const p=pct();
+ $('#prog').innerHTML=`<div class="pbar"><i style="width:${p}%"></i></div><b class="ppct">${p} %</b>`;
+ const s=STEPS[S.step];$('#pagerMid').textContent=`Schritt ${S.step+1} von ${STEPS.length}: ${s.title}`;
+ $('#prevBtn').style.visibility=S.step===0?'hidden':'visible';
+ const nb=$('#nextBtn'),last=S.step===STEPS.length-1;nb.hidden=last||!stepDone(S.step);nb.textContent=s.key==='exit'?'Zur Profi-Zone':'Weiter';
+ const hint=$('#pagerHint');if(hint)hint.hidden=!(nb.hidden&&!last);
+ connChip()}
+function update(){renderNav();const s=STEPS[S.step],el=document.getElementById('cnt-'+s.key);if(el)el.textContent=`${s.b.filter(x=>S.done[x]).length} / ${s.b.length}`;
+ if(s.key==='profi')profUpd();
+ if(s.sc.length){const slot=$('#scslot');if(tasksDone(s)){if(s.sc.every(x=>S.sc[x])){if(slot)slot.innerHTML=`<h2>Dein Selbstcheck</h2>`+scCard(s.key)}else if(!scOpen)openSC(s.key)}else if(slot)slot.innerHTML=''}
+ celebrateCheck()}
+let scOpen=false;
+function openSC(key){scOpen=true;const items=SC[key];
+ dialog(`<div class="schead">${ico('base','')}<h2 style="margin:0">Station geschafft! Das kann ich schon:</h2></div><p>Schätze dich ehrlich ein. Deine Lehrkraft sieht deine Antworten und kann dir so gezielt helfen.</p>
+ ${items.map((t,i)=>`<div class="selfrow"><span>${t}</span><div class="seg">${RATE.map(v=>`<button type="button" data-sc="${key}:${i}" data-v="${v}" aria-pressed="${S.sc[key+':'+i]===v}">${v}</button>`).join('')}</div></div>`).join('')}
+ <div class="acts"><button type="button" class="btn" id="scOk"${items.every((_,i)=>S.sc[key+':'+i])?'':' disabled'}>Fertig</button></div>`,'sticky');
+ $('#scOk').onclick=()=>{scOpen=false;closeDlg(true);update()}}
+function celebrateCheck(){STEPS.forEach((s,i)=>{if(s.key==='profi')return;if(stepDone(i)&&!S.cele[s.key]){S.cele[s.key]=1;save();if(!scOpen)celebrate()}})}
+function celebrate(){const p=pct(),el=$('#cele');const m=p>=100?'Wahnsinn, du hast alles geschafft!':pick([`Super, du hast schon ${p} % geschafft!`,`Stark! ${p} % sind geschafft!`,`Weiter so, schon ${p} % erledigt!`]);
+ el.innerHTML=`<div class="cbox"><svg aria-hidden="true"><use href="#i-bitty"/></svg><div class="cpct">${p} %</div><div class="cmsg">${m}</div>${Array.from({length:14},(_,i)=>`<i style="--a:${i*26}deg;--c:${['#ffd23f','#2ecc85','#5b8cff','#ff5d55'][i%4]}"></i>`).join('')}</div>`;
+ el.className='cele show';clearTimeout(el._t);el._t=setTimeout(()=>el.className='cele',3200)}
+
+const closeDlg=force=>{const o=$('#ov');if(!o)return;if(o.classList.contains('sticky')&&!force)return;o.className='ov'};
+function go(i,noScroll){i=Math.max(0,Math.min(STEPS.length-1,i));if(!canGo(i))return;closeDlg(true);scOpen=false;S.step=i;S.seen[i]=1;save();
+ document.documentElement.style.setProperty('--part',STEPS[i].key==='exit'?'var(--green)':STEPS[i].key==='profi'?'var(--pro)':'var(--red)');
+ const s=STEPS[i];$('#main').innerHTML=`<div class="kicker"><span class="tag part">Bit, Byte, Einheiten</span><span class="tag">Schritt ${i+1} von ${STEPS.length}</span>${s.min?`<span class="tag">${ico('clock')} ca. ${s.min} min</span>`:''}</div>`+s.render();
+ Object.keys(EX).forEach(id=>{if(S.done[id]&&document.getElementById('ex-'+id))solved(id,false);else if(S.tries[id])helpBtns(id)});
+ s.init&&s.init();update();
+ if(location.hash!=='#schritt-'+(i+1))history.replaceState(null,'','#schritt-'+(i+1));
+ if(!noScroll)window.scrollTo({top:0})}
+
+/* ---------- dialog ---------- */
+const ov=$('#ov'),dlg=$('#dlg');
+function dialog(html,cls=''){dlg.innerHTML=html;ov.className='ov show '+cls;const f=dlg.querySelector('button:not([disabled])');f&&f.focus()}
+ov.addEventListener('click',e=>{if(e.target===ov)closeDlg();if(e.target.closest('[data-close]'))closeDlg(true);if(!ov.classList.contains('show')&&!S.join&&hstate!=='open'&&hstate!=='connecting')joinDialog()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDlg()});
+
+/* ---------- room: student side (PeerJS, browser to browser) ---------- */
+let peerLib=null;
+function loadPeer(){if(peerLib)return peerLib;peerLib=new Promise(res=>{if(window.Peer)return res(true);const sc=document.createElement('script');sc.src='https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js';sc.onload=()=>res(!!window.Peer);sc.onerror=()=>res(false);document.head.appendChild(sc)});return peerLib}
+let peer=null,conn=null,cstate='off',retryT=null,stT=null;
+function connChip(){const c=$('#conn');if(!c)return;const set=(dot,l,sh)=>{c.innerHTML=`<span class="cdot ${dot}"></span><span class="cl">${l}</span><span class="cs">${sh}</span>`};
+ if(hosting()){const on=Object.keys(hconns).length;set('on',`Raum ${esc(H.room)} · ${on} verbunden`,`${esc(H.room)} · ${on}`);c.hidden=false;return}
+ if(!S.join){c.hidden=true;return}c.hidden=false;
+ if(S.join.solo){set('','Ohne Raum · <u>Raum beitreten</u>','<u>Beitreten</u>');return}
+ set(cstate==='on'?'on':cstate==='connecting'?'wait':'',`${cstate==='on'?'Verbunden':cstate==='connecting'?'Verbinde …':'Getrennt'} · ${esc(S.join.code)}`,esc(S.join.code))}
+function payload(){const SR=skillRes();return {t:'state',v:1,pct:pct(),step:S.step,sc:S.sc,chap:Object.fromEntries(STEPS.map((s,i)=>[s.key,stepDone(i)])),exit:{a:CC.filter(c=>S.cc[c.id]).length,r:CC.filter(c=>S.cc[c.id]&&S.cc[c.id].ok).length,n:CC.length,sk:SR.map(x=>[x.r,x.a,x.n])},profi:[...PV,...PL,...PSW].filter(i=>S.done[i]).length}}
+function sendState(){if(!conn||!conn.open||!S.join||S.join.solo)return;clearTimeout(stT);stT=setTimeout(()=>{try{conn.send(payload())}catch(e){}},300)}
+async function joinRoom(room,code,interactive){clearTimeout(retryT);cstate='connecting';connChip();
+ const fail=msg=>{cstate='off';connChip();try{peer&&peer.destroy()}catch(e){}peer=null;conn=null;if(interactive)joinError(msg);else retryT=setTimeout(()=>S.join&&!S.join.solo&&joinRoom(S.join.room,S.join.code,false),6000)};
+ if(!await loadPeer())return fail('Die Verbindungs-Bibliothek konnte nicht geladen werden. Ist das Internet verfügbar?');
+ try{peer&&peer.destroy()}catch(e){}
+ try{peer=new window.Peer()}catch(e){return fail('Verbindung in diesem Browser nicht möglich.')}
+ let to=setTimeout(()=>fail('Raum nicht gefunden. Prüfe den Raumcode und ob die Lehrkraft den Raum geöffnet hat.'),10000);
+ peer.on('error',e=>{clearTimeout(to);fail(e&&e.type==='peer-unavailable'?'Raum nicht gefunden. Prüfe den Raumcode und ob die Lehrkraft den Raum geöffnet hat.':'Verbindung fehlgeschlagen. Versuche es noch einmal.')});
+ peer.on('open',()=>{conn=peer.connect(PREFIX+room,{reliable:true});
+  conn.on('open',()=>conn.send({t:'hello',code}));
+  conn.on('data',d=>{if(!d||typeof d!=='object')return;
+   if(d.t==='welcome'){clearTimeout(to);cstate='on';S.join={room,code};save();if(interactive){closeDlg(true);go(S.step,true)}sendState();connChip()}
+   else if(d.t==='denied'){clearTimeout(to);S.join=interactive?null:S.join;fail(String(d.msg||'Zugang abgelehnt.'))}});
+  conn.on('close',()=>{if(cstate==='on'){cstate='off';connChip();retryT=setTimeout(()=>S.join&&!S.join.solo&&joinRoom(S.join.room,S.join.code,false),4000)}})})}
+function joinError(msg){const e=$('#jErr');if(e){e.textContent=msg;e.hidden=false}const b=$('#jGo');if(b){b.disabled=false;b.textContent='Beitreten'}}
+function joinDialog(){dialog(`<div class="schead"><svg class="jb" aria-hidden="true"><use href="#i-bitty"/></svg><h2 style="margin:0">Willkommen im Datenlabor!</h2></div>
+ <p>Gib den <b>Raumcode</b> von der Tafel und <b>deinen persönlichen Code</b> ein. Beides bekommst du von deiner Lehrkraft.</p>
+ <div class="jform"><label>Raumcode<input id="jRoom" maxlength="5" autocomplete="off" spellcheck="false" placeholder="z. B. K7QXM"></label><label>Dein Code<input id="jCode" maxlength="6" autocomplete="off" spellcheck="false" placeholder="z. B. B4TR"></label></div>
+ <p class="fb bad" id="jErr" hidden></p>
+ <div class="acts">${S.join?'<button type="button" class="btn ghost" data-close>Abbrechen</button>':''}<button type="button" class="btn" id="jGo">Beitreten</button></div>
+ ${S.join&&S.join.solo?'':'<p class="jalt"><button type="button" class="linkb" id="jSolo">Ohne Raum üben</button></p>'}`,'sticky');
+ if(S.join&&!S.join.solo){$('#jRoom').value=S.join.room||'';$('#jCode').value=S.join.code||''}
+ const up=e=>{e.target.value=e.target.value.toUpperCase().replace(/[^A-Z0-9]/g,'')};$('#jRoom').oninput=up;$('#jCode').oninput=up;
+ const goJ=()=>{const r=$('#jRoom').value.trim(),c=$('#jCode').value.trim();if(r.length<5||c.length<4)return joinError('Bitte Raumcode (5 Zeichen) und deinen Code (4 Zeichen) eingeben.');$('#jErr').hidden=true;$('#jGo').disabled=true;$('#jGo').textContent='Verbinde …';joinRoom(r,c,true)};
+ $('#jGo').onclick=goJ;$('#jCode').onkeydown=e=>{if(e.key==='Enter')goJ()};
+ if($('#jSolo'))$('#jSolo').onclick=e=>{if(e.target.dataset.sure){S.join={solo:true};save();closeDlg(true);connChip()}else{e.target.dataset.sure=1;e.target.textContent='Wirklich? Deine Ergebnisse gehen dann nicht an die Lehrkraft. Ja, ohne Raum üben'}};
+ const jb=dlg.querySelector('.jb');if(jb)jb.addEventListener('dblclick',()=>{closeDlg(true);hostPanel()});
+ $('#jRoom').focus()}
+
+/* ---------- room: teacher side ---------- */
+let H={room:null,codes:[],data:{},seen:{},preview:false};
+try{const r=JSON.parse(localStorage.getItem(HKEY)||'null');if(r)H=Object.assign(H,r)}catch(e){}
+const hsave=()=>{try{localStorage.setItem(HKEY,JSON.stringify(H))}catch(e){}};
+let hpeer=null,hconns={},hstate='off',hT=null;
+const hosting=()=>hstate==='open';
+async function openRoom(newCode){if(newCode||!H.room){H.room=genCode(5);hsave()}hstate='connecting';renderHost();
+ if(!await loadPeer()){hstate='error';renderHost('Die Verbindungs-Bibliothek konnte nicht geladen werden. Ist das Internet verfügbar?');return}
+ try{hpeer&&hpeer.destroy()}catch(e){}hconns={};
+ try{hpeer=new window.Peer(PREFIX+H.room)}catch(e){hstate='error';renderHost('Ein Raum lässt sich in dieser Ansicht nicht öffnen. Bitte die Seite über GitHub Pages im Browser öffnen.');return}
+ hpeer.on('open',()=>{hstate='open';renderHost();renderNav()});
+ hpeer.on('error',e=>{if(e&&e.type==='unavailable-id'){openRoom(true);return}if(e&&e.type==='peer-unavailable')return;hstate='error';renderHost('Der Raum konnte nicht geöffnet werden ('+esc(e&&e.type||'Fehler')+').')});
+ hpeer.on('disconnected',()=>{try{hpeer.reconnect()}catch(e){}});
+ hpeer.on('connection',c=>{c.on('data',d=>{if(!d||typeof d!=='object')return;
+  if(d.t==='hello'){const code=String(d.code||'').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,6);
+   if(!H.codes.includes(code)){try{c.send({t:'denied',msg:'Diesen Code gibt es in diesem Raum nicht. Prüfe deinen Code.'})}catch(e){}setTimeout(()=>c.close(),600);return}
+   c.code=code;if(hconns[code]&&hconns[code]!==c){try{hconns[code].close()}catch(e){}}hconns[code]=c;try{c.send({t:'welcome'})}catch(e){}H.seen[code]=Date.now();hsave();renderHostSoon()}
+  else if(d.t==='state'&&c.code){H.data[c.code]=clean(d);H.seen[c.code]=Date.now();hsave();renderHostSoon()}});
+  c.on('close',()=>{if(c.code&&hconns[c.code]===c)delete hconns[c.code];renderHostSoon()})})}
+function clean(d){const num=(x,a,b)=>{x=Number(x);return isFinite(x)?Math.max(a,Math.min(b,x)):0};const sc={};SCALL.forEach(({key})=>{const v=d.sc&&d.sc[key];if(RATE.includes(v))sc[key]=v});
+ const sk=Array.isArray(d.exit&&d.exit.sk)?d.exit.sk.slice(0,SKILLS.length).map(a=>Array.isArray(a)?a.map(x=>num(x,0,9)):[0,0,0]):[];
+ return {pct:num(d.pct,0,100),step:num(d.step,0,STEPS.length-1),sc,exit:{a:num(d.exit&&d.exit.a,0,99),r:num(d.exit&&d.exit.r,0,99),n:CC.length,sk},profi:num(d.profi,0,99)}}
+function renderHostSoon(){clearTimeout(hT);hT=setTimeout(()=>{renderHost();connChip()},250)}
+const RCL={sicher:'r0',fast:'r1','noch nicht':'r2'};
+function hostTable(){if(!H.codes.length)return '<p style="color:var(--soft)">Noch keine Schülercodes. Erzeuge zuerst Codes.</p>';
+ return `<div class="scroll"><table class="htab"><thead><tr><th>Code</th><th>Status</th><th>Fortschritt</th><th>Station</th>${SCALL.map((x,i)=>`<th title="${esc(x.t)}">S${i+1}</th>`).join('')}${SKILLS.map((s,i)=>`<th title="${esc(s.s)}">L${i+1}</th>`).join('')}<th>Exit</th></tr></thead><tbody>
+ ${H.codes.map(code=>{const d=H.data[code],on=!!hconns[code];
+  return `<tr><td><b>${esc(code)}</b></td><td><span class="cdot ${on?'on':''}"></span>${on?'online':d?'offline':'–'}</td><td>${d?`<span class="mini"><i style="width:${d.pct}%"></i></span> ${d.pct} %`:''}</td><td>${d?esc(STEPS[d.step].title):''}</td>
+  ${SCALL.map(x=>{const v=d&&d.sc[x.key];return `<td>${v?`<span class="rt ${RCL[v]}" title="${esc(v)}">${v==='sicher'?'S':v==='fast'?'F':'N'}</span>`:''}</td>`}).join('')}
+  ${SKILLS.map((s,i)=>{const k=d&&d.exit.sk[i];if(!k||k[1]<k[2])return '<td></td>';return `<td>${k[0]===k[2]?'<span class="lz ok" title="erreicht">✓</span>':k[0]>0?'<span class="lz part" title="teilweise">◐</span>':'<span class="lz no" title="nicht erreicht">✗</span>'}</td>`}).join('')}
+  <td>${d&&d.exit.a?`${d.exit.r}/${d.exit.a}`:''}</td></tr>`}).join('')}</tbody></table></div>
+ <div class="hleg"><div><b>Selbstcheck</b> (S = sicher, F = fast, N = noch nicht):<ol>${SCALL.map(x=>`<li>${esc(x.t)}</li>`).join('')}</ol></div><div><b>Lernziele im Exit-Check</b> (✓ erreicht, ◐ teilweise, ✗ nicht erreicht):<ol>${SKILLS.map(s=>`<li>${esc(s.s)}</li>`).join('')}</ol></div></div>`}
+function hostOpen(){return ov.classList.contains('host')&&ov.classList.contains('show')}
+function renderHost(err){if(!hostOpen())return;const box=$('#hBody');if(!box)return;
+ box.innerHTML=`<section class="hsec"><h3>1. Raum</h3>
+ ${hosting()?`<div class="hroom"><span>Raumcode</span><b>${esc(H.room)}</b></div><p>Schreibe den Raumcode an die Tafel. <b>Lass diese Seite geöffnet</b>, solange die Klasse arbeitet: Die Ergebnisse kommen direkt in diesem Browser an und werden nur hier gespeichert.</p>`:`<p>${hstate==='connecting'?'Raum wird geöffnet …':'Der Raum ist geschlossen.'}</p>`}
+ ${err?`<p class="fb bad">${err}</p>`:''}
+ <div class="row">${hosting()?'':`<button type="button" class="btn" data-h="open">${H.room?'Raum '+esc(H.room)+' öffnen':'Raum öffnen'}</button>`}<button type="button" class="btn ghost" data-h="new">Neuen Raumcode erzeugen</button></div></section>
+ <section class="hsec"><h3>2. Schülercodes</h3><p>Gib jedem Kind einen Code und notiere die Zuordnung nur bei dir. Im Labor erscheinen ausschließlich die Codes.</p>
+ <div class="row"><label for="hN">Anzahl</label><input id="hN" type="number" min="1" max="40" value="${H.codes.length||28}" style="width:5em"><button type="button" class="btn ghost" data-h="codes">${H.codes.length?'Neue Codes erzeugen':'Codes erzeugen'}</button>${H.codes.length?'<button type="button" class="btn ghost" data-h="copy">Liste kopieren</button>':''}</div>
+ ${H.codes.length?`<div class="hcodes">${H.codes.map(c=>`<span>${esc(c)}</span>`).join('')}</div>`:''}</section>
+ <section class="hsec"><h3>3. Lernstand <small>(${Object.keys(hconns).length} von ${H.codes.length} online)</small></h3>${hostTable()}
+ <div class="row">${H.codes.length?'<button type="button" class="btn ghost" data-h="csv">Als Tabelle kopieren (CSV)</button><button type="button" class="btn ghost" data-h="clear">Ergebnisse löschen</button>':''}</div><p id="hMsg" class="okmark"></p></section>
+ <section class="hsec"><h3>4. Vorschau und Ablauf</h3>
+ <label class="chk"><input type="checkbox" data-h="preview"${H.preview?' checked':''}${hosting()?'':' disabled'}> Lehrkraft-Vorschau: In diesem Browser alle Stationen freischalten (nur während der Raum geöffnet ist)</label>
+ <details><summary>Ablauf der Stunde (45 min)</summary>${planTable()}</details></section>`}
+const PLANS=[['0–2 min','A: Aufwärmen 8 Bit, Selbstcheck','EA am PC'],['2–12','B: Bit und Byte, AB Kasten 1, Selbstcheck','EA am PC'],['12–22','C: Einheitentreppe, Zuordnen, Sortieren, AB Kasten 2, Selbstcheck','EA am PC'],['22–37','D: Speicher-Check im Datei-Explorer, AB Kasten 3, Selbstcheck','EA am PC'],['37–42','Exit-Check (5 Transferaufgaben)','EA am PC'],['42–45','Puffer: Besprechung oder Profi-Zone für Schnelle','Plenum / EA']];
+const planTable=()=>`<div class="scroll"><table class="plan">${PLANS.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td style="color:var(--soft)">${r[2]}</td></tr>`).join('')}</table></div>`;
+function hostPanel(){dialog(`<div class="hhead"><h2 style="margin:0">Lehrkraft: Raum und Lernstand</h2><button type="button" class="btn ghost sm" data-close>Schließen</button></div><div id="hBody"></div>`,'host');renderHost()}
+dlg.addEventListener('click',async e=>{const b=e.target.closest('[data-h]');if(!b||b.tagName==='INPUT')return;const a=b.dataset.h;const msg=t=>{const m=$('#hMsg');if(m)m.textContent=t};
+ if(a==='open')openRoom(false);
+ else if(a==='new'){if(b.dataset.sure||!hosting()){openRoom(true)}else{b.dataset.sure=1;b.textContent='Sicher? Alle müssen neu beitreten. Ja, neuer Code'}}
+ else if(a==='codes'){if(H.codes.length&&!b.dataset.sure){b.dataset.sure=1;b.textContent='Sicher? Alte Codes und Ergebnisse werden gelöscht. Ja';return}const n=Math.max(1,Math.min(40,parseInt($('#hN').value)||28));const set=new Set();while(set.size<n)set.add(genCode(4));H.codes=[...set];H.data={};H.seen={};hsave();renderHost()}
+ else if(a==='copy'){try{await navigator.clipboard.writeText(H.codes.join('\n'));msg('Codes kopiert.')}catch(x){msg('Kopieren nicht möglich.')}}
+ else if(a==='csv'){const head=['Code','Fortschritt %',...SCALL.map((x,i)=>'S'+(i+1)+' '+x.t),...SKILLS.map((s,i)=>'L'+(i+1)+' '+s.s),'Exit richtig'];
+  const rows=H.codes.map(c=>{const d=H.data[c];return [c,d?d.pct:'',...SCALL.map(x=>d&&d.sc[x.key]||''),...SKILLS.map((s,i)=>{const k=d&&d.exit.sk[i];return !k||k[1]<k[2]?'':k[0]===k[2]?'erreicht':k[0]>0?'teilweise':'nicht erreicht'}),d&&d.exit.a?d.exit.r+'/'+d.exit.a:'']});
+  const csv=[head,...rows].map(r=>r.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(';')).join('\n');try{await navigator.clipboard.writeText(csv);msg('Tabelle kopiert. In Excel oder Tabellen einfügen.')}catch(x){msg('Kopieren nicht möglich.')}}
+ else if(a==='clear'){if(!b.dataset.sure){b.dataset.sure=1;b.textContent='Wirklich alle Ergebnisse löschen?';return}H.data={};H.seen={};hsave();renderHost()}});
+dlg.addEventListener('change',e=>{if(e.target.dataset&&e.target.dataset.h==='preview'){H.preview=e.target.checked;hsave();renderNav()}});
+
+/* ---------- buttons ---------- */
+let lastIn=null;document.addEventListener('focusin',e=>{const d=e.target.dataset||{};if(d.in||d.ccin)lastIn=e.target.id});
+$('#calcBtn').addEventListener('click',()=>{const t=lastIn&&document.getElementById(lastIn);calcOpen(t&&!t.readOnly?lastIn:null)});
+$('#nextBtn').addEventListener('click',()=>{if(stepDone(S.step))go(S.step+1)});
+$('#prevBtn').addEventListener('click',()=>go(S.step-1));
+$('#stepsBtn').addEventListener('click',()=>{dialog(`<nav class="metro" style="display:block;position:static;max-height:none;padding:0">${$('#metro').innerHTML}</nav><div class="acts"><button type="button" class="btn ghost" data-close>Schließen</button></div>`,'drawer')});
+$('#fontBtn').addEventListener('click',()=>{dialog(`<h2 style="margin-top:0">Schriftgröße</h2><div class="seg">${[[15,'Klein'],[17,'Normal'],[20,'Groß']].map(([v,l])=>`<button type="button" data-fs="${v}" aria-pressed="${S.fs===v}">${l}</button>`).join('')}</div><div class="acts"><button type="button" class="btn" data-close>Fertig</button></div>`)});
+$('#ver').addEventListener('dblclick',hostPanel);
+$('#conn').addEventListener('click',()=>{if(hosting())hostPanel();else if(!(S.join&&cstate==='on'))joinDialog()});
+function resetAll(){try{localStorage.removeItem(KEY)}catch(x){}const fs=S.fs,join=S.join;S=fresh();S.fs=fs;S.join=join;try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}location.hash='';location.reload()}
+$('#resetBtn').addEventListener('click',()=>{dialog(`<h2 style="margin-top:0">Neu starten?</h2><p>Alle Antworten, Haken und Selbstchecks in diesem Browser werden gelöscht. Du bekommst neue Aufgaben und startest wieder bei Schritt 1.</p><p><b>Das kann man nicht rückgängig machen.</b></p><div class="acts"><button type="button" class="btn ghost" data-close>Abbrechen</button><button type="button" class="btn danger" id="rstYes">Ja, neu starten</button></div>`);$('#rstYes').onclick=resetAll});
+
+/* ---------- delegated events ---------- */
+document.addEventListener('click',e=>{const t=e.target;let b;
+ if(b=t.closest('[data-check]')){const id=b.dataset.check;check(id,readVal(id),null)}
+ else if(b=t.closest('[data-choice]')){check(b.dataset.choice,b.dataset.i,b)}
+ else if(b=t.closest('[data-sort]')){const id=b.dataset.sort,d=EX[id];if(S.done[id])return;const cur=(S.sortcur[id]||d.start).slice(),p=+b.dataset.p,q=p+(+b.dataset.d);if(q<0||q>=cur.length)return;[cur[p],cur[q]]=[cur[q],cur[p]];S.sortcur[id]=cur;save();$('#sl-'+id).innerHTML=sortList(id);const nb=$('#sl-'+id).children[q].querySelector(`[data-d="${b.dataset.d}"]`)||$('#sl-'+id).children[q].querySelector('.sb:not([disabled])');nb&&nb.focus()}
+ else if(b=t.closest('[data-ccbtn]')){const id=b.dataset.ccbtn;ccSubmit(id,$('#cc-'+id).value)}
+ else if(b=t.closest('[data-cc]')){ccSubmit(b.dataset.cc,b.dataset.i)}
+ else if(b=t.closest('[data-calc]')){calcOpen(b.dataset.calc)}
+ else if(b=t.closest('[data-hint]')){const d=EX[b.dataset.hint];const fb=$('#ex-'+d.id+' .fb');fb.className='fb info';fb.innerHTML='<b>Tipp:</b> '+d.hint}
+ else if(b=t.closest('[data-sol]')){const id=b.dataset.sol,d=EX[id];S.done[id]=1;save();solved(id,false);$('#ex-'+id+' .fb').innerHTML='<b>Lösung:</b> '+(d.sol||correctText(d))+'<br>Schau dir den Weg genau an.';update()}
+ else if(b=t.closest('[data-go]')){const i=+b.dataset.go;if(canGo(i))go(i);else{const m=$('#pagerHint');m&&m.animate&&m.animate([{transform:'scale(1)'},{transform:'scale(1.06)'},{transform:'scale(1)'}],{duration:400})}}
+ else if(b=t.closest('.pjump')){e.preventDefault();const tg=document.querySelector(b.getAttribute('href'));tg&&tg.scrollIntoView({behavior:'smooth'})}
+ else if(b=t.closest('[data-sc]')){const k=b.dataset.sc;S.sc[k]=b.dataset.v;save();b.parentNode.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));const key=k.split(':')[0];const ok=$('#scOk');if(ok)ok.disabled=!SC[key].every((_,i)=>S.sc[key+':'+i])}
+ else if(b=t.closest('[data-scedit]')){openSC(b.dataset.scedit)}
+ else if(b=t.closest('[data-fs]')){S.fs=+b.dataset.fs;save();document.documentElement.style.setProperty('--fs',S.fs+'px');b.parentNode.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b))}
+ else if(t.closest('#cele')){$('#cele').className='cele'}});
+document.addEventListener('change',e=>{const d=e.target.dataset||{};
+ if(d.hef){S.hef[d.hef]=e.target.checked;save();e.target.closest('.hef').classList.toggle('done',e.target.checked);update()}
+ else if(d.match){const id=d.match;const cur=S.matchcur[id]||[];cur[+d.i]=e.target.value;S.matchcur[id]=cur;save();e.target.closest('.mrow').classList.remove('bad')}});
+document.addEventListener('keydown',e=>{const d=e.target.dataset;if(e.key!=='Enter'||!d)return;if(d.in)check(d.in,e.target.value);else if(d.ccin)ccSubmit(d.ccin,e.target.value)});
+const fromHash=()=>{const m=location.hash.match(/^#schritt-(\d+)$/);return m?+m[1]-1:null};
+window.addEventListener('hashchange',()=>{const h=fromHash();if(h!==null&&h!==S.step&&canGo(h))go(h)});
+S.cele=S.cele||{};STEPS.forEach((s,i)=>{if(stepDone(i))S.cele[s.key]=1});
+const wantHost=location.hash==='#lehrkraft';const h0=fromHash();go(h0!==null&&canGo(h0)?h0:Math.min(S.step,firstOpen()),true);
+if(wantHost)hostPanel();else if(!S.join)joinDialog();else if(!S.join.solo)joinRoom(S.join.room,S.join.code,false);
+}
+</script>
+</body>
+</html>
